@@ -9,10 +9,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "eslint-config-prettier": "^9.1.0",
     "vue": "^3.4.21"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^8.0.9",
+    "@storybook/addon-interactions": "^8.0.9",
+    "@storybook/addon-links": "^8.0.9",
+    "@storybook/blocks": "^8.0.9",
+    "@storybook/builder-vite": "^8.0.9",
+    "@storybook/testing-library": "^0.2.2",
+    "@storybook/vue3": "^8.0.9",
+    "@storybook/vue3-vite": "^8.0.9",
+    "eslint-config-prettier": "^9.1.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/eslint-config-airbnb": "^6.0.0",
@@ -23,6 +31,8 @@
     "lint-staged": "^15.2.2",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
+    "storybook": "^8.0.9",
+    "storybook-addon-data-theme-switcher": "^0.4.2",
     "tailwind": "^4.0.0",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
