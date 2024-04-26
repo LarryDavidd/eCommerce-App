@@ -1,0 +1,25 @@
+{
+  "root": true,
+  "plugins": ["prettier"],
+  "extends": [
+    "plugin:vue/vue3-essential",
+    "eslint:recommended",
+    "@vue/eslint-config-typescript",
+    "@vue/eslint-config-prettier/skip-formatting",
+    "plugin:storybook/recommended",
+    "prettier",
+    "plugin:prettier/recommended",
+    "plugin:tailwindcss/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "prettier/prettier": "error",
+    "tailwindcss/classnames-order": "error",
+    "tailwindcss/no-custom-classname": "off",
+    "linebreak-style": "off",
+    "no-console": "warn",
+    "no-debugger": "warn"
+  }
+}
