@@ -2,7 +2,6 @@
   "root": true,
   "plugins": ["prettier"],
   "extends": [
-    "@feature-sliced",
     "plugin:vue/vue3-essential",
     "eslint:recommended",
     "@vue/eslint-config-typescript",
@@ -14,14 +13,6 @@
   ],
   "parserOptions": {
     "ecmaVersion": "latest"
-  },
-  // "parser": "@typescript-eslint/parser",
-  "settings": {
-    "import/resolver": {
-      "typescript": {
-        "alwaysTryTypes": true
-      }
-    }
   },
   "rules": {
     "prettier/prettier": "error",
