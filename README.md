@@ -26,35 +26,37 @@ The application is powered by CommerceTools, a leading provider of commercial so
 
 ## Technology stack:
 
-JS, TS, Vite, Vue, Vue router, Pinia
+JS, TS, Vite, Vue, Vue router, Pinia, commercetools, axios
 
 ## All available scripts and instructions for use:
 
 The scripts are called using the example command -> npm run dev
 
- - prepare: This script seems to be intended for setting up your project environment. It likely installs dependencies, possibly including Husky, a tool for managing Git hooks.
+ - `npm run prepare`: Run both BEFORE the package is packed and published, and on local npm install without any arguments. This is run AFTER prepublish, but BEFORE prepublishOnly.
 
- - depcheck: This script likely checks for any unused or unnecessary dependencies in your project. It helps to keep your project lean and efficient by identifying dependencies that are not being utilized.
+ - `npm run depcheck`: A tool for analyzing the dependencies in a project to see: how each dependency is used, which dependencies are useless, and which dependencies are missing from package.json.
 
- - dev: This script is used to start the development server using Vite, a build tool that focuses on fast development. It provides hot module replacement (HMR) which allows you to see changes in your code without a full page reload.
+ - `npm run dev`: The development mode has a hot reboot, it is convenient to pick up all changes on the fly during development
 
- - build: This script is for building your project. It performs type checks for Vue projects and then compiles the entire project, outputting it to the ./dist directory.
+ - `npm run build`: At the beginning, he does type checks in Vue projects, then collects the entire project and outputs it to a folder./dist
 
- - lint: This script runs ESLint with specific configurations (--ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts) to check for and fix linting errors in your project's JavaScript and Vue files. It also ignores files listed in .gitignore.
+ - `npm run lint`: this is the command to run ESLint, a tool for static code analysis and troubleshooting
 
- - format: This script uses Prettier to automatically format your source code files (src/ directory) according to predefined rules. It helps maintain consistent code style across your project.
-storybook: This script starts Storybook in development mode. Storybook is a tool for developing UI components in isolation. It runs a local server and allows you to view and interact with your components in a browser.
+ - `npm run format`: this is the command to run Prettier, a code formatting tool
 
- - build-storybook: This script builds your Storybook into static files, which can be deployed to a web server. It generates a static version of your Storybook in the storybook-static directory by default.
-npm-check: This script likely runs npm-check, a tool for checking the status of your npm dependencies. It provides information about which dependencies are outdated or unused.
+ - `npm run build`: this is the command to run Storybook in development mode. It runs Storybook on a local server and allows you to view and develop components in real time.
 
- - npm-check-updates: This script runs ncu (npm-check-updates) which checks for updates to your project's dependencies without modifying the package.json file.
+ - `npm run build-storybook`: this is a command to build a Storybook into static files. It creates a static version of your Storybook that can be hosted on any web server. The build result is saved in the `storybook-static` directory by default
 
- - npm-updates: This script runs ncu -u which updates your project's dependencies to their latest versions, modifying the package.json file accordingly.
+ - `npm run npm-check`: Check for outdated, incorrect, and unused dependencies.
 
- - test:unit: This script runs unit tests using vitest. It likely executes tests for your project's components or modules.
+ - `npm run npm-check-updates`: This script runs ncu (npm-check-updates) which checks for updates to project's dependencies without modifying the package.json file.
 
- - test:coverage: This script runs unit tests with coverage analysis using vitest. It provides information about how much of your code is covered by tests.
+ - `npm run npm-updates`: This script runs ncu -u which updates project's dependencies to their latest versions, modifying the package.json file accordingly.
+
+ - `npm run test:unit`: This script runs unit tests using vitest.
+
+ - `npm run test:coverage`: This script runs unit tests with coverage analysis using vitest.
 
 ## Step-by-step instructions for setting up and running the project locally:
 
@@ -62,7 +64,9 @@ Download the project through the **git clone** command.
 
 We enter the project through **Visual Code**.
 
-In the terminal, we write the command **npm i** -> install all dependencies
+In the terminal, we write the command **npm i** -> to install all dependencies
+
+In the terminal, we write the command **copy .env.example .env** -> to create an .env file based on .env.example
 
 Open the **Extensions** tab in the search bar, write the **@recommended** command and install plugins, these plugins are needed to work correctly in **Visual Code**.
 
