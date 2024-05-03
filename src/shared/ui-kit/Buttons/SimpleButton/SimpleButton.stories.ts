@@ -9,6 +9,8 @@ const meta: Meta<typeof SimpleButton> = {
   // This component will have an automatically generated docsPage entry: https://storybook.js.org/docs/vue/writing-docs/autodocs
   tags: ['autodocs'],
   argTypes: {}
+
+
 };
 
 export default meta;
