@@ -1,4 +1,13 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const onSubmit = (e: Event) => {
+  e.preventDefault();
+  const form = e.target as HTMLFormElement;
+
+  const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+  const password = (form.elements.namedItem('password') as HTMLInputElement).value;
+  console.log(email, password);
+};
+</script>
 
 <template>
   <section class="bg-gray-50 dark:bg-gray-900">
@@ -20,6 +29,7 @@
           <form
             class="space-y-4 md:space-y-6"
             action="#"
+            @submit.prevent="onSubmit"
           >
             <div>
               <label

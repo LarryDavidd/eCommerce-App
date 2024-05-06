@@ -1,29 +1,14 @@
-import '@app/styles/tailwind.scss';
-
-import { createPinia } from 'pinia';
-import { createApp } from 'vue';
-
-import App from '@app/App.vue';
-import router from '@app/router';
-
-const app = createApp(App);
-
-app.use(createPinia());
-
-app.use(router);
-
-app.mount('#app');
-
 import fetch from 'node-fetch';
-import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import {
   ClientBuilder,
 
   // Import middlewares
   type AuthMiddlewareOptions, // Required for auth
   type HttpMiddlewareOptions,
-  type Client,
-  type AnonymousAuthMiddlewareOptions
+  PasswordAuthMiddlewareOptions,
+  Client,
+  AnonymousAuthMiddlewareOptions,
+  RefreshAuthMiddlewareOptions
 } from '@commercetools/sdk-client-v2';
 
 // Configure httpMiddlewareOptions
@@ -59,14 +44,14 @@ export const getCredentialFlowClient = (): Client => {
 
 const anonymousMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
   host: 'https://auth.europe-west1.gcp.commercetools.com',
-  projectKey: 'grka1007',
+  projectKey: 'ecom_app',
   credentials: {
     clientId: '2owzoZm-BNwMFzO2OOYvFsUx',
     clientSecret: 'orOZpSq7L24ySz8op9kQbSehlnpLxz5z',
     anonymousId: 'ANONYMOUS_ID'
   },
   scopes: [
-    'view_cart_discounts:grka1007 manage_orders:grka1007 view_project_settings:grka1007 manage_my_shopping_lists:grka1007 manage_customers:grka1007 view_messages:grka1007 view_published_products:grka1007 manage_my_profile:grka1007 view_shipping_methods:grka1007 manage_shopping_lists:grka1007 view_shopping_lists:grka1007 view_payments:grka1007 view_orders:grka1007 view_categories:grka1007 view_discount_codes:grka1007 manage_my_orders:grka1007'
+    'view_cart_discounts:ecom_app manage_orders:ecom_app view_project_settings:ecom_app manage_my_shopping_lists:ecom_app manage_customers:ecom_app view_messages:ecom_app view_published_products:ecom_app manage_my_profile:ecom_app view_shipping_methods:ecom_app manage_shopping_lists:ecom_app view_shopping_lists:ecom_app view_payments:ecom_app view_orders:ecom_app view_categories:ecom_app view_discount_codes:ecom_app manage_my_orders:ecom_app'
   ],
   fetch
 };
@@ -75,14 +60,6 @@ export const getAnonymousFlowClient = (): Client => {
   const ctpClient = new ClientBuilder().withProjectKey('grka1007').withAnonymousSessionFlow(anonymousMiddlewareOptions).withHttpMiddleware(httpMiddlewareOptions).build();
 
   return ctpClient;
-};
-
-export const getApiRootForAnonymousFlow = () => {
-  const apiRootForAnonumousFlow = createApiBuilderFromCtpClient(getAnonymousFlowClient()).withProjectKey({
-    projectKey: 'grka1007'
-  });
-
-  return apiRootForAnonumousFlow;
 };
 
 console.log(getAnonymousFlowClient());
