@@ -11,6 +11,7 @@ type PropsType = {
   maxWidth?: string;
   modelValue: string | number;
 };
+
 withDefaults(defineProps<PropsType>(), {
   name: 'Simple Input',
   disabled: false,

@@ -10,39 +10,45 @@ import LoginIcon from '@/shared/ui-kit/Icons/LoginIcon.vue';
 <template>
   <header class="flex h-16 w-full flex-col justify-center">
     <div class="header__wrapper mx-20 flex justify-between">
-      <div>Shop Name</div>
+      <router-link to="/home"><div>Shop Name</div></router-link>
       <SearchBar></SearchBar>
 
       <div class="flex justify-between gap-10">
-        <div class="login__button flex gap-2">
-          <div class="login__button-text flex flex-col justify-center">Registration</div>
-          <ButtonIcon>
+        <router-link to="/registration">
+          <div class="login__button flex gap-2">
+            <div class="login__button-text flex flex-col justify-center">Registration</div>
+            <ButtonIcon>
+              <template v-slot:icon>
+                <LoginIcon />
+              </template>
+            </ButtonIcon></div
+        ></router-link>
+
+        <router-link to="/login">
+          <div class="login__button flex gap-2">
+            <div class="login__button-text flex flex-col justify-center">Login</div>
+            <ButtonIcon>
+              <template v-slot:icon>
+                <LoginIcon />
+              </template>
+            </ButtonIcon></div
+        ></router-link>
+
+        <router-link to="/likes">
+          <ButtonIconCounter>
             <template v-slot:icon>
-              <LoginIcon />
+              <LikeHeart />
             </template>
-          </ButtonIcon>
-        </div>
+          </ButtonIconCounter>
+        </router-link>
 
-        <div class="login__button flex gap-2">
-          <div class="login__button-text flex flex-col justify-center">Login</div>
-          <ButtonIcon>
+        <router-link to="/cart">
+          <ButtonIconCounter>
             <template v-slot:icon>
-              <LoginIcon />
+              <CartIcon />
             </template>
-          </ButtonIcon>
-        </div>
-
-        <ButtonIconCounter>
-          <template v-slot:icon>
-            <LikeHeart />
-          </template>
-        </ButtonIconCounter>
-
-        <ButtonIconCounter>
-          <template v-slot:icon>
-            <CartIcon />
-          </template>
-        </ButtonIconCounter>
+          </ButtonIconCounter>
+        </router-link>
       </div>
     </div>
   </header>
