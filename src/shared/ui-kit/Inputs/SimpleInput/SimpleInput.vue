@@ -43,10 +43,10 @@ function handleInput(event: Event) {
       :required="required"
       :type="type"
       :id="name"
-      style="border: 1px solid #dedede"
       :placeholder="placeholder"
       :value="modelValue"
       @input="handleInput"
+      :disabled="disabled"
     />
     <slot name="before" />
     <transition name="fade">
@@ -71,9 +71,14 @@ function handleInput(event: Event) {
 .fade-leave-to {
   opacity: 0;
 }
-.error-input {
-  border: 2px solid #fd304a;
+
+.simple-input {
+  border: 1px solid #dedede;
+  &.error-input {
+    border: 2px solid #fd304a;
+  }
 }
+
 .simple-input {
   max-height: 40px;
   line-height: 1.2;
