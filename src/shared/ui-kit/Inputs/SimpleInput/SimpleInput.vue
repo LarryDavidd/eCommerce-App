@@ -5,7 +5,7 @@ type PropsType = {
   name: string;
   placeholder: string;
   type?: 'text' | 'password' | 'phone' | 'email' | 'number';
-  error: string | null | undefined;
+  error: string[] | null;
   required: boolean;
   disabled?: boolean;
   maxWidth?: string;
@@ -14,10 +14,9 @@ type PropsType = {
 withDefaults(defineProps<PropsType>(), {
   name: 'Simple Input',
   disabled: false,
-  error: '',
+  error: null,
   required: true,
   placeholder: '',
-  maxWidth: '300px',
   type: 'text'
 });
 
@@ -33,9 +32,9 @@ function handleInput(event: Event) {
 
 <template>
   <div
+    class="flex flex-col gap-1"
     :style="{ maxWidth: maxWidth }"
     style="width: 100%"
-    class="m-2"
   >
     <slot name="after" />
     <input
@@ -52,10 +51,16 @@ function handleInput(event: Event) {
     <transition name="fade">
       <div
         v-if="error"
-        class="fl flex items-center gap-2"
+        class="error-message fl flex items-start gap-2"
       >
-        <ErrorIcon />
-        <span class="error text-red-500">{{ error }}</span>
+        <ErrorIcon class="flex-shrink-0" />
+        <span
+          v-for="(err, index) in error"
+          :key="index"
+          class="error text-xs text-red-500"
+        >
+          {{ err }}
+        </span>
       </div>
     </transition>
   </div>
@@ -64,21 +69,24 @@ function handleInput(event: Event) {
 <style scoped lang="scss">
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s;
+  transition: opacity 0.5s ease;
 }
 
-.fade-enter,
+.fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
 
 .simple-input {
   border: 1px solid #dedede;
+
   &.error-input {
     border: 2px solid #fd304a;
   }
 }
-
+.error-message {
+  min-height: 32px;
+}
 .simple-input {
   max-height: 40px;
   line-height: 1.2;

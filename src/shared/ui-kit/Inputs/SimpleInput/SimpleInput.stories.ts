@@ -38,7 +38,7 @@ export const WithError: Story = {
   args: {
     ...Default.args,
     modelValue: '',
-    error: 'Something went wrong'
+    error: ['Something went wrong']
   }
 };
 
