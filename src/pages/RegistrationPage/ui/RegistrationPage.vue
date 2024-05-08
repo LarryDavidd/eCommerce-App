@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import AuthModal from '@features/ui/Forms/AuthForm.vue';
+import AuthModal from '@features/ui/Forms/AuthForm/AuthForm.vue';
 
 console.log('Hello');
 </script>
