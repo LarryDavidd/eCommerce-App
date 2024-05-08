@@ -4,6 +4,6 @@ import { MainHeader } from '@widgets/MainHeader';
 </script>
 
 <template>
-  <main-header></main-header>
+  <MainHeader />
   <RouterView />
 </template>
