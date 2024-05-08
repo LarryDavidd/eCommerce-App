@@ -45,43 +45,31 @@ const login = () => {
 <template>
   <FormWrapper :on-submit="login">
     <template #content>
-      <div class="title text-2xl">Sign in to your account</div>
+      <h1 class="title">Sign in to your account</h1>
       <SimpleInput
         v-model="creds.email"
-        title="email"
         placeholder="Email"
-        :required="true"
         :error="errorsEmail"
-        name="input"
         @update:modelValue="checkEmail"
-        style="position: relative"
-        type="text"
-        max-width="300px"
       />
       <SimpleInput
-        max-width="300px"
         v-model="creds.password"
-        title="password"
         placeholder="Password"
-        :required="true"
         :error="errorsPassword"
-        name="input"
         @update:modelValue="checkPassword"
-        style="position: relative"
         :type="isVisible ? 'text' : 'password'"
       >
         <template #before>
           <opened-eye
-            style="cursor: pointer; position: absolute; top: 20px; right: 20px; transform: translateY(-50%)"
+            class="password-eye"
             v-if="isVisible"
             @click="isVisible = !isVisible"
             :color="iconColor"
             @mouseover="iconColor = '#b5bac2'"
             @mouseleave="iconColor = '#D6DBE4'"
           />
-
           <closed-eye
-            style="cursor: pointer; position: absolute; top: 20px; right: 20px; transform: translateY(-50%)"
+            class="password-eye"
             v-else
             :color="iconColor"
             @mouseover="iconColor = '#b5bac2'"
@@ -100,17 +88,32 @@ const login = () => {
       </button>
       <p>
         Don't you have an account?
-        <a
-          href="/registration"
-          class="text-gray-600 underline duration-200 hover:text-gray-900"
-          >Register</a
-        >
+        <router-link to="/registration">
+          <span class="link">Register</span>
+        </router-link>
       </p>
     </template>
   </FormWrapper>
 </template>
 
 <style scoped lang="scss">
+.title {
+  @apply text-xl;
+}
+.link {
+  @apply text-gray-600
+  underline
+  duration-200
+  hover:text-gray-900;
+}
+
+.password-eye {
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  transform: translateY(-50%);
+}
 .auth-wrapper {
   background-color: #e8e7e7;
   padding: 20px 50px;
