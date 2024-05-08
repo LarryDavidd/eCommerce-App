@@ -53,7 +53,7 @@ function handleInput(event: Event) {
         v-if="error"
         class="error-message fl flex items-start gap-2"
       >
-        <ErrorIcon class="flex-shrink-0" />
+        <ErrorIcon class="shrink-0" />
         <span
           v-for="(err, index) in error"
           :key="index"
