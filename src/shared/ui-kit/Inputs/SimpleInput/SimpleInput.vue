@@ -2,13 +2,12 @@
 import ErrorIcon from '@shared/ui-kit/Icons/ErrorIcon.vue';
 
 type PropsType = {
-  name: string;
+  name?: string;
   placeholder: string;
   type?: 'text' | 'password' | 'phone' | 'email' | 'number';
   error: string[] | null;
-  required: boolean;
+  required?: boolean;
   disabled?: boolean;
-  maxWidth?: string;
   modelValue: string | number;
 };
 
@@ -32,14 +31,10 @@ function handleInput(event: Event) {
 </script>
 
 <template>
-  <div
-    class="flex flex-col gap-1"
-    :style="{ maxWidth: maxWidth }"
-    style="width: 100%"
-  >
+  <div class="simple-input-wrap flex flex-col gap-1">
     <slot name="after" />
     <input
-      :class="['simple-input w-full bg-white', error ? 'error-input' : '']"
+      :class="['simple-input', error ? 'error-input' : '']"
       :required="required"
       :type="type"
       :id="name"
@@ -52,7 +47,7 @@ function handleInput(event: Event) {
     <transition name="fade">
       <div
         v-if="error"
-        class="error-message fl flex items-start gap-2"
+        class="error-message"
       >
         <ErrorIcon class="shrink-0" />
         <span
@@ -78,16 +73,17 @@ function handleInput(event: Event) {
   opacity: 0;
 }
 
-.simple-input {
-  border: 1px solid #dedede;
-
-  &.error-input {
-    border: 2px solid #fd304a;
-  }
-}
 .error-message {
   min-height: 32px;
+  @apply flex items-start gap-2;
 }
+
+.simple-input-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+}
+
 .simple-input {
   max-height: 40px;
   line-height: 1.2;
@@ -95,10 +91,14 @@ function handleInput(event: Event) {
   font-size: 18px;
   color: #525252;
   padding: 9px 10px;
-
+  border: 1px solid #dedede;
+  &.error-input {
+    border: 2px solid #fd304a;
+  }
   &::placeholder {
     font-size: 18px;
     color: #ababab;
   }
+  @apply w-full bg-white;
 }
 </style>
