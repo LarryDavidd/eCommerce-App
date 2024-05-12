@@ -6,6 +6,7 @@ import ClosedEye from '@shared/ui-kit/Icons/ClosedEye.vue';
 import { validateEmail } from '@/utils/validation';
 import { validatePassword } from '@/utils/validation';
 import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
+import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 
 const creds = ref({
   email: '',
@@ -78,14 +79,14 @@ const login = () => {
           />
         </template>
       </SimpleInput>
-      <button
+      <MainButton
+        class="sign-in"
         type="submit"
         :disabled="!isValidInputData"
-        style="color: #ffffff; background-color: #515151; max-width: 300px"
-        class="bg-primary-600 hover:bg-primary-700 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 w-full rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
+        :options="{ buttonStyle: 'dark-grey' }"
+        name="Sign in"
       >
-        Sign in
-      </button>
+      </MainButton>
       <p>
         Don't you have an account?
         <router-link to="/registration">
@@ -97,6 +98,14 @@ const login = () => {
 </template>
 
 <style scoped lang="scss">
+.sign-in:not(:disabled):hover {
+  cursor: pointer;
+}
+.sign-in {
+  border-radius: 2px;
+  margin: 0;
+  height: 40px;
+}
 .title {
   @apply text-xl;
 }
@@ -113,10 +122,6 @@ const login = () => {
   top: 20px;
   right: 20px;
   transform: translateY(-50%);
-}
-.auth-wrapper {
-  background-color: #e8e7e7;
-  padding: 20px 50px;
 }
 
 button:disabled {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ErrorIcon from '@shared/ui-kit/Icons/ErrorIcon.vue';
+import { ref } from 'vue';
 
 type PropsType = {
   name?: string;
@@ -15,11 +16,10 @@ withDefaults(defineProps<PropsType>(), {
   name: 'Simple Input',
   disabled: false,
   error: null,
-  required: true,
+  required: false,
   placeholder: '',
   type: 'text'
 });
-
 const emit = defineEmits(['update:modelValue']);
 
 function handleInput(event: Event) {
@@ -34,10 +34,11 @@ function handleInput(event: Event) {
   <div class="simple-input-wrap flex flex-col gap-1">
     <slot name="after" />
     <input
+      autocomplete="off"
       :class="['simple-input', error ? 'error-input' : '']"
       :required="required"
       :type="type"
-      :id="name"
+      :id="placeholder"
       :placeholder="placeholder"
       :value="modelValue"
       @input="handleInput"
