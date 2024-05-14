@@ -1,30 +1,32 @@
 <script setup lang="ts">
 import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
-import { computed, ref, watch } from 'vue';
-import { validateName, validatePostalCode } from '@/utils/validation';
+import { computed, ref, toRefs, watch } from 'vue';
+import { validateName, validatePostalCode } from '@shared/utils/validation';
 import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
-// import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
-import { useRegistrationStore } from '@app/stores/registration';
 import SelectInput from '@shared/ui-kit/Inputs/SelectInput/SelectInput.vue';
 import CheckBox from '@shared/ui-kit/Inputs/CheckBox/CheckBox.vue';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 
-const store = useRegistrationStore();
-
-const creds = ref({
-  country: store.countryShipping,
-  city: store.cityShipping,
-  street: store.streetShipping,
-  postalCode: store.postalCodeShipping,
-  isDefault: store.isDefaultShipping
+interface StepData {
+  countryShipping: string;
+  cityShipping: string;
+  streetShipping: string;
+  postalCodeShipping: string;
+  isDefaultShipping: boolean;
+}
+const props = defineProps({
+  data: { type: Object as () => StepData, required: true },
+  cb: { type: Function, required: true }
 });
+const { data } = toRefs(props);
+
 const errorsStreet = ref<null | string[]>(null);
 const errorsCity = ref<null | string[]>(null);
 const errorsCountry = ref<null | string[]>(null);
 const errorsPostalCode = ref<null | string[]>(null);
 
 watch(
-  () => creds.value.street,
+  () => data.value.streetShipping,
   (newValue: string) => {
     let result = validateName(newValue);
     const errorList = result.errors.map((error) => error.message).filter((message): message is string => message !== undefined);
@@ -34,7 +36,7 @@ watch(
 );
 
 watch(
-  () => creds.value.city,
+  () => data.value.cityShipping,
   (newValue: string) => {
     let result = validateName(newValue);
     const errorList = result.errors.map((error) => error.message).filter((message): message is string => message !== undefined);
@@ -44,10 +46,10 @@ watch(
 );
 
 watch(
-  () => creds.value.country,
+  () => data.value.countryShipping,
   (newValue: string) => {
-    if (creds.value.postalCode) {
-      let result = validatePostalCode(creds.value.postalCode, newValue);
+    if (data.value.postalCodeShipping) {
+      let result = validatePostalCode(data.value.postalCodeShipping, newValue);
       errorsPostalCode.value = result.length > 0 ? result : null;
     }
   },
@@ -55,9 +57,9 @@ watch(
 );
 
 watch(
-  () => creds.value.postalCode,
+  () => data.value.postalCodeShipping,
   (newValue: string) => {
-    let result = validatePostalCode(newValue, creds.value.country);
+    let result = validatePostalCode(newValue, data.value.countryShipping);
     errorsPostalCode.value = result.length > 0 ? result : null;
   },
   { deep: true }
@@ -69,27 +71,18 @@ const isValidInputData = computed(
     !errorsCountry.value &&
     !errorsStreet.value &&
     !errorsPostalCode.value &&
-    creds.value.street &&
-    creds.value.country &&
-    creds.value.city &&
-    creds.value.postalCode
+    data.value.streetShipping &&
+    data.value.countryShipping &&
+    data.value.cityShipping &&
+    data.value.postalCodeShipping
 );
-const saveData = () => {
-  store.countryShipping = creds.value.country;
-  store.cityShipping = creds.value.city;
-  store.streetShipping = creds.value.street;
-  store.postalCodeShipping = creds.value.postalCode;
-  store.isDefaultShipping = creds.value.isDefault;
-};
 
 const nextStep = () => {
-  store.nextStep();
-  saveData();
+  props.cb();
 };
 
 const prevStep = () => {
-  store.prevStep();
-  saveData();
+  props.cb(false);
 };
 </script>
 <template>
@@ -102,34 +95,33 @@ const prevStep = () => {
       </div>
 
       <SelectInput
-        v-model="creds.country"
+        v-model="data.countryShipping"
         :options="['Russia', 'United States']"
       ></SelectInput>
       <SimpleInput
-        v-model="creds.postalCode"
+        v-model="data.postalCodeShipping"
         placeholder="Postal code"
         :error="errorsPostalCode"
       />
       <SimpleInput
-        v-model="creds.street"
+        v-model="data.streetShipping"
         placeholder="Street"
         :error="errorsStreet"
       />
       <SimpleInput
-        v-model="creds.city"
+        v-model="data.cityShipping"
         placeholder="City"
         :error="errorsCity"
       >
       </SimpleInput>
       <CheckBox
         label="set as default shipping address"
-        v-model="creds.isDefault"
+        v-model="data.isDefaultShipping"
       />
       <div class="button-block">
         <MainButton
           class="button"
           type="submit"
-          :disabled="!isValidInputData"
           :options="{ buttonStyle: 'dark-grey' }"
           name="Prev"
           @click="prevStep"

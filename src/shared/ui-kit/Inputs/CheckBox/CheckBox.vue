@@ -63,6 +63,7 @@ input[type='checkbox']:checked::before {
   color: #666;
 }
 .checkbox-wrapper {
+  border: none;
   align-items: center;
   width: 100%;
   display: flex;

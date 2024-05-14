@@ -3,8 +3,8 @@ import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
 import { computed, ref } from 'vue';
 import OpenedEye from '@shared/ui-kit/Icons/OpenedEye.vue';
 import ClosedEye from '@shared/ui-kit/Icons/ClosedEye.vue';
-import { validateEmail } from '@/utils/validation';
-import { validatePassword } from '@/utils/validation';
+import { validateEmail } from '@shared/utils/validation';
+import { validatePassword } from '@shared/utils/validation';
 import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 
@@ -80,6 +80,7 @@ const login = () => {
         </template>
       </SimpleInput>
       <MainButton
+        id="sign-in"
         class="sign-in"
         type="submit"
         :disabled="!isValidInputData"
@@ -101,7 +102,8 @@ const login = () => {
 .sign-in:not(:disabled):hover {
   cursor: pointer;
 }
-.sign-in {
+#sign-in {
+  width: 100%;
   border-radius: 2px;
   margin: 0;
   height: 40px;

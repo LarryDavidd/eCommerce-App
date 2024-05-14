@@ -19,4 +19,15 @@ const props = defineProps({
   background-color: #e8e7e7;
   padding: 20px 50px;
 }
+@media screen and (max-width: 600px) {
+  .form-wrapper {
+    width: 350px;
+  }
+}
+@media screen and (max-width: 450px) {
+  .form-wrapper {
+    width: 300px;
+    padding: 10px 20px;
+  }
+}
 </style>

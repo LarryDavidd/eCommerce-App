@@ -2,9 +2,7 @@
 import VueDatePicker from '@vuepic/vue-datepicker';
 import ErrorIcon from '@shared/ui-kit/Icons/ErrorIcon.vue';
 import { ref } from 'vue';
-import { useRegistrationStore } from '@app/stores/registration';
 
-const store = useRegistrationStore();
 type PropsType = {
   name?: string;
   placeholder: string;
@@ -12,7 +10,7 @@ type PropsType = {
   disabled?: boolean;
   modelValue: Date | null;
 };
-withDefaults(defineProps<PropsType>(), {
+const props = withDefaults(defineProps<PropsType>(), {
   name: 'Date Picker',
   disabled: false,
   error: null,
@@ -21,8 +19,7 @@ withDefaults(defineProps<PropsType>(), {
 const emit = defineEmits<{
   (e: 'update:modelValue', value: Date): void;
 }>();
-const date = ref(store.birthDate);
-
+const date = ref(props.modelValue);
 function handleSelect(data: Date) {
   emit('update:modelValue', data);
 }

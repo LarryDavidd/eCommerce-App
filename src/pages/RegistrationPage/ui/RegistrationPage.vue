@@ -1,27 +1,61 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { useRegistrationStore } from '@app/stores/registration';
+import { ref } from 'vue';
 import FirstStep from '@features/ui/Forms/FirstStep/FirstStep.vue';
 import SecondStep from '@features/ui/Forms/SecondStep/SecondStep.vue';
 import ThirdStep from '@features/ui/Forms/ThirdStep/ThirdStep.vue';
 import ForthStep from '@features/ui/Forms/ForthStep/ForthStep.vue';
 
-const store = useRegistrationStore();
-const currentComponentKey = computed(() => `component-${store.step}`);
-const currentComponent = computed(() => {
-  switch (store.step) {
-    case 1:
-      return FirstStep;
-    case 2:
-      return SecondStep;
-    case 3:
-      return ThirdStep;
-    case 4:
-      return ForthStep;
-    default:
-      return FirstStep;
+const step = ref(1);
+
+const data = ref({
+  firstStep: {
+    name: '',
+    surname: '',
+    birthDate: null
+  },
+  secondStep: {
+    email: '',
+    password: ''
+  },
+  thirdStep: {
+    countryShipping: 'Russia',
+    cityShipping: '',
+    streetShipping: '',
+    postalCodeShipping: '',
+    isDefaultShipping: false
+  },
+  forthStep: {
+    countryBilling: 'Russia',
+    cityBilling: '',
+    streetBilling: '',
+    postalCodeBilling: '',
+    isDefaultBilling: false,
+    isSameAddresses: false
   }
 });
+
+const changeStep = (flag: boolean = true) => {
+  if (flag) step.value += 1;
+  else step.value -= 1;
+};
+const setSameAddresses = () => {
+  data.value.forthStep.cityBilling = data.value.thirdStep.cityShipping;
+  data.value.forthStep.streetBilling = data.value.thirdStep.streetShipping;
+  data.value.forthStep.countryBilling = data.value.thirdStep.countryShipping;
+  data.value.forthStep.postalCodeBilling = data.value.thirdStep.postalCodeShipping;
+};
+
+const checkSameness = () => {
+  if (
+    data.value.forthStep.isSameAddresses &&
+    (data.value.forthStep.cityBilling !== data.value.thirdStep.cityShipping ||
+      data.value.forthStep.streetBilling !== data.value.thirdStep.streetShipping ||
+      data.value.forthStep.countryBilling !== data.value.thirdStep.countryShipping ||
+      data.value.forthStep.postalCodeBilling !== data.value.thirdStep.postalCodeShipping)
+  ) {
+    data.value.forthStep.isSameAddresses = false;
+  }
+};
 </script>
 
 <template>
@@ -31,9 +65,27 @@ const currentComponent = computed(() => {
         name="fade"
         mode="out-in"
       >
-        <component
-          :is="currentComponent"
-          :key="currentComponentKey"
+        <FirstStep
+          :data="data.firstStep"
+          v-if="step === 1"
+          :cb="changeStep"
+        />
+        <SecondStep
+          :data="data.secondStep"
+          v-else-if="step === 2"
+          :cb="changeStep"
+        />
+        <ThirdStep
+          :data="data.thirdStep"
+          v-else-if="step === 3"
+          :cb="changeStep"
+        />
+        <ForthStep
+          :data="data.forthStep"
+          v-else-if="step === 4"
+          :cb="changeStep"
+          @setSameValues="setSameAddresses"
+          @updateBilling="checkSameness"
         />
       </transition>
     </div>
