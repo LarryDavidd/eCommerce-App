@@ -1,48 +1,90 @@
 import { defineStore } from 'pinia';
+import CostumerApi from '../api/costumerApi';
+import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
+import { ref } from 'vue';
+import type { CustomerDraft } from '@commercetools/platform-sdk';
+import { revokingToken } from '@/auth/api/revokeToken';
 
-const useCostumerStore = defineStore('costumer_store', () => {
-  const user = ref<CustomerSignInResultType | null>(null);
-  const userName = ref<string | null>(ls.load('user-name') ?? null);
-  const isLoadingRef = ref(false);
+export const useCostumerStore = defineStore('costumer_store', () => {
+  const costumerApi = new CostumerApi();
+  const ls = useLocalStorage();
 
-  const IsLoading = computed(() => isLoadingRef.value);
+  const isLogined = ref<boolean>(false);
+  const isLoading = ref<boolean>(false);
+  const isExist = ref<boolean>(false);
 
-  const GetUser = computed(() => user.value?.customer);
+  async function AnonCostumer() {
+    const anonCostumer = await costumerApi.anonCostumer();
 
-  const GetUserName = computed(() => userName.value);
-
-  const GetUserCart = computed(() => user.value?.cart);
-
-  async function SignIn(email: string, password: string) {
-    isLoadingRef.value = true;
-    const res = await fetchUserSignin({ email, password });
-
-    let isError = false;
-    let isLogin = false;
-
-    if (res instanceof Error) {
-      isError = true;
-      alert.AddMessage({ status: 'error', message: res.message });
-    } else {
-      user.value = res;
-      userName.value = res.customer.firstName ?? null;
-      ls.set('user-name', userName.value);
-
-      const result = await authController.PasswordFlowCommand.execute(email, password);
-
-      if (result instanceof Error) {
-        isError = true;
-        alert.AddMessage({ status: 'error', message: result.message });
-      } else {
-        isLogin = true;
-        alert.AddMessage({ status: 'success', message: 'Success Sign In' });
-      }
+    if (anonCostumer?.statusCode === 200) {
+      isLogined.value = false;
+      isExist.value = true;
     }
-
-    isLoadingRef.value = false;
-
-    return { data: res, isError, isLoading: isLoadingRef.value, isLogin };
   }
 
-  return { SignIn, GetUser, GetUserCart, IsLoading, GetUserName };
+  async function LoginExistigCostumer() {
+    isLoading.value = true;
+    const accessToken = ls.load('access_token');
+
+    if (accessToken) {
+      const existCostumer = await costumerApi.existingCostumer(String(accessToken));
+
+      if (existCostumer?.statusCode === 200) {
+        isLogined.value = true;
+        isExist.value = true;
+      } else {
+        const refreshToken = ls.load('refresh_token');
+
+        const refreshCostumer = await costumerApi.refreshCostumer(String(refreshToken));
+
+        if (refreshCostumer?.statusCode === 200) {
+          isLogined.value = true;
+          isExist.value = true;
+        }
+      }
+    } else {
+      AnonCostumer();
+    }
+    isLoading.value = false;
+  }
+
+  async function LoginCostumer(email: string, password: string) {
+    isLoading.value = true;
+    const loginCostumer = await costumerApi.loginCostumer(email, password);
+
+    if (loginCostumer.statusCode === 200) {
+      isExist.value = true;
+      isLogined.value = true;
+    }
+    isLoading.value = false;
+  }
+
+  async function RegistrationCostumer(draft: CustomerDraft) {
+    isLoading.value = true;
+    const regCostumer = await costumerApi.regCostumer(draft);
+
+    if (regCostumer.statusCode === 200) {
+      isExist.value = true;
+      isLogined.value = true;
+    }
+    isLoading.value = false;
+  }
+
+  async function LogoutCostumer() {
+    isLoading.value = true;
+
+    const accessToken = String(ls.load('access_token'));
+
+    const logoutCostumer = await revokingToken(accessToken);
+
+    if (logoutCostumer instanceof Error) {
+      console.log('alert with error about token');
+    }
+
+    AnonCostumer();
+
+    isLoading.value = false;
+  }
+
+  return { LoginExistigCostumer, LoginCostumer, RegistrationCostumer, LogoutCostumer };
 });

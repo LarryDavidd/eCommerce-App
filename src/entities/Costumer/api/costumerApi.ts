@@ -1,6 +1,5 @@
 import Client from '@/shared/api/client/Client';
-import { useLocalStorage } from '@/shared/lib/composables/useLocalStorage';
-import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
+import { ByProjectKeyRequestBuilder, type CustomerDraft } from '@commercetools/platform-sdk';
 
 class CostumerApi {
   static clientBuilder: ByProjectKeyRequestBuilder;
@@ -12,7 +11,16 @@ class CostumerApi {
       .me()
       .get()
       .execute()
-      .then((data) => console.log(data));
+      .then((data) => data);
+  }
+
+  public async regCostumer(draft: CustomerDraft) {
+    return Client.getInstance()
+      .anonymousClient.customers()
+      .post({
+        body: draft
+      })
+      .execute();
   }
 
   public async anonCostumer() {
@@ -20,7 +28,7 @@ class CostumerApi {
       .anonymousClient.me()
       .get()
       .execute()
-      .then((data) => console.log(data));
+      .then((data) => data);
     // anonUserBuilder
     //   .products()
     //   .get()
@@ -39,40 +47,30 @@ class CostumerApi {
       .clientCredentialsClient.me()
       .get()
       .execute()
-      .then((data) => console.log(data));
+      .then((data) => data);
   }
 
-  public async refreshCostumer() {
-    const refreshToken = useLocalStorage().load('refresh_token');
-    if (refreshToken) {
-      return Client.getInstance()
-        .clientWithRefreshTokenFlow(String(refreshToken))
-        .me()
-        .get()
-        .execute()
-        .then((data) => console.log(data));
-      // .me()
-      // .carts()
-      // .post({ body: { currency: 'USD' } })
-      // .execute()
-      // .then((data) => console.log(data));
-    } else {
-      return null;
-    }
+  public async refreshCostumer(refreshToken: string) {
+    return Client.getInstance()
+      .clientWithRefreshTokenFlow(refreshToken)
+      .me()
+      .get()
+      .execute()
+      .then((data) => data);
+    // .me()
+    // .carts()
+    // .post({ body: { currency: 'USD' } })
+    // .execute()
+    // .then((data) => console.log(data));
   }
 
-  public async existingCostumer() {
-    const access_token = useLocalStorage().load('access_token');
-    if (access_token) {
-      return Client.getInstance()
-        .clientWithExistTokenFlow(String(access_token))
-        .me()
-        .get()
-        .execute()
-        .then((data) => console.log(data));
-    } else {
-      return null;
-    }
+  public async existingCostumer(access_token: string) {
+    return Client.getInstance()
+      .clientWithExistTokenFlow(access_token)
+      .me()
+      .get()
+      .execute()
+      .then((data) => data);
   }
 }
 

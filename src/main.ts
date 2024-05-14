@@ -5,7 +5,8 @@ import { createApp } from 'vue';
 
 import App from '@app/App.vue';
 import router from '@app/router';
-import CostumerApi from './entities/Costumer/api/costumerApi';
+
+import { useCostumerStore } from './entities/Costumer/store/costumerStore';
 
 const app = createApp(App);
 
@@ -15,7 +16,8 @@ app.use(router);
 
 app.mount('#app');
 
-new CostumerApi().existingCostumer();
+useCostumerStore().LogoutCostumer();
+
 // new CostumerApi().credentialsCostumer();
 // new CostumerApi().loginCostumer('seb@example.uk', 'asdfjkl1A');
 // new CostumerApi().anonCostumer();
