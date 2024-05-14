@@ -1,4 +1,5 @@
 import Client from '@/shared/api/client/Client';
+import { useLocalStorage } from '@/shared/lib/composables/useLocalStorage';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 
 class CostumerApi {
@@ -33,11 +34,19 @@ class CostumerApi {
     //   .then((data) => console.log(data));
   }
 
-  public async existingCostumer() {
-    const refreshToken = localStorage.getItem('refresh_token');
+  public async credentialsCostumer() {
+    return Client.getInstance()
+      .clientCredentialsClient.me()
+      .get()
+      .execute()
+      .then((data) => console.log(data));
+  }
+
+  public async refreshCostumer() {
+    const refreshToken = useLocalStorage().load('refresh_token');
     if (refreshToken) {
       return Client.getInstance()
-        .clientWithRefreshTokenFlow(refreshToken)
+        .clientWithRefreshTokenFlow(String(refreshToken))
         .me()
         .get()
         .execute()
@@ -47,6 +56,20 @@ class CostumerApi {
       // .post({ body: { currency: 'USD' } })
       // .execute()
       // .then((data) => console.log(data));
+    } else {
+      return null;
+    }
+  }
+
+  public async existingCostumer() {
+    const access_token = useLocalStorage().load('access_token');
+    if (access_token) {
+      return Client.getInstance()
+        .clientWithExistTokenFlow(String(access_token))
+        .me()
+        .get()
+        .execute()
+        .then((data) => console.log(data));
     } else {
       return null;
     }

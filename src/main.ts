@@ -16,5 +16,6 @@ app.use(router);
 app.mount('#app');
 
 new CostumerApi().existingCostumer();
+// new CostumerApi().credentialsCostumer();
 // new CostumerApi().loginCostumer('seb@example.uk', 'asdfjkl1A');
 // new CostumerApi().anonCostumer();

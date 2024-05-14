@@ -2,6 +2,7 @@ import {
   ClientBuilder,
   type AnonymousAuthMiddlewareOptions,
   type AuthMiddlewareOptions,
+  type ExistingTokenMiddlewareOptions,
   type HttpMiddlewareOptions,
   type PasswordAuthMiddlewareOptions,
   type RefreshAuthMiddlewareOptions
@@ -25,7 +26,6 @@ class AuthTokenFlow {
   }
 
   public createLoginedUser(username: string, password: string) {
-    console.log(apiUrl, authUrl, clientId, projectKey, scopes, clientSecret);
     return createApiBuilderFromCtpClient(
       this.clientBuilder.withPasswordFlow(this.getLoginedOptions(username, password)).withHttpMiddleware(this.httpMiddlewareOptions).build()
     ).withProjectKey({ projectKey });
@@ -35,6 +35,19 @@ class AuthTokenFlow {
     return createApiBuilderFromCtpClient(
       this.clientBuilder.withClientCredentialsFlow(this.getRefreshCostumerOptions(refreshToken)).withHttpMiddleware(this.httpMiddlewareOptions).build()
     ).withProjectKey({ projectKey });
+  }
+
+  public createExistUser(access_token: string) {
+    const authorization = `Bearer ${access_token}`;
+
+    const options: ExistingTokenMiddlewareOptions = {
+      force: true
+    };
+    const ctpClient = createApiBuilderFromCtpClient(
+      this.clientBuilder.withProjectKey(projectKey).withHttpMiddleware(this.httpMiddlewareOptions).withExistingTokenFlow(authorization, options).build()
+    ).withProjectKey({ projectKey });
+
+    return ctpClient;
   }
 
   public createCredentialsUser() {

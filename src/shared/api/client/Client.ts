@@ -53,6 +53,14 @@ class Client {
     return this.cachedClients.existingTokenClient;
   }
 
+  clientWithExistTokenFlow(accessToken: string) {
+    if (!this.cachedClients.existingTokenClient) {
+      this.cachedClients.existingTokenClient = this.authTokenFlow.createExistUser(accessToken);
+    }
+
+    return this.cachedClients.existingTokenClient;
+  }
+
   clearApiRoot() {
     this.cachedClients = { ...this.cachedClients, passwordFlow: undefined, existingTokenClient: undefined };
   }

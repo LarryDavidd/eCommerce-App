@@ -1,3 +1,5 @@
+import { useLocalStorage } from '@/shared/lib/composables/useLocalStorage';
+
 export interface TokenResponse {
   refresh_token?: string;
   access_token?: string;
@@ -8,8 +10,8 @@ async function fetcher(...args: Parameters<typeof fetch>): Promise<Response> {
   const clone = response.clone();
   const data: TokenResponse = await clone.json();
 
-  if (data.refresh_token) localStorage.setItem('refresh_token', data.refresh_token);
-  if (data.access_token) localStorage.setItem('access_token', data.access_token);
+  if (data.refresh_token) useLocalStorage().set('refresh_token', data.refresh_token);
+  if (data.access_token) useLocalStorage().set('access_token', data.access_token);
 
   console.log(data);
 
