@@ -44,3 +44,28 @@ export const validatePassword = create((password: string) => {
     enforce(password).matches(/^\S.*\S$/);
   });
 });
+export const validateBirthDate = (birthDate: Date) => {
+  const currentDate = new Date();
+  const minAgeDate = new Date(currentDate.getFullYear() - 14, currentDate.getMonth(), currentDate.getDate());
+  return birthDate <= minAgeDate;
+};
+export const validateName = create((name: string) => {
+  test('username', 'Field must contain at least one character and no special characters or numbers', () => {
+    enforce(name).matches(/^[a-zA-Z]+$/);
+  });
+});
+export const validatePostalCode = (code: string, country: string) => {
+  if (code == '') return ['Postal code is required'];
+  if (country == 'Russia') {
+    const codeRusFormat = /^\d{6}$/;
+    if (!code.match(codeRusFormat)) {
+      return ['The postal code does not correspond to the postal code of Russia (e.g 123456)'];
+    }
+  } else if (country == 'United States') {
+    const codeAmericanFormat = /^\d{5}(?:[-\s]\d{4})?$/;
+    if (!code.match(codeAmericanFormat)) {
+      return ['The postal code does not match the postal code of the United States (e.g 12345)'];
+    }
+  }
+  return [];
+};
