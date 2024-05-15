@@ -23,8 +23,8 @@ const data = [
 
 <template>
   <footer>
-    <div class="footer-top py-20 shadow-md">
-      <div class="mx-20 flex space-x-60">
+    <div class="footer-top py-4 md:py-20">
+      <div class="mx-20 flex flex-col items-center gap-10 md:flex-row md:items-start md:justify-between">
         <FooterColumn
           v-for="(column, index) in data"
           :key="index"
@@ -34,7 +34,7 @@ const data = [
       </div>
     </div>
     <div class="bg-gray-300">
-      <div class="mx-20 flex h-14 items-center justify-between">
+      <div class="mx-5 flex h-14 flex-col items-center justify-between md:mx-20 md:flex-row">
         <p>© 2024 All rights reserved</p>
         <p>Privacy Policy</p>
       </div>

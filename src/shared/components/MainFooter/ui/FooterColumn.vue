@@ -9,10 +9,10 @@ const props = defineProps<PropsType>();
 
 <template>
   <div class="max-col-with">
-    <h2 class="mb-4 max-w-xs text-left text-base font-medium leading-7 text-black">{{ props.name }}</h2>
+    <h2 class="mb-4 max-w-xs text-center text-base font-medium leading-7 text-black md:text-left">{{ props.name }}</h2>
     <ul>
       <li
-        class="mb-3 text-base leading-6 text-gray-900"
+        class="mb-3 text-center text-base leading-6 text-gray-900 md:text-left"
         v-for="(link, index) in props.links"
         :key="index"
       >
@@ -24,6 +24,6 @@ const props = defineProps<PropsType>();
 
 <style scoped lang="scss">
 .max-col-with {
-  max-width: 250px;
+  max-width: 15rem;
 }
 </style>
