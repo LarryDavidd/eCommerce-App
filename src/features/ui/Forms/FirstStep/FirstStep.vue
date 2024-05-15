@@ -1,25 +1,28 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { ref, toRefs, watch, computed } from 'vue';
 import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
 import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
 import DatePicker from '@shared/ui-kit/Inputs/DatePicker/DatePicker.vue';
-import { validateName, validateBirthDate } from '@/utils/validation';
-import { useRegistrationStore } from '@app/stores/registration';
+import { validateName, validateBirthDate } from '@shared/utils/validation';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 
-const store = useRegistrationStore();
-const creds = ref({
-  name: store.name,
-  surname: store.surname,
-  birthDate: store.birthDate
+export interface StepData {
+  name: string;
+  surname: string;
+  birthDate: Date | null;
+}
+const props = defineProps({
+  data: { type: Object as () => StepData, required: true },
+  cb: { type: Function, required: true }
 });
+const { data } = toRefs(props);
 
 const errorsName = ref<null | string[]>(null);
 const errorsSurname = ref<null | string[]>(null);
 const errorsBirthDate = ref<null | string>(null);
 
 watch(
-  () => creds.value.name,
+  () => data.value.name,
   (newName) => {
     const result = validateName(newName);
     const errorList = result.errors.map((error) => error.message).filter((message): message is string => message !== undefined);
@@ -29,7 +32,7 @@ watch(
 );
 
 watch(
-  () => creds.value.surname,
+  () => data.value.surname,
   (newSurname) => {
     const result = validateName(newSurname);
     const errorList = result.errors.map((error) => error.message).filter((message): message is string => message !== undefined);
@@ -39,7 +42,7 @@ watch(
 );
 
 watch(
-  () => creds.value.birthDate,
+  () => data.value.birthDate,
   (newBirthDate) => {
     if (!newBirthDate) errorsBirthDate.value = 'This field is required';
     else {
@@ -51,14 +54,11 @@ watch(
 );
 
 const isValidInputData = computed(() => {
-  return !errorsName.value && !errorsSurname.value && !errorsBirthDate.value && creds.value.name && creds.value.surname && creds.value.birthDate;
+  return !errorsName.value && !errorsSurname.value && !errorsBirthDate.value && data.value.name && data.value.surname && data.value.birthDate;
 });
 
 const nextStep = () => {
-  store.name = creds.value.name;
-  store.surname = creds.value.surname;
-  store.birthDate = creds.value.birthDate;
-  store.nextStep();
+  props.cb();
 };
 </script>
 
@@ -70,21 +70,22 @@ const nextStep = () => {
         <span>Step 1</span>
       </div>
       <SimpleInput
-        v-model="creds.name"
+        v-model="data.name"
         placeholder="Name"
         :error="errorsName"
       />
       <SimpleInput
-        v-model="creds.surname"
+        v-model="data.surname"
         placeholder="Surname"
         :error="errorsSurname"
       />
       <DatePicker
-        v-model="creds.birthDate"
+        v-model="data.birthDate"
         placeholder="BirthDate"
         :error="errorsBirthDate"
       />
       <MainButton
+        id="next-but"
         class="button"
         type="submit"
         :disabled="!isValidInputData"
@@ -100,7 +101,9 @@ const nextStep = () => {
 .button:not(:disabled):hover {
   cursor: pointer;
 }
+
 .button {
+  width: 100%;
   border-radius: 2px;
   margin: 0;
   height: 40px;
@@ -118,9 +121,9 @@ const nextStep = () => {
 
 .link {
   @apply text-gray-600
-  underline
-  duration-200
-  hover:text-gray-900;
+    underline
+    duration-200
+    hover:text-gray-900;
 }
 
 .password-eye {

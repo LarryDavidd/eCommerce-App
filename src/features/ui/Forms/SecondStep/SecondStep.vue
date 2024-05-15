@@ -1,27 +1,29 @@
 <script setup lang="ts">
 import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, toRefs, watch } from 'vue';
 import OpenedEye from '@shared/ui-kit/Icons/OpenedEye.vue';
 import ClosedEye from '@shared/ui-kit/Icons/ClosedEye.vue';
-import { validatePassword, validateEmail } from '@/utils/validation';
+import { validatePassword, validateEmail } from '@shared/utils/validation';
 import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
-import { useRegistrationStore } from '@app/stores/registration';
 
-const store = useRegistrationStore();
-
-const creds = ref({
-  email: store.email,
-  password: store.password
+export interface StepData {
+  email: string;
+  password: string;
+}
+const props = defineProps({
+  data: { type: Object as () => StepData, required: true },
+  cb: { type: Function, required: true }
 });
-console.log('creds', store);
+const { data } = toRefs(props);
+
 const errorsEmail = ref<null | string[]>(null);
 const errorsPassword = ref<null | string[]>(null);
 const isVisible = ref(false);
 const iconColor = ref('#D6DBE4');
 
 watch(
-  () => creds.value.email,
+  () => data.value.email,
   (newEmail) => {
     const result = validateEmail(newEmail);
     const errorList = result.errors.map((error) => error.message).filter((message): message is string => message !== undefined);
@@ -31,7 +33,7 @@ watch(
 );
 
 watch(
-  () => creds.value.password,
+  () => data.value.password,
   (newPassword) => {
     const result = validatePassword(newPassword);
     const errorList = result.errors.map((error) => error.message).filter((message): message is string => message !== undefined);
@@ -41,18 +43,14 @@ watch(
 );
 
 const isValidInputData = computed(() => {
-  return !errorsEmail.value && !errorsPassword.value && creds.value.email && creds.value.password;
+  return !errorsEmail.value && !errorsPassword.value && data.value.email && data.value.password;
 });
 
 const nextStep = () => {
-  store.nextStep();
-  store.password = creds.value.password;
-  store.email = creds.value.email;
+  props.cb();
 };
 const prevStep = () => {
-  store.prevStep();
-  store.password = creds.value.password;
-  store.email = creds.value.email;
+  props.cb(false);
 };
 </script>
 <template>
@@ -63,12 +61,12 @@ const prevStep = () => {
         <span>Step 2</span>
       </div>
       <SimpleInput
-        v-model="creds.email"
+        v-model="data.email"
         placeholder="Email"
         :error="errorsEmail"
       />
       <SimpleInput
-        v-model="creds.password"
+        v-model="data.password"
         placeholder="Password"
         :error="errorsPassword"
         :type="isVisible ? 'text' : 'password'"
@@ -96,7 +94,6 @@ const prevStep = () => {
         <MainButton
           class="button"
           type="submit"
-          :disabled="!isValidInputData"
           :options="{ buttonStyle: 'dark-grey' }"
           name="Prev"
           @click="prevStep"
