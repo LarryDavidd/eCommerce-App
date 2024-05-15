@@ -4,9 +4,9 @@ import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 
 <template>
   <div class="mx-10 lg:mx-20">
-    <div class="test mb-4 flex w-full flex-col items-center sm:items-start">
-      <div class="test4 md:h-70vh flex w-full bg-contain bg-center bg-no-repeat py-5 text-center sm:bg-right-top sm:py-20 sm:text-left">
-        <div class="test6 flex flex-col justify-between gap-6 font-bold text-black sm:w-3/5 md:justify-center">
+    <div class="mb-4 flex w-full flex-col items-center sm:items-start">
+      <div class="background md:h-70vh flex w-full bg-contain bg-center bg-no-repeat py-5 text-center sm:bg-right-top sm:py-20 sm:text-left">
+        <div class="flex flex-col justify-between gap-6 font-bold text-black sm:w-3/5 md:justify-center">
           <p class="text-3xl md:text-5xl">Oops... Page not found :/</p>
           <p class="text-1xl md:text-2xl">We are already working on fixing this error.</p>
         </div>
@@ -22,17 +22,17 @@ import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 </template>
 
 <style scoped lang="scss">
-.test4 {
+.background {
   height: 23rem;
   background-image: url('../../../shared/assets/images/clothes_hanger.png');
 }
 @media (max-width: 1024px) {
-  .test4 {
+  .background {
     background-size: 25rem;
   }
 }
 @media (max-width: 767px) {
-  .test4 {
+  .background {
     background-size: 15rem;
   }
 }
