@@ -18,7 +18,7 @@ const props = defineProps({
   data: { type: Object as () => StepData, required: true },
   cb: { type: Function, required: true }
 });
-const emits = defineEmits(['updateBilling', 'setSameValues']);
+const emits = defineEmits(['updateBilling', 'setSameValues', 'submitForm']);
 const { data } = toRefs(props);
 
 const errorsStreet = ref<null | string[]>(null);
@@ -97,7 +97,7 @@ const isValidInputData = computed(
 );
 
 const nextStep = () => {
-  console.log('submit');
+  emits('submitForm');
 };
 
 const prevStep = () => {
