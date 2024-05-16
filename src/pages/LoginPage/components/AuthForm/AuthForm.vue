@@ -12,7 +12,7 @@ const creds = ref({
   email: '',
   password: ''
 });
-
+const emits = defineEmits(['submitForm']);
 const errorsEmail = ref<null | string[]>(null);
 const errorsPassword = ref<null | string[]>(null);
 
@@ -39,8 +39,7 @@ const passwordIsValid = ref(false);
 const isValidInputData = computed(() => emailIsValid.value && passwordIsValid.value);
 
 const login = () => {
-  // const response = await ...
-  console.log('login');
+  emits('submitForm');
 };
 </script>
 <template>

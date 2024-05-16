@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import FirstStep from '@features/ui/Forms/FirstStep/FirstStep.vue';
-import SecondStep from '@features/ui/Forms/SecondStep/SecondStep.vue';
-import ThirdStep from '@features/ui/Forms/ThirdStep/ThirdStep.vue';
-import ForthStep from '@features/ui/Forms/ForthStep/ForthStep.vue';
+import FirstStep from '@pages/RegistrationPage/components/FirstStep/FirstStep.vue';
+import SecondStep from '@pages/RegistrationPage/components/SecondStep/SecondStep.vue';
+import ThirdStep from '@pages/RegistrationPage/components/ThirdStep/ThirdStep.vue';
+import ForthStep from '@pages/RegistrationPage/components/ForthStep/ForthStep.vue';
 
 const step = ref(1);
 
@@ -56,6 +56,9 @@ const checkSameness = () => {
     data.value.forthStep.isSameAddresses = false;
   }
 };
+const register = () => {
+  console.log('register');
+};
 </script>
 
 <template>
@@ -86,6 +89,7 @@ const checkSameness = () => {
           :cb="changeStep"
           @setSameValues="setSameAddresses"
           @updateBilling="checkSameness"
+          @submit-form="register"
         />
       </transition>
     </div>
