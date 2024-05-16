@@ -1,50 +1,43 @@
 import Client from '@/shared/api/client/Client';
-import { ByProjectKeyRequestBuilder, type CustomerDraft } from '@commercetools/platform-sdk';
+import { ByProjectKeyRequestBuilder, type CustomerDraft, type ErrorResponse } from '@commercetools/platform-sdk';
+import type { ClientResponse } from '@commercetools/sdk-client-v2';
 
 class CostumerApi {
   static clientBuilder: ByProjectKeyRequestBuilder;
   constructor() {}
 
   public async loginCostumer(username: string, password: string) {
-    return Client.getInstance()
+    const res = await Client.getInstance()
       .getPasswordFlowClient(username, password)
       .me()
       .get()
       .execute()
-      .then((data) => data);
+      .then((data) => data)
+      .catch((err) => JSON.parse(JSON.stringify(err.body)) as ClientResponse<ErrorResponse>);
+    return res;
   }
 
   public async regCostumer(draft: CustomerDraft) {
-    return Client.getInstance()
+    return await Client.getInstance()
       .anonymousClient.customers()
       .post({
         body: draft
       })
-      .execute();
+      .execute()
+      .then((data) => data)
+      .catch((err) => JSON.parse(JSON.stringify(err.body)) as ClientResponse<ErrorResponse>);
   }
 
   public async anonCostumer() {
     return Client.getInstance()
-      .anonymousClient.me()
-      .get()
+      .anonymousClient.get()
       .execute()
       .then((data) => data);
-    // anonUserBuilder
-    //   .products()
-    //   .get()
-    //   .execute()
-    //   .then((data) => console.log(data));
-    // anonUserBuilder
-    //   .me()
-    //   .carts()
-    //   .get()
-    //   .execute()
-    //   .then((data) => console.log(data));
   }
 
   public async credentialsCostumer() {
     return Client.getInstance()
-      .clientCredentialsClient.me()
+      .credentialsClient.me()
       .get()
       .execute()
       .then((data) => data);
@@ -57,11 +50,6 @@ class CostumerApi {
       .get()
       .execute()
       .then((data) => data);
-    // .me()
-    // .carts()
-    // .post({ body: { currency: 'USD' } })
-    // .execute()
-    // .then((data) => console.log(data));
   }
 
   public async existingCostumer(access_token: string) {

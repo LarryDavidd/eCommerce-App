@@ -5,7 +5,7 @@ export interface TokenResponse {
   access_token?: string;
 }
 
-async function fetcher(...args: Parameters<typeof fetch>): Promise<Response> {
+async function fetcher(...args: Parameters<typeof fetch>): Promise<Response | Error> {
   const response = await fetch(...args);
   const clone = response.clone();
   const data: TokenResponse = await clone.json();

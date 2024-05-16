@@ -8,8 +8,9 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 
 import App from '@app/App.vue';
 import router from '@app/router';
+import CostumerApi from './entities/Costumer/api/costumerApi';
 
-import { useCostumerStore } from './entities/Costumer/store/costumerStore';
+// import { useCostumerStore } from './entities/Costumer/store/costumerStore';
 
 const app = createApp(App);
 app.component('VueDatePicker', VueDatePicker);
@@ -19,8 +20,9 @@ app.use(router);
 
 app.mount('#app');
 
-useCostumerStore().LogoutCostumer();
+// useCostumerStore().LogoutCostumer();
+// useCostumerStore().();
 
 // new CostumerApi().credentialsCostumer();
-// new CostumerApi().loginCostumer('seb@example.uk', 'asdfjkl1A');
+// new CostumerApi().loginCostumer('seb@example.com', 'asdfjkl1A@');
 // new CostumerApi().anonCostumer();

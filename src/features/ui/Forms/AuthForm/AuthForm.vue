@@ -7,6 +7,11 @@ import { validateEmail } from '@shared/utils/validation';
 import { validatePassword } from '@shared/utils/validation';
 import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
+import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
+import { useRouter } from 'vue-router';
+
+const costumerStore = useCostumerStore();
+const router = useRouter();
 
 const creds = ref({
   email: '',
@@ -38,9 +43,12 @@ const passwordIsValid = ref(false);
 
 const isValidInputData = computed(() => emailIsValid.value && passwordIsValid.value);
 
-const login = () => {
-  // const response = await ...
-  console.log('login');
+const login = async () => {
+  await costumerStore.LoginCostumer(creds.value.email, creds.value.password).then((data) => {
+    if (data.isLogined.value) {
+      router.push({ name: 'home' });
+    }
+  });
 };
 </script>
 <template>

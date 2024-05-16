@@ -4,10 +4,12 @@ import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
 import { ref } from 'vue';
 import type { CustomerDraft } from '@commercetools/platform-sdk';
 import { revokingToken } from '@/auth/api/revokeToken';
+import { useAlertMessage } from '@/shared/Store/AlertMessagesStore';
 
 export const useCostumerStore = defineStore('costumer_store', () => {
   const costumerApi = new CostumerApi();
   const ls = useLocalStorage();
+  const alert = useAlertMessage();
 
   const isLogined = ref<boolean>(false);
   const isLoading = ref<boolean>(false);
@@ -49,23 +51,32 @@ export const useCostumerStore = defineStore('costumer_store', () => {
   }
 
   async function LoginCostumer(email: string, password: string) {
-    isLoading.value = true;
-    const loginCostumer = await costumerApi.loginCostumer(email, password);
+    const res = await costumerApi.loginCostumer(email, password);
 
-    if (loginCostumer.statusCode === 200) {
+    if (res.statusCode === 200) {
       isExist.value = true;
       isLogined.value = true;
+    } else if (res.statusCode === 400) {
+      alert.SetMessage({ status: 'error', message: res.message });
+    } else {
+      alert.SetMessage({ status: 'error', message: 'Please try again or reload page' });
     }
     isLoading.value = false;
+
+    return { isLogined };
   }
 
   async function RegistrationCostumer(draft: CustomerDraft) {
     isLoading.value = true;
-    const regCostumer = await costumerApi.regCostumer(draft);
+    const res = await costumerApi.regCostumer(draft);
 
-    if (regCostumer.statusCode === 200) {
+    if (res.statusCode === 200) {
       isExist.value = true;
       isLogined.value = true;
+    } else if (res.statusCode >= 300) {
+      alert.SetMessage({ status: 'error', message: res.message });
+    } else {
+      alert.SetMessage({ status: 'error', message: 'Please try again or reload page' });
     }
     isLoading.value = false;
   }
@@ -75,16 +86,16 @@ export const useCostumerStore = defineStore('costumer_store', () => {
 
     const accessToken = String(ls.load('access_token'));
 
-    const logoutCostumer = await revokingToken(accessToken);
+    const res = await revokingToken(accessToken);
 
-    if (logoutCostumer instanceof Error) {
-      console.log('alert with error about token');
+    if (res instanceof Error) {
+      alert.SetMessage({ status: 'error', message: 'Please reload page' });
+    } else {
+      AnonCostumer();
     }
-
-    AnonCostumer();
 
     isLoading.value = false;
   }
 
-  return { LoginExistigCostumer, LoginCostumer, RegistrationCostumer, LogoutCostumer };
+  return { AnonCostumer, LoginExistigCostumer, LoginCostumer, RegistrationCostumer, LogoutCostumer };
 });

@@ -21,7 +21,7 @@ class Client {
     return Client.instance;
   }
 
-  get clientCredentialsClient() {
+  get credentialsClient() {
     if (!this.cachedClients.clientCredentials) {
       this.cachedClients.clientCredentials = this.authTokenFlow.createCredentialsUser();
     }
