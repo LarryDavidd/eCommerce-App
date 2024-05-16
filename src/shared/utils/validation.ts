@@ -5,13 +5,11 @@ export const validateEmail = create((email: string) => {
   test('email', 'Email is required', () => {
     enforce(email).isNotEmpty();
   });
-
-  test('email', 'Email must be a valid email address', () => {
-    enforce(email).matches(/^[^@\s]+@[^@\s]+\.[^@\s]+$/);
-  });
-
   test('email', 'Email must not contain leading or trailing whitespace', () => {
     enforce(email).matches(/^\S.*\S$/);
+  });
+  test('email', 'Email must be a valid email address', () => {
+    enforce(email).matches(/^[^@\s]+@[^@\s]+\.[^@\s]+$/);
   });
 });
 
@@ -49,11 +47,30 @@ export const validateBirthDate = (birthDate: Date) => {
   const minAgeDate = new Date(currentDate.getFullYear() - 14, currentDate.getMonth(), currentDate.getDate());
   return birthDate <= minAgeDate;
 };
-export const validateName = create((name: string) => {
-  test('username', 'Field must contain at least one character and no special characters or numbers', () => {
-    enforce(name).matches(/^[a-zA-Z]+$/);
+export const validateStreet = create((street: string) => {
+  test('street', 'Field is required', () => {
+    enforce(street).isNotEmpty();
+  });
+  test('street', 'Field must contain at least one character', () => {
+    enforce(street).matches(/^[a-zA-Z\s\d!@#$%^&*]+$/);
+  });
+  test('street', 'Field must not contain leading or trailing whitespace', () => {
+    enforce(street).matches(/^\S(?:.*\S)?$/);
   });
 });
+
+export const validateName = create((name: string) => {
+  test('username', 'Field is required', () => {
+    enforce(name).isNotEmpty();
+  });
+  test('username', 'Field must contain at least one character and no special characters or numbers', () => {
+    enforce(name).matches(/^[a-zA-Z\s]+$/);
+  });
+  test('username', 'Field must not contain leading or trailing whitespace', () => {
+    enforce(name).matches(/^\S(?:.*\S)?$/);
+  });
+});
+
 export const validatePostalCode = (code: string, country: string) => {
   if (code == '') return ['Postal code is required'];
   if (country == 'Russia') {
