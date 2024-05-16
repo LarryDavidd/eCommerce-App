@@ -28,7 +28,6 @@
     "vue-router": "^4.3.2"
   },
   "devDependencies": {
-    "@vuepic/vue-datepicker": "^8.5.1",
     "@storybook/addon-essentials": "^8.0.9",
     "@storybook/addon-interactions": "^8.0.9",
     "@storybook/addon-links": "^8.0.9",
@@ -45,9 +44,11 @@
     "@vitest/coverage-v8": "^1.5.3",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/eslint-config-typescript": "^13.0.0",
+    "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.5.1",
     "@vuedx/typecheck": "^0.7.6",
     "@vuedx/typescript-plugin-vue": "^0.7.6",
+    "@vuepic/vue-datepicker": "^8.5.1",
     "autoprefixer": "^10.4.19",
     "daisyui": "^4.10.2",
     "depcheck": "^1.4.7",
