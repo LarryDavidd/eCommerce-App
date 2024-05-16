@@ -1,87 +1,68 @@
 <script setup lang="ts">
 import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
 import { computed, ref, toRefs, watch } from 'vue';
-import { validateName, validatePostalCode } from '@shared/utils/validation';
+import { validateName, validatePostalCode, validateStreet } from '@shared/utils/validation';
 import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
 import SelectInput from '@shared/ui-kit/Inputs/SelectInput/SelectInput.vue';
 import CheckBox from '@shared/ui-kit/Inputs/CheckBox/CheckBox.vue';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
+
 interface StepData {
-  countryBilling: string;
-  cityBilling: string;
-  streetBilling: string;
-  postalCodeBilling: string;
-  isDefaultBilling: boolean;
-  isSameAddresses: boolean;
+  countryShipping: string;
+  cityShipping: string;
+  streetShipping: string;
+  postalCodeShipping: string;
+  isDefaultShipping: boolean;
 }
 const props = defineProps({
   data: { type: Object as () => StepData, required: true },
   cb: { type: Function, required: true }
 });
-const emits = defineEmits(['updateBilling', 'setSameValues']);
 const { data } = toRefs(props);
 
 const errorsStreet = ref<null | string[]>(null);
 const errorsCity = ref<null | string[]>(null);
 const errorsCountry = ref<null | string[]>(null);
 const errorsPostalCode = ref<null | string[]>(null);
+
 watch(
-  () => data.value.streetBilling,
+  () => data.value.streetShipping,
   (newValue: string) => {
-    emits('updateBilling');
-    if (newValue) {
-      let result = validateName(newValue);
-      const errorList = result.errors.map((error) => error.message).filter((message): message is string => message !== undefined);
-      errorsStreet.value = errorList.length > 0 ? errorList : null;
-    }
+    let result = validateStreet(newValue);
+    const errorList = result.errors.map((error) => error.message).filter((message): message is string => message !== undefined);
+    errorsStreet.value = errorList.length > 0 ? errorList : null;
   },
-  { deep: true, immediate: true }
+  { deep: true }
 );
 
 watch(
-  () => data.value.cityBilling,
+  () => data.value.cityShipping,
   (newValue: string) => {
-    emits('updateBilling');
-    if (newValue) {
-      let result = validateName(newValue);
-      const errorList = result.errors.map((error) => error.message).filter((message): message is string => message !== undefined);
-      errorsCity.value = errorList.length > 0 ? errorList : null;
-    }
+    let result = validateName(newValue);
+    const errorList = result.errors.map((error) => error.message).filter((message): message is string => message !== undefined);
+    errorsCity.value = errorList.length > 0 ? errorList : null;
   },
-  { deep: true, immediate: true }
+  { deep: true }
 );
 
 watch(
-  () => data.value.countryBilling,
+  () => data.value.countryShipping,
   (newValue: string) => {
-    emits('updateBilling');
-    emits('updateBilling');
-    if (data.value.postalCodeBilling) {
-      let result = validatePostalCode(data.value.postalCodeBilling, newValue);
+    if (data.value.postalCodeShipping) {
+      let result = validatePostalCode(data.value.postalCodeShipping, newValue);
       errorsPostalCode.value = result.length > 0 ? result : null;
     }
   },
-  { deep: true, immediate: true }
+  { deep: true }
 );
 
 watch(
-  () => data.value.postalCodeBilling,
+  () => data.value.postalCodeShipping,
   (newValue: string) => {
-    emits('updateBilling');
-    if (newValue) {
-      let result = validatePostalCode(newValue, data.value.countryBilling);
-      errorsPostalCode.value = result.length > 0 ? result : null;
-    }
+    let result = validatePostalCode(newValue, data.value.countryShipping);
+    errorsPostalCode.value = result.length > 0 ? result : null;
   },
-  { deep: true, immediate: true }
-);
-
-watch(
-  () => data.value.isSameAddresses,
-  (isSame: boolean) => {
-    if (isSame) emits('setSameValues');
-  },
-  { deep: true, immediate: true }
+  { deep: true }
 );
 
 const isValidInputData = computed(
@@ -90,14 +71,14 @@ const isValidInputData = computed(
     !errorsCountry.value &&
     !errorsStreet.value &&
     !errorsPostalCode.value &&
-    data.value.streetBilling &&
-    data.value.countryBilling &&
-    data.value.cityBilling &&
-    data.value.postalCodeBilling
+    data.value.streetShipping &&
+    data.value.countryShipping &&
+    data.value.cityShipping &&
+    data.value.postalCodeShipping
 );
 
 const nextStep = () => {
-  console.log('submit');
+  props.cb();
 };
 
 const prevStep = () => {
@@ -108,42 +89,34 @@ const prevStep = () => {
   <FormWrapper>
     <template #content>
       <div class="title-block">
-        <h2 class="clarification">Billing address</h2>
+        <h2 class="clarification">Shipping address</h2>
         <span class="title">Registration</span>
-        <span>Step 4</span>
+        <span>Step 3</span>
       </div>
 
       <SelectInput
-        v-model="data.countryBilling"
+        v-model="data.countryShipping"
         :options="['Russia', 'United States']"
       ></SelectInput>
-
       <SimpleInput
-        v-model="data.postalCodeBilling"
+        v-model="data.postalCodeShipping"
         placeholder="Postal code"
         :error="errorsPostalCode"
       />
-
       <SimpleInput
-        v-model="data.streetBilling"
+        v-model="data.streetShipping"
         placeholder="Street"
         :error="errorsStreet"
       />
       <SimpleInput
-        v-model="data.cityBilling"
+        v-model="data.cityShipping"
         placeholder="City"
         :error="errorsCity"
       >
       </SimpleInput>
       <CheckBox
-        class="checkbox"
-        label="set as default billing address"
-        v-model="data.isDefaultBilling"
-      />
-      <CheckBox
-        class="checkbox"
-        label="set the same as the shipping address"
-        v-model="data.isSameAddresses"
+        label="set as default shipping address"
+        v-model="data.isDefaultShipping"
       />
       <div class="button-block">
         <MainButton
@@ -159,7 +132,7 @@ const prevStep = () => {
           type="submit"
           :disabled="!isValidInputData"
           :options="{ buttonStyle: 'dark-grey' }"
-          name="Submit"
+          name="Next"
           @click="nextStep"
         >
         </MainButton>
@@ -217,10 +190,5 @@ const prevStep = () => {
 
 button:disabled {
   opacity: 0.5;
-}
-@media screen and (max-width: 600px) {
-  .checkbox {
-    font-size: 13px;
-  }
 }
 </style>
