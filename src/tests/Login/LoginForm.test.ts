@@ -1,12 +1,8 @@
-import AuthForm from '@features/ui/Forms/AuthForm/AuthForm.vue';
-import { describe, it, expect, vi } from 'vitest';
+import AuthForm from '@pages/LoginPage/components/AuthForm/AuthForm.vue';
+import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-// import { setActivePinia, createPinia } from 'pinia';
-// const global = {
-//   components: {
-//     RouterLink: RouterLinkStub
-//   }
-// };
+import OpenedEye from '@shared/ui-kit/Icons/OpenedEye.vue';
+import ClosedEye from '@shared/ui-kit/Icons/ClosedEye.vue';
 
 describe('Login form tests', () => {
   it('should render form', () => {
@@ -33,18 +29,46 @@ describe('Email validation', () => {
 
   it('checking the processing of correct input', () => {
     const wrapper = mount(AuthForm);
-    const inputElement = wrapper.find('input[type="text"]'); // Находим элемент input по его типу
+    const inputElement = wrapper.find('input[type="text"]');
     inputElement.setValue('hello@world.com');
     expect(wrapper.vm.errorsEmail).toBeNull();
   });
 
   it('checking the processing of incorrect input', () => {
     const wrapper = mount(AuthForm);
-    const inputElement = wrapper.find('input[type="text"]'); // Находим элемент input по его типу
+    const inputElement = wrapper.find('input[type="text"]');
     inputElement.setValue('helloworld.com');
     expect(wrapper.vm.errorsEmail).not.toBeNull();
     inputElement.setValue('');
     expect(wrapper.vm.errorsEmail).not.toBeNull();
+  });
+});
+
+describe('Password validation', () => {
+  it('operability of the validation function', () => {
+    const wrapper = mount(AuthForm);
+    wrapper.vm.checkPassword('asdLj7d!3');
+    expect(wrapper.vm.errorsPassword).toBeNull();
+    wrapper.vm.checkPassword('assa78787');
+    expect(wrapper.vm.errorsPassword).not.toBeNull();
+    wrapper.vm.checkPassword('d5Idf78551');
+    expect(wrapper.vm.errorsPassword).not.toBeNull();
+  });
+
+  it('checking the processing of correct input', () => {
+    const wrapper = mount(AuthForm);
+    const inputElement = wrapper.find('input[type="password"]');
+    inputElement.setValue('123!Wetfhgh');
+    expect(wrapper.vm.errorsPassword).toBeNull();
+  });
+
+  it('checking the processing of incorrect input', () => {
+    const wrapper = mount(AuthForm);
+    const inputElement = wrapper.find('input[type="password"]');
+    inputElement.setValue('12345678Ty');
+    expect(wrapper.vm.errorsPassword).not.toBeNull();
+    inputElement.setValue('');
+    expect(wrapper.vm.errorsPassword).not.toBeNull();
   });
 });
 
@@ -65,46 +89,29 @@ describe('The operability of the submit button', () => {
   });
 });
 
-describe('Password validation', () => {
-  it('validates password value correctly', () => {
+describe('Password field', () => {
+  it('should toggle password visibility when eye icon is clicked', async () => {
     const wrapper = mount(AuthForm);
-    wrapper.vm.checkPassword('asdLj7d!3');
-    expect(wrapper.vm.errorsPassword).toBeNull();
 
-    wrapper.vm.checkPassword('assa78787');
-    expect(wrapper.vm.errorsPassword).not.toBeNull();
+    const passwordInput = wrapper.find('input[type="password"]');
+    expect(passwordInput.exists()).toBe(true);
 
-    wrapper.vm.checkPassword('d5Idf78551');
-    expect(wrapper.vm.errorsPassword).not.toBeNull();
+    const closedEyeIcon = wrapper.findComponent(ClosedEye);
+    expect(closedEyeIcon.exists()).toBe(true);
+
+    await closedEyeIcon.trigger('click');
+    await wrapper.vm.$nextTick();
+
+    const visiblePasswordInput = wrapper.find('input[type="text"]');
+    expect(visiblePasswordInput.exists()).toBe(true);
+
+    const openedEyeIcon = wrapper.findComponent(OpenedEye);
+    expect(openedEyeIcon.exists()).toBe(true);
+
+    await openedEyeIcon.trigger('click');
+    await wrapper.vm.$nextTick();
+
+    const hiddenPasswordInput = wrapper.find('input[type="password"]');
+    expect(hiddenPasswordInput.exists()).toBe(true);
   });
 });
-
-// describe('Show password method', () => {
-//   it('It should change input type by click on the eye icon', async () => {
-//     const wrapper = mount(AuthForm);
-//     const passInput = wrapper.findComponent({ ref:  });
-//     const eyeIcon = passInput.find('.input-icon');
-//     await wrapper.vm.$nextTick();
-//     passInput.trigger('click');
-//     await wrapper.vm.$nextTick();
-//     expect(wrapper.vm.hidePass).toBe('show');
-//     expect(wrapper.vm.passInputType).toBe('password');
-//     await wrapper.vm.$nextTick();
-//     eyeIcon.trigger('click');
-//     await wrapper.vm.$nextTick();
-//     expect(wrapper.vm.hidePass).toBe('hide');
-//     expect(wrapper.vm.passInputType).toBe('text');
-//   });
-// });
-// describe('Sign-in function', () => {
-//   it('should perform sign-in correctly', async () => {
-//     const wrapper = mount(AuthForm);
-//
-//     const signInMock = wrapper.mock('login', jest.fn());
-//     wrapper.setProps({ email: 'hello@world.com', password: 'asdLj7d3' });
-//
-//     await wrapper.trigger('submit');
-//
-//     expect(signInMock).toHaveBeenCalled();
-//   });
-// });

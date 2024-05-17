@@ -99,6 +99,7 @@ const prevStep = () => {
         :options="['Russia', 'United States']"
       ></SelectInput>
       <SimpleInput
+        class="postal-code"
         v-model="data.postalCodeShipping"
         placeholder="Postal code"
         :error="errorsPostalCode"
@@ -120,7 +121,7 @@ const prevStep = () => {
       />
       <div class="button-block">
         <MainButton
-          class="button"
+          class="button prev-step"
           type="submit"
           :options="{ buttonStyle: 'dark-grey' }"
           name="Prev"
@@ -128,7 +129,7 @@ const prevStep = () => {
         >
         </MainButton>
         <MainButton
-          class="button"
+          class="button next-step"
           type="submit"
           :disabled="!isValidInputData"
           :options="{ buttonStyle: 'dark-grey' }"
