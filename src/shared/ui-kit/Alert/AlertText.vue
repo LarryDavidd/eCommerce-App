@@ -1,99 +1,89 @@
-<script lang="ts" setup>
-type PropsType = {
-  status: 'success' | 'warning' | 'error' | 'info';
+<script setup lang="ts">
+import { defineProps } from 'vue';
+import SuccessNotify from '@shared/ui-kit/Icons/SuccessNotify.vue';
+import ErrorNotify from '@shared/ui-kit/Icons/ErrorNotify.vue';
+
+export type Notification = {
   message: string;
+  type: string;
+  id: number;
+  timerId?: NodeJS.Timeout;
 };
-
-const props = withDefaults(defineProps<PropsType>(), {
-  status: 'info',
-  message: ''
-});
-
-const statusClassStyle = () => {
-  switch (props.status) {
-    case 'success':
-      return 'alert-success';
-
-    case 'warning':
-      return 'alert-warning';
-
+defineProps<{
+  notification: Notification;
+}>();
+const getTypeLabel = (type: string) => {
+  switch (type) {
     case 'error':
-      return 'alert-error';
-
+      return 'Error';
+    case 'success':
+      return 'Success';
     default:
-      return 'alert-info';
+      return type;
   }
 };
 </script>
 
 <template>
   <div
-    class="alert"
-    :class="statusClassStyle()"
+    class="content_text"
+    :class="notification.type === 'error' ? 'error' : 'success'"
   >
-    <template v-if="props.status === 'info'">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
+    <div class="icon">
+      <ErrorNotify
+        v-if="notification.type === 'error'"
         viewBox="0 0 24 24"
-        class="h-6 w-6 shrink-0 stroke-current"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        ></path>
-      </svg>
-    </template>
-
-    <template v-if="props.status === 'success'">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6 shrink-0 stroke-current"
-        fill="none"
+      />
+      <SuccessNotify
+        v-if="notification.type === 'success'"
         viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    </template>
-
-    <template v-if="props.status === 'warning'">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6 shrink-0 stroke-current"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-        />
-      </svg>
-    </template>
-
-    <template v-if="props.status === 'error'">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6 shrink-0 stroke-current"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    </template>
-    <span>{{ props.message }}</span>
+      />
+    </div>
+    <div class="content_text-desc">
+      <span>{{ getTypeLabel(notification.type) }}</span>
+      <span>{{ notification.message }}</span>
+    </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.icon {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.content_text {
+  display: flex;
+  column-gap: 16px;
+  padding: 10px 20px;
+  color: #ffffff;
+  align-items: center;
+  z-index: 1000;
+  margin-bottom: 16px;
+  box-shadow: 0 5px 20px rgba(111, 117, 135, 0.15);
+  background: #ffffff;
+  &.error {
+    border-bottom: 2px solid red;
+  }
+  &.success {
+    border-bottom: 2px solid green;
+  }
+  span {
+    color: #525252;
+  }
+
+  &-desc {
+    display: flex;
+    flex-direction: column;
+
+    span:first-child {
+      font-weight: 600;
+    }
+
+    span:last-child {
+      font-size: 15px;
+    }
+  }
+}
+</style>
