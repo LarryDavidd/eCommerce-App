@@ -4,12 +4,12 @@ import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
 import { ref } from 'vue';
 import type { CustomerDraft } from '@commercetools/platform-sdk';
 import { revokingToken } from '@/auth/api/revokeToken';
-import { useAlertMessage } from '@/shared/Store/AlertMessagesStore';
+import { useNotificationStore } from '@/shared/Store/AlertMessageStore';
 
 export const useCostumerStore = defineStore('costumer_store', () => {
   const costumerApi = new CostumerApi();
   const ls = useLocalStorage();
-  const alert = useAlertMessage();
+  const alert = useNotificationStore();
 
   const isLogined = ref<boolean>(false);
   const isLoading = ref<boolean>(false);
@@ -57,9 +57,19 @@ export const useCostumerStore = defineStore('costumer_store', () => {
       isExist.value = true;
       isLogined.value = true;
     } else if (res.statusCode === 400) {
-      alert.SetMessage({ status: 'error', message: res.message });
+      const notification = {
+        id: Date.now(),
+        message: res.message,
+        type: 'error'
+      };
+      alert.addNotification(notification);
     } else {
-      alert.SetMessage({ status: 'error', message: 'Please try again or reload page' });
+      const notification = {
+        id: Date.now(),
+        message: 'Please try again or reload page',
+        type: 'error'
+      };
+      alert.addNotification(notification);
     }
     isLoading.value = false;
 
@@ -70,15 +80,27 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLoading.value = true;
     const res = await costumerApi.regCostumer(draft);
 
-    if (res.statusCode === 200) {
+    if (res.statusCode === 201) {
       isExist.value = true;
       isLogined.value = true;
     } else if (res.statusCode >= 300) {
-      alert.SetMessage({ status: 'error', message: res.message });
+      const notification = {
+        id: Date.now(),
+        message: res.message,
+        type: 'error'
+      };
+      alert.addNotification(notification);
     } else {
-      alert.SetMessage({ status: 'error', message: 'Please try again or reload page' });
+      const notification = {
+        id: Date.now(),
+        message: 'Please try again or reload page',
+        type: 'error'
+      };
+      alert.addNotification(notification);
     }
     isLoading.value = false;
+
+    return { isLogined };
   }
 
   async function LogoutCostumer() {

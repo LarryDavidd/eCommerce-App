@@ -4,6 +4,11 @@ import FirstStep from '@pages/RegistrationPage/components/FirstStep/FirstStep.vu
 import SecondStep from '@pages/RegistrationPage/components/SecondStep/SecondStep.vue';
 import ThirdStep from '@pages/RegistrationPage/components/ThirdStep/ThirdStep.vue';
 import ForthStep from '@pages/RegistrationPage/components/ForthStep/ForthStep.vue';
+import type { BaseAddress } from '@commercetools/platform-sdk';
+import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
+import router from '@/app/router';
+
+const costumerStore = useCostumerStore();
 
 const step = ref(1);
 
@@ -11,7 +16,7 @@ const data = ref({
   firstStep: {
     name: '',
     surname: '',
-    birthDate: null
+    birthDate: new Date(Date.now())
   },
   secondStep: {
     email: '',
@@ -57,7 +62,39 @@ const checkSameness = () => {
   }
 };
 const register = () => {
-  console.log('register');
+  console.log(data.value.firstStep.birthDate.toString().slice(0, 10));
+  const addresses: BaseAddress[] = [
+    {
+      country: data.value.thirdStep.countryShipping,
+      city: data.value.thirdStep.cityShipping,
+      streetName: data.value.thirdStep.streetShipping,
+      postalCode: data.value.thirdStep.postalCodeShipping
+    },
+    {
+      country: data.value.forthStep.countryBilling,
+      city: data.value.forthStep.cityBilling,
+      streetName: data.value.forthStep.cityBilling,
+      postalCode: data.value.forthStep.cityBilling
+    }
+  ];
+  costumerStore
+    .RegistrationCostumer({
+      // firstName: data.value.firstStep.name,
+      // lastName: data.value.firstStep.surname,
+      // dateOfBirth: data.value.firstStep.birthDate.toString().slice(0, 10),
+
+      email: data.value.secondStep.email,
+      password: data.value.secondStep.password
+
+      // addresses: addresses,
+      // shippingAddresses: [0],
+      // billingAddresses: data.value.forthStep.isSameAddresses ? [0] : [1],
+      // defaultShippingAddress: data.value.thirdStep.isDefaultShipping ? 0 : undefined,
+      // defaultBillingAddress: data.value.forthStep.isDefaultBilling ? 1 : undefined
+    })
+    .then((data) => {
+      if (data.isLogined.value) router.push({ name: 'home' });
+    });
 };
 </script>
 

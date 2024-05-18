@@ -9,8 +9,13 @@ class CostumerApi {
   public async loginCostumer(username: string, password: string) {
     const res = await Client.getInstance()
       .getPasswordFlowClient(username, password)
-      .me()
-      .get()
+      .login()
+      .post({
+        body: {
+          email: username,
+          password
+        }
+      })
       .execute()
       .then((data) => data)
       .catch((err) => JSON.parse(JSON.stringify(err.body)) as ClientResponse<ErrorResponse>);
@@ -19,7 +24,7 @@ class CostumerApi {
 
   public async regCostumer(draft: CustomerDraft) {
     return await Client.getInstance()
-      .anonymousClient.customers()
+      .credentialsClient.customers()
       .post({
         body: draft
       })

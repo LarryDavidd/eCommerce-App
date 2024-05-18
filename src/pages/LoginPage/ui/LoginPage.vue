@@ -1,9 +1,16 @@
 <script lang="ts" setup>
+import router from '@/app/router';
+import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
 import AuthForm from '@pages/LoginPage/components/AuthForm/AuthForm.vue';
 // import { useNotificationStore } from '@app/store/useAlertMessage';
 
-const login = () => {
-  console.log('login');
+const costumerStore = useCostumerStore();
+
+const login = (data: { email: string; password: string }) => {
+  console.log(data);
+  costumerStore.LoginCostumer(data.email, data.password).then((data) => {
+    if (data.isLogined.value) router.push({ name: 'home' });
+  });
 };
 // const appStore = useNotificationStore();
 // const addNotify = () => {
