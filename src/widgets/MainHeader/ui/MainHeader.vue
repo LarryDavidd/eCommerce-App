@@ -52,24 +52,9 @@ import LoginIcon from '@/shared/ui-kit/Icons/LoginIcon.vue';
               <template v-slot:icon>
                 <CartIcon />
               </template>
-              </ButtonIcon></div
-        ></router-link>
-
-        <router-link to="/favorites">
-          <ButtonIconCounter>
-            <template v-slot:icon>
-              <LikeHeart />
-            </template>
-          </ButtonIconCounter>
-        </router-link>
-
-        <router-link to="/cart">
-          <ButtonIconCounter>
-            <template v-slot:icon>
-              <CartIcon />
-            </template>
-          </ButtonIconCounter>
-        </router-link>
+            </ButtonIconCounter>
+          </router-link>
+        </div>
       </div>
     </div>
   </header>
