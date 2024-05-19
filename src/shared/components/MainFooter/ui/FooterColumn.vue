@@ -1,7 +1,11 @@
 <script setup lang="ts">
 type PropsType = {
   name: string;
-  links?: string[];
+  links?: Links[];
+};
+type Links = {
+  title: string;
+  path: string;
 };
 
 const props = defineProps<PropsType>();
@@ -16,7 +20,7 @@ const props = defineProps<PropsType>();
         v-for="(link, index) in props.links"
         :key="index"
       >
-        <a href="#">{{ link }}</a>
+        <router-link :to="link.path">{{ link.title }}</router-link>
       </li>
     </ul>
   </div>
