@@ -8,30 +8,51 @@ import LoginIcon from '@/shared/ui-kit/Icons/LoginIcon.vue';
 </script>
 
 <template>
-  <header class="flex h-16 w-full flex-col justify-center">
-    <div class="header__wrapper mx-20 flex justify-between">
-      <router-link to="/home"><div>Shop Name</div></router-link>
-      <SearchBar></SearchBar>
+  <header class="flex h-20 w-full flex-col justify-center">
+    <div class="header__wrapper mx-6 flex justify-between gap-4 md:mx-20 lg:gap-32">
+      <div class="flex w-1/2 flex-col gap-4 md:w-4/5 md:flex-row md:gap-8">
+        <router-link to="/home"><div class="text-base font-bold lg:text-xl">Shop Name</div></router-link>
+        <SearchBar></SearchBar>
+      </div>
 
-      <div class="flex justify-between gap-10">
-        <router-link to="/registration">
-          <div class="login__button flex gap-2">
-            <div class="login__button-text flex flex-col justify-center">Registration</div>
-            <ButtonIcon>
-              <template v-slot:icon>
-                <LoginIcon />
-              </template>
-            </ButtonIcon></div
-        ></router-link>
+      <div class="flex flex-col items-end gap-4 md:flex-row md:items-start">
+        <div class="flex gap-4 text-xs">
+          <router-link to="/registration">
+            <div class="login__button flex gap-2">
+              <div class="login__button-text flex flex-col justify-center">Registration</div>
+              <ButtonIcon>
+                <template v-slot:icon>
+                  <LoginIcon />
+                </template>
+              </ButtonIcon></div
+          ></router-link>
 
-        <router-link to="/login">
-          <div class="login__button flex gap-2">
-            <div class="login__button-text flex flex-col justify-center">Login</div>
-            <ButtonIcon>
+          <router-link to="/login">
+            <div class="login__button flex gap-2">
+              <div class="login__button-text flex flex-col justify-center">Login</div>
+              <ButtonIcon>
+                <template v-slot:icon>
+                  <LoginIcon />
+                </template>
+              </ButtonIcon></div
+          ></router-link>
+        </div>
+
+        <div class="flex gap-4">
+          <router-link to="/likes">
+            <ButtonIconCounter>
               <template v-slot:icon>
-                <LoginIcon />
+                <LikeHeart />
               </template>
-            </ButtonIcon></div
+            </ButtonIconCounter>
+          </router-link>
+
+          <router-link to="/cart">
+            <ButtonIconCounter>
+              <template v-slot:icon>
+                <CartIcon />
+              </template>
+              </ButtonIcon></div
         ></router-link>
 
         <router-link to="/favorites">
@@ -65,8 +86,7 @@ header {
 
 .login__button-text {
   color: rgb(82, 82, 82);
-  font-family: Montserrat;
-  font-size: 12px;
+  font-size: 0.8rem;
   font-weight: 500;
   line-height: 100%;
   letter-spacing: 5%;
