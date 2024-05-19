@@ -5,13 +5,16 @@ import ButtonIcon from '@shared/ui-kit/Buttons/ButtonIcon/ButtonIcon.vue';
 import LikeHeart from '@shared/ui-kit/Icons/LikeHeart.vue';
 import CartIcon from '@/shared/ui-kit/Icons/CartIcon.vue';
 import LoginIcon from '@/shared/ui-kit/Icons/LoginIcon.vue';
+import { ref } from 'vue';
+
+const count = ref<number>(0);
 </script>
 
 <template>
   <header class="flex h-20 w-full flex-col justify-center">
     <div class="header__wrapper mx-6 flex justify-between gap-4 md:mx-20 lg:gap-32">
       <div class="flex w-1/2 flex-col gap-4 md:w-4/5 md:flex-row md:gap-8">
-        <router-link to="/home"><div class="text-base font-bold lg:text-xl">Shop Name</div></router-link>
+        <router-link to="/"><div class="text-base font-bold lg:text-xl">Shop Name</div></router-link>
         <SearchBar></SearchBar>
       </div>
 
@@ -39,8 +42,8 @@ import LoginIcon from '@/shared/ui-kit/Icons/LoginIcon.vue';
         </div>
 
         <div class="flex gap-4">
-          <router-link to="/likes">
-            <ButtonIconCounter>
+          <router-link to="/favorites">
+            <ButtonIconCounter :count="count">
               <template v-slot:icon>
                 <LikeHeart />
               </template>
@@ -48,7 +51,7 @@ import LoginIcon from '@/shared/ui-kit/Icons/LoginIcon.vue';
           </router-link>
 
           <router-link to="/cart">
-            <ButtonIconCounter>
+            <ButtonIconCounter :count="count">
               <template v-slot:icon>
                 <CartIcon />
               </template>

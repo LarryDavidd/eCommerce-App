@@ -1,3 +1,3 @@
 <template>
-  <div>home page</div>
+  <div>favorites page</div>
 </template>
