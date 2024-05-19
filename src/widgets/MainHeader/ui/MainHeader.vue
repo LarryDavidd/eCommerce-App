@@ -34,7 +34,7 @@ import LoginIcon from '@/shared/ui-kit/Icons/LoginIcon.vue';
             </ButtonIcon></div
         ></router-link>
 
-        <router-link to="/likes">
+        <router-link to="/favorites">
           <ButtonIconCounter>
             <template v-slot:icon>
               <LikeHeart />
