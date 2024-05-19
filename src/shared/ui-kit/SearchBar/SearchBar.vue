@@ -17,7 +17,7 @@ function onSubmit(event: Event) {
 <template>
   <form
     :onsubmit="onSubmit"
-    class="search-bar__container flex w-1/4"
+    class="search-bar__container flex"
   >
     <button class="search-bar__magnifier size-8">
       <img
@@ -45,10 +45,20 @@ function onSubmit(event: Event) {
 .search-bar__magnifier {
   @apply duration-500;
   background: rgb(196, 196, 196);
-  border-radius: 5px 0px 0px 5px;
+  border-radius: 5px 0 0 5px;
 
   &:hover {
     background-color: rgb(110, 110, 118);
+  }
+}
+@media (max-width: 1024px) {
+  .search-bar__container {
+    width: 50%;
+  }
+}
+@media (max-width: 640px) {
+  .search-bar__container {
+    width: 120%;
   }
 }
 
