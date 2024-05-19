@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { useNotificationStore } from '@app/store/useAlertMessage';
+import { useNotificationStore } from '../store/useAlertMessage';
 import { ref } from 'vue';
 import Alert from '@shared/ui-kit/Alert/AlertText.vue';
 const { getNotifications } = useNotificationStore();

@@ -115,7 +115,7 @@ const prevStep = () => {
 
       <SelectInput
         v-model="data.countryBilling"
-        :options="['Russia', 'United States']"
+        :options="['Russia', 'United States', 'United Kingdom']"
       ></SelectInput>
 
       <SimpleInput

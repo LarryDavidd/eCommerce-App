@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router';
 import { MainHeader } from '@widgets/MainHeader';
 import { MainFooter } from '@shared/components/MainFooter';
-import AlertMessage from '@shared/components/Alert/ui/AlertMessages.vue';
+import { AlertMessage } from '@shared/Store/AlertMessageStore';
 </script>
 
 <template>

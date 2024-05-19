@@ -39,7 +39,7 @@ const passwordIsValid = ref(false);
 const isValidInputData = computed(() => emailIsValid.value && passwordIsValid.value);
 
 const login = () => {
-  emits('submitForm');
+  emits('submitForm', { email: creds.value.email, password: creds.value.password });
 };
 </script>
 <template>
