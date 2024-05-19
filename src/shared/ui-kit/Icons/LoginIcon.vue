@@ -38,3 +38,11 @@ defineProps({
     </g>
   </svg>
 </template>
+
+<style scoped lang="scss">
+@media (max-width: 640px) {
+  svg {
+    width: 1.2rem;
+  }
+}
+</style>
