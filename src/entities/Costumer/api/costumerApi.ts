@@ -63,7 +63,13 @@ class CostumerApi {
       .me()
       .get()
       .execute()
-      .then((data) => data);
+      .then((data) => data)
+      .catch((err) => JSON.parse(JSON.stringify(err.body)) as ClientResponse<ErrorResponse>);
+  }
+
+  public logout() {
+    Client.getInstance().clearApiRoot();
+    Client.getInstance().clearTokenCashe();
   }
 }
 

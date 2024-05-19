@@ -7,7 +7,6 @@ import AuthForm from '@pages/LoginPage/components/AuthForm/AuthForm.vue';
 const costumerStore = useCostumerStore();
 
 const login = (data: { email: string; password: string }) => {
-  console.log(data);
   costumerStore.LoginCostumer(data.email, data.password).then((data) => {
     if (data.isLogined.value) router.push({ name: 'home' });
   });

@@ -19,7 +19,6 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     const anonCostumer = await costumerApi.anonCostumer();
 
     if (anonCostumer?.statusCode === 200) {
-      isLogined.value = false;
       isExist.value = true;
     }
   }
@@ -27,6 +26,7 @@ export const useCostumerStore = defineStore('costumer_store', () => {
   async function LoginExistigCostumer() {
     isLoading.value = true;
     const accessToken = ls.load('access_token');
+    const refreshToken = ls.load('refresh_token');
 
     if (accessToken) {
       const existCostumer = await costumerApi.existingCostumer(String(accessToken));
@@ -34,15 +34,15 @@ export const useCostumerStore = defineStore('costumer_store', () => {
       if (existCostumer?.statusCode === 200) {
         isLogined.value = true;
         isExist.value = true;
-      } else {
-        const refreshToken = ls.load('refresh_token');
-
+      } else if (refreshToken) {
         const refreshCostumer = await costumerApi.refreshCostumer(String(refreshToken));
 
         if (refreshCostumer?.statusCode === 200) {
           isLogined.value = true;
           isExist.value = true;
         }
+      } else {
+        AnonCostumer();
       }
     } else {
       AnonCostumer();
@@ -109,6 +109,10 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     const accessToken = String(ls.load('access_token'));
 
     const res = await revokingToken(accessToken);
+    costumerApi.logout();
+    ls.remove('access_token');
+    ls.remove('refresh_token');
+    isLogined.value = false;
 
     if (res instanceof Error) {
       alert.SetMessage({ status: 'error', message: 'Please reload page' });
@@ -119,5 +123,5 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLoading.value = false;
   }
 
-  return { AnonCostumer, LoginExistigCostumer, LoginCostumer, RegistrationCostumer, LogoutCostumer };
+  return { AnonCostumer, LoginExistigCostumer, LoginCostumer, RegistrationCostumer, LogoutCostumer, isLogined, isLoading, isExist };
 });

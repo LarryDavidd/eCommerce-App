@@ -96,7 +96,7 @@ const prevStep = () => {
 
       <SelectInput
         v-model="data.countryShipping"
-        :options="['Russia', 'United States']"
+        :options="['Russia', 'United States', 'United Kingdom']"
       ></SelectInput>
       <SimpleInput
         v-model="data.postalCodeShipping"

@@ -19,6 +19,10 @@ class AuthTokenFlow {
   private tokenCashe = new Token();
   constructor() {}
 
+  public clearTokenCashe() {
+    this.tokenCashe.clear();
+  }
+
   public createAnonUser() {
     return createApiBuilderFromCtpClient(this.clientBuilder.withAnonymousSessionFlow(this.getAnonOptions()).withHttpMiddleware(this.httpMiddlewareOptions).build()).withProjectKey({
       projectKey

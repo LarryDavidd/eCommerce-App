@@ -20,7 +20,7 @@ app.use(router);
 
 app.mount('#app');
 
-useCostumerStore().AnonCostumer();
+useCostumerStore().LoginExistigCostumer();
 
 // useCostumerStore().LogoutCostumer();
 // useCostumerStore().();

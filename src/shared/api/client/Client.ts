@@ -14,6 +14,10 @@ class Client {
 
   constructor() {}
 
+  public clearTokenCashe() {
+    this.authTokenFlow.clearTokenCashe();
+  }
+
   public static getInstance(): Client {
     if (!Client.instance) {
       Client.instance = new Client();

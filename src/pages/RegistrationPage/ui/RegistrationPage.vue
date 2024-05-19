@@ -16,7 +16,7 @@ const data = ref({
   firstStep: {
     name: '',
     surname: '',
-    birthDate: new Date(Date.now())
+    birthDate: null
   },
   secondStep: {
     email: '',
@@ -39,10 +39,27 @@ const data = ref({
   }
 });
 
+enum Countries {
+  'Russia' = 'RU',
+  'United States' = 'US',
+  'United Kingdom' = 'GB'
+}
+
+function formatDate(date: Date | null) {
+  if (date) {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+  }
+}
+
 const changeStep = (flag: boolean = true) => {
   if (flag) step.value += 1;
   else step.value -= 1;
 };
+
 const setSameAddresses = () => {
   data.value.forthStep.cityBilling = data.value.thirdStep.cityShipping;
   data.value.forthStep.streetBilling = data.value.thirdStep.streetShipping;
@@ -61,17 +78,18 @@ const checkSameness = () => {
     data.value.forthStep.isSameAddresses = false;
   }
 };
+
 const register = () => {
-  console.log(data.value.firstStep.birthDate.toString().slice(0, 10));
+  const dateOfBirth = formatDate(data.value.firstStep.birthDate);
   const addresses: BaseAddress[] = [
     {
-      country: data.value.thirdStep.countryShipping,
+      country: Countries[data.value.thirdStep.countryShipping],
       city: data.value.thirdStep.cityShipping,
       streetName: data.value.thirdStep.streetShipping,
       postalCode: data.value.thirdStep.postalCodeShipping
     },
     {
-      country: data.value.forthStep.countryBilling,
+      country: Countries[data.value.forthStep.countryBilling],
       city: data.value.forthStep.cityBilling,
       streetName: data.value.forthStep.cityBilling,
       postalCode: data.value.forthStep.cityBilling
@@ -79,18 +97,18 @@ const register = () => {
   ];
   costumerStore
     .RegistrationCostumer({
-      // firstName: data.value.firstStep.name,
-      // lastName: data.value.firstStep.surname,
-      // dateOfBirth: data.value.firstStep.birthDate.toString().slice(0, 10),
+      firstName: data.value.firstStep.name,
+      lastName: data.value.firstStep.surname,
+      dateOfBirth,
 
       email: data.value.secondStep.email,
-      password: data.value.secondStep.password
+      password: data.value.secondStep.password,
 
-      // addresses: addresses,
-      // shippingAddresses: [0],
-      // billingAddresses: data.value.forthStep.isSameAddresses ? [0] : [1],
-      // defaultShippingAddress: data.value.thirdStep.isDefaultShipping ? 0 : undefined,
-      // defaultBillingAddress: data.value.forthStep.isDefaultBilling ? 1 : undefined
+      addresses: addresses,
+      shippingAddresses: [0],
+      billingAddresses: data.value.forthStep.isSameAddresses ? [0] : [1],
+      defaultShippingAddress: data.value.thirdStep.isDefaultShipping ? 0 : undefined,
+      defaultBillingAddress: data.value.forthStep.isDefaultBilling ? 1 : undefined
     })
     .then((data) => {
       if (data.isLogined.value) router.push({ name: 'home' });
