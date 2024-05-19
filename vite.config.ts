@@ -5,10 +5,6 @@ import { defineConfig } from 'vite';
 
 import eslintPlugin from 'vite-plugin-eslint';
 
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
-import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), eslintPlugin()],
@@ -21,26 +17,7 @@ export default defineConfig({
       '@features': fileURLToPath(new URL('./src/features', import.meta.url)),
       '@entities': fileURLToPath(new URL('./src/entities', import.meta.url)),
       '@shared': fileURLToPath(new URL('./src/shared', import.meta.url)),
-      stream: 'rollup-plugin-node-polyfills/polyfills/stream'
-    }
-  },
-  optimizeDeps: {
-    esbuildOptions: {
-      define: {
-        global: 'globalThis'
-      },
-      plugins: [
-        NodeGlobalsPolyfillPlugin({
-          process: true,
-          buffer: true
-        }),
-        NodeModulesPolyfillPlugin()
-      ]
-    }
-  },
-  build: {
-    rollupOptions: {
-      plugins: [rollupNodePolyFill]
+      'node-fetch': 'axios'
     }
   }
 });
