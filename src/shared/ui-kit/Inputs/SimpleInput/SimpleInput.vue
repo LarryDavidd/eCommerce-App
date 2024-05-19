@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ErrorIcon from '@shared/ui-kit/Icons/ErrorIcon.vue';
-import { ref } from 'vue';
 
 type PropsType = {
   name?: string;
