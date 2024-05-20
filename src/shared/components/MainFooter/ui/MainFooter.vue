@@ -47,7 +47,7 @@ const data = [
 <template>
   <footer>
     <div class="footer-top py-4 md:py-20">
-      <div class="mx-20 flex flex-col items-center gap-10 md:flex-row md:items-start md:justify-between">
+      <div class="mx-20 flex flex-col items-center md:flex-row md:items-start md:justify-between md:gap-10">
         <FooterColumn
           v-for="(column, index) in data"
           :key="index"
