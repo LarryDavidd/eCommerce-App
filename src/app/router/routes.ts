@@ -9,10 +9,7 @@ export const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomePage,
-    meta: {
-      requiresGuest: true
-    }
+    component: HomePage
   },
   {
     path: '/login',
@@ -35,7 +32,7 @@ export const routes = [
     name: 'favorites',
     component: FavoritesPage,
     meta: {
-      requiresGuest: true
+      requiresAuth: true
     }
   },
   {
@@ -43,7 +40,7 @@ export const routes = [
     name: 'cart',
     component: CartPage,
     meta: {
-      requiresGuest: true
+      requiresAuth: true
     }
   },
   {

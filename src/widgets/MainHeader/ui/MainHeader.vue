@@ -6,6 +6,7 @@ import LikeHeart from '@shared/ui-kit/Icons/LikeHeart.vue';
 import CartIcon from '@/shared/ui-kit/Icons/CartIcon.vue';
 import LoginIcon from '@/shared/ui-kit/Icons/LoginIcon.vue';
 import { ref } from 'vue';
+import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
 
 const count = ref<number>(0);
 </script>
@@ -20,25 +21,41 @@ const count = ref<number>(0);
 
       <div class="flex flex-col items-end gap-4 md:flex-row md:items-start">
         <div class="flex gap-4 text-xs">
-          <router-link to="/registration">
-            <div class="login__button flex gap-2">
-              <div class="login__button-text flex flex-col justify-center">Registration</div>
-              <ButtonIcon>
-                <template v-slot:icon>
-                  <LoginIcon />
-                </template>
-              </ButtonIcon></div
-          ></router-link>
+          <template v-if="!useCostumerStore().isLogined">
+            <router-link to="/registration">
+              <div class="login__button flex gap-2">
+                <div class="login__button-text flex flex-col justify-center">Registration</div>
+                <ButtonIcon>
+                  <template v-slot:icon>
+                    <LoginIcon />
+                  </template>
+                </ButtonIcon></div
+            ></router-link>
 
-          <router-link to="/login">
-            <div class="login__button flex gap-2">
-              <div class="login__button-text flex flex-col justify-center">Login</div>
-              <ButtonIcon>
+            <router-link to="/login">
+              <div class="login__button flex gap-2">
+                <div class="login__button-text flex flex-col justify-center">Login</div>
+                <ButtonIcon>
+                  <template v-slot:icon>
+                    <LoginIcon />
+                  </template>
+                </ButtonIcon></div
+            ></router-link>
+          </template>
+
+          <template v-else>
+            <div
+              class="login__button flex cursor-pointer gap-2"
+              @click="useCostumerStore().LogoutCostumer()"
+            >
+              <div class="login__button-text flex flex-col justify-center">Logout</div>
+              <ButtonIcon style="transform: scaleX(-1)">
                 <template v-slot:icon>
                   <LoginIcon />
                 </template>
-              </ButtonIcon></div
-          ></router-link>
+              </ButtonIcon>
+            </div>
+          </template>
         </div>
 
         <div class="flex gap-4">

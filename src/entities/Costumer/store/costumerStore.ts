@@ -15,12 +15,41 @@ export const useCostumerStore = defineStore('costumer_store', () => {
   const isLoading = ref<boolean>(false);
   const isExist = ref<boolean>(false);
 
+  const userAccessToken = ref<string>('');
+  const userRefreshToken = ref<string>('');
+
+  const setTokenToLs = () => {
+    if (isLogined.value) {
+      if (userRefreshToken.value) useLocalStorage().set('refresh_token', userRefreshToken.value);
+      if (userAccessToken.value) useLocalStorage().set('access_token', userAccessToken.value);
+    }
+  };
+
+  const setNotificationSucces = () => {
+    const notification = {
+      id: Date.now(),
+      message: 'Login was successful' + ' ' + (isLogined.value ? 'Loginded user' : 'Anon user'),
+      type: 'success'
+    };
+    alert.addNotification(notification);
+  };
+
   async function AnonCostumer() {
     const anonCostumer = await costumerApi.anonCostumer();
 
-    if (anonCostumer?.statusCode === 200) {
+    if (anonCostumer.statusCode === 200) {
       isExist.value = true;
+      setNotificationSucces();
+    } else {
+      const notification = {
+        id: Date.now(),
+        message: 'Please reload page',
+        type: 'error'
+      };
+      alert.addNotification(notification);
     }
+
+    return { isExist };
   }
 
   async function LoginExistigCostumer() {
@@ -48,14 +77,20 @@ export const useCostumerStore = defineStore('costumer_store', () => {
       AnonCostumer();
     }
     isLoading.value = false;
+
+    setNotificationSucces();
+    setTokenToLs();
   }
 
   async function LoginCostumer(email: string, password: string) {
+    isLoading.value = true;
+
     const res = await costumerApi.loginCostumer(email, password);
 
     if (res.statusCode === 200) {
       isExist.value = true;
       isLogined.value = true;
+      setNotificationSucces();
     } else if (res.statusCode === 400) {
       const notification = {
         id: Date.now(),
@@ -73,6 +108,8 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     }
     isLoading.value = false;
 
+    setTokenToLs();
+
     return { isLogined };
   }
 
@@ -81,19 +118,17 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     const res = await costumerApi.regCostumer(draft);
 
     if (res.statusCode === 201) {
-      isExist.value = true;
-      isLogined.value = true;
+      const notification = {
+        id: Date.now(),
+        message: 'Registration was successful',
+        type: 'success'
+      };
+      alert.addNotification(notification);
+      if (draft.password) await LoginCostumer(draft.email, draft.password);
     } else if (res.statusCode >= 300) {
       const notification = {
         id: Date.now(),
         message: res.message,
-        type: 'error'
-      };
-      alert.addNotification(notification);
-    } else {
-      const notification = {
-        id: Date.now(),
-        message: 'Please try again or reload page',
         type: 'error'
       };
       alert.addNotification(notification);
@@ -123,5 +158,5 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLoading.value = false;
   }
 
-  return { AnonCostumer, LoginExistigCostumer, LoginCostumer, RegistrationCostumer, LogoutCostumer, isLogined, isLoading, isExist };
+  return { AnonCostumer, LoginExistigCostumer, LoginCostumer, RegistrationCostumer, LogoutCostumer, isLogined, isLoading, isExist, userAccessToken, userRefreshToken };
 });

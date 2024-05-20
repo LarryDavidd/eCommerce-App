@@ -6,6 +6,10 @@ import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
 import SelectInput from '@shared/ui-kit/Inputs/SelectInput/SelectInput.vue';
 import CheckBox from '@shared/ui-kit/Inputs/CheckBox/CheckBox.vue';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
+import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
+
+const costumerStore = useCostumerStore();
+
 interface StepData {
   countryBilling: string;
   cityBilling: string;
@@ -150,6 +154,7 @@ const prevStep = () => {
           class="button prev-step"
           type="submit"
           :options="{ buttonStyle: 'dark-grey' }"
+          :isLoading="costumerStore.isLoading"
           name="Prev"
           @click="prevStep"
         >
@@ -158,6 +163,7 @@ const prevStep = () => {
           class="button submit"
           type="submit"
           :disabled="!isValidInputData"
+          :isLoading="costumerStore.isLoading"
           :options="{ buttonStyle: 'dark-grey' }"
           name="Submit"
           @click="nextStep"

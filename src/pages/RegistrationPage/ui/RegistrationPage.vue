@@ -117,7 +117,7 @@ const register = () => {
 </script>
 
 <template>
-  <div class="flex h-dvh w-dvw bg-gray-50 dark:bg-gray-900">
+  <div class="page-wrapper flex bg-gray-50 dark:bg-gray-900">
     <div class="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
       <transition
         name="fade"
@@ -152,6 +152,14 @@ const register = () => {
 </template>
 
 <style scoped lang="scss">
+.page-wrapper {
+  padding: 40px;
+}
+@media (max-width: 400px) {
+  .page-wrapper {
+    padding: 80px 20px;
+  }
+}
 .fade-enter-active,
 .fade-leave-active {
   transition:

@@ -37,13 +37,13 @@ class CostumerApi {
     return Client.getInstance()
       .anonymousClient.get()
       .execute()
-      .then((data) => data);
+      .then((data) => data)
+      .catch((err) => JSON.parse(JSON.stringify(err.body)) as ClientResponse<ErrorResponse>);
   }
 
   public async credentialsCostumer() {
     return Client.getInstance()
-      .credentialsClient.me()
-      .get()
+      .credentialsClient.get()
       .execute()
       .then((data) => data);
   }
@@ -60,7 +60,6 @@ class CostumerApi {
   public async existingCostumer(access_token: string) {
     return Client.getInstance()
       .clientWithExistTokenFlow(access_token)
-      .me()
       .get()
       .execute()
       .then((data) => data)

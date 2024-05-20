@@ -7,6 +7,9 @@ import { validateEmail } from '@shared/utils/validation';
 import { validatePassword } from '@shared/utils/validation';
 import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
+import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
+
+const costumerStore = useCostumerStore();
 
 const creds = ref({
   email: '',
@@ -83,6 +86,7 @@ const login = () => {
         class="sign-in"
         type="submit"
         :disabled="!isValidInputData"
+        :isLoading="costumerStore.isLoading"
         :options="{ buttonStyle: 'dark-grey' }"
         name="Sign in"
       >
