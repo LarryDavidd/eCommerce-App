@@ -1,0 +1,33 @@
+<script setup lang="ts">
+type PropsType = {
+  name: string;
+  links?: Links[];
+};
+type Links = {
+  title: string;
+  path: string;
+};
+
+const props = defineProps<PropsType>();
+</script>
+
+<template>
+  <div class="max-col-with">
+    <h2 class="mb-4 max-w-xs text-center text-base font-medium leading-7 text-black md:text-left">{{ props.name }}</h2>
+    <ul>
+      <li
+        class="mb-3 text-center text-base leading-6 text-gray-900 md:text-left"
+        v-for="(link, index) in props.links"
+        :key="index"
+      >
+        <router-link :to="link.path">{{ link.title }}</router-link>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.max-col-with {
+  max-width: 15rem;
+}
+</style>
