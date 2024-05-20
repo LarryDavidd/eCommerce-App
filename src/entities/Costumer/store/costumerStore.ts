@@ -5,6 +5,7 @@ import { ref } from 'vue';
 import type { CustomerDraft } from '@commercetools/platform-sdk';
 import { revokingToken } from '@/auth/api/revokeToken';
 import { useNotificationStore } from '@/shared/Store/AlertMessageStore';
+import router from '@/app/router';
 
 export const useCostumerStore = defineStore('costumer_store', () => {
   const costumerApi = new CostumerApi();
@@ -55,7 +56,6 @@ export const useCostumerStore = defineStore('costumer_store', () => {
   async function LoginExistigCostumer() {
     isLoading.value = true;
     const accessToken = ls.load('access_token');
-    const refreshToken = ls.load('refresh_token');
 
     if (accessToken) {
       const existCostumer = await costumerApi.existingCostumer(String(accessToken));
@@ -63,22 +63,14 @@ export const useCostumerStore = defineStore('costumer_store', () => {
       if (existCostumer?.statusCode === 200) {
         isLogined.value = true;
         isExist.value = true;
-      } else if (refreshToken) {
-        const refreshCostumer = await costumerApi.refreshCostumer(String(refreshToken));
-
-        if (refreshCostumer?.statusCode === 200) {
-          isLogined.value = true;
-          isExist.value = true;
-        }
-      } else {
-        AnonCostumer();
+        setNotificationSucces();
       }
-    } else {
-      AnonCostumer();
     }
+
+    if (!isLogined.value) await AnonCostumer();
+
     isLoading.value = false;
 
-    setNotificationSucces();
     setTokenToLs();
   }
 
@@ -153,6 +145,7 @@ export const useCostumerStore = defineStore('costumer_store', () => {
       alert.SetMessage({ status: 'error', message: 'Please reload page' });
     } else {
       AnonCostumer();
+      router.push({ name: 'login' });
     }
 
     isLoading.value = false;

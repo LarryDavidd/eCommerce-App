@@ -37,7 +37,7 @@ class AuthTokenFlow {
 
   public createRefreshUser(refreshToken: string) {
     return createApiBuilderFromCtpClient(
-      this.clientBuilder.withClientCredentialsFlow(this.getRefreshCostumerOptions(refreshToken)).withHttpMiddleware(this.httpMiddlewareOptions).build()
+      this.clientBuilder.withRefreshTokenFlow(this.getRefreshCostumerOptions(refreshToken)).withHttpMiddleware(this.httpMiddlewareOptions).build()
     ).withProjectKey({ projectKey });
   }
 
