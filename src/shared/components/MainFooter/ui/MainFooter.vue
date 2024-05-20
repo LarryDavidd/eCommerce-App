@@ -4,19 +4,42 @@ import FooterColumn from './FooterColumn.vue';
 const data = [
   {
     title: 'Information',
-    links: ['Order Processing', 'Delivery Information', 'Payment Terms', 'Privacy and Information Protection', 'Details']
+    links: [
+      { title: 'Order Processing', path: '/404' },
+      { title: 'Delivery Information', path: '/404' },
+      { title: 'Payment Terms', path: '/404' },
+      { title: 'Privacy and Information Protection', path: '/404' },
+      { title: 'Details', path: '/404' }
+    ]
   },
   {
     title: 'Customer Support',
-    links: ['How can we assist you?', 'Contacts', 'Size Chart']
+    links: [
+      { title: 'How can we assist you?', path: '/404' },
+      { title: 'Contacts', path: '/404' },
+      { title: 'Size Chart', path: '/404' }
+    ]
   },
   {
     title: 'Customer Service',
-    links: ['Personal Account', 'Shopping Cart', 'Order History', 'News', 'Search', 'Site Map']
+    links: [
+      { title: 'Personal Account', path: '/404' },
+      { title: 'Shopping Cart', path: '/cart' },
+      { title: 'Order History', path: '/404' },
+      { title: 'News', path: '/404' },
+      { title: 'Search', path: '/404' },
+      { title: 'Site Map', path: '/404' }
+    ]
   },
   {
     title: 'Store Name',
-    links: ['About Us', 'Store Map', 'Gift Card', 'Careers', 'Stores']
+    links: [
+      { title: 'About Us', path: '/404' },
+      { title: 'Store Map', path: '/404' },
+      { title: 'Gift Card', path: '/404' },
+      { title: 'Careers', path: '/404' },
+      { title: 'Stores', path: '/404' }
+    ]
   }
 ];
 </script>

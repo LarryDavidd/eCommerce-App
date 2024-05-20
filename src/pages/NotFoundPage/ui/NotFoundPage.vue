@@ -11,7 +11,7 @@ import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
           <p class="text-1xl md:text-2xl">We are already working on fixing this error.</p>
         </div>
       </div>
-      <router-link to="/home">
+      <router-link to="/">
         <MainButton
           name="return to homepage"
           :options="{ buttonStyle: 'dark-grey' }"
