@@ -19,7 +19,7 @@ const props = defineProps<PropsType>();
   <div class="max-col-with">
     <h2
       @click="isOpen = !isOpen"
-      class="mb-4 max-w-xs text-center text-base font-medium leading-7 text-black sm:cursor-pointer md:text-left"
+      class="mb-4 max-w-xs cursor-pointer text-center text-base font-medium leading-7 text-black sm:cursor-default md:text-left"
     >
       {{ props.name }}
     </h2>
