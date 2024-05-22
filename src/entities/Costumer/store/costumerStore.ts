@@ -75,6 +75,7 @@ export const useCostumerStore = defineStore('costumer_store', () => {
   }
 
   async function LoginCostumer(email: string, password: string) {
+    console.log(email, password);
     isLoading.value = true;
 
     const res = await costumerApi.loginCostumer(email, password);

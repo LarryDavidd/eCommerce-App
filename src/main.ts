@@ -6,6 +6,7 @@ import { createApp } from 'vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import App from '@app/App.vue';
 import router from '@app/router';
+import { useProductStore } from './entities/Product/store/productStore';
 
 const app = createApp(App);
 
@@ -16,3 +17,7 @@ app.use(createPinia());
 app.use(router);
 
 app.mount('#app');
+
+useProductStore()
+  .getProduct()
+  .then((data) => console.log(data));
