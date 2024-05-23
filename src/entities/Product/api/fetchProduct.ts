@@ -17,6 +17,17 @@ class ProductApi {
       .catch((err) => err);
   }
 
+  async fetchGetProductProjectionByID(id: string) {
+    const client = Client.getInstance().credentialsClient;
+    return await client
+      .productProjections()
+      .withId({ ID: id })
+      .get()
+      .execute()
+      .then((data) => data)
+      .catch((err) => err);
+  }
+
   async fetchQueryProductProjectionsByCategory(ids: string[]) {
     const client = Client.getInstance().credentialsClient;
     return await client

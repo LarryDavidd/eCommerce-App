@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
 import ProductApi from '../api/fetchProduct';
 import { ref } from 'vue';
-import type { ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
+import type { ProductProjection, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
 
 export const useProductStore = defineStore('product_store', () => {
   const productApi = new ProductApi();
   const data = ref<ProductProjectionPagedQueryResponse | null>(null);
+  const product = ref<ProductProjection | null>(null);
   const isLoading = ref<boolean>(false);
 
   const requestGetProduct = async (offset = 0, limit = 10) => {
@@ -18,6 +19,17 @@ export const useProductStore = defineStore('product_store', () => {
     data.value = products;
     isLoading.value = false;
     return products;
+  };
+
+  const requestGetProductById = async (id: string) => {
+    isLoading.value = true;
+    const res = await productApi.fetchGetProductProjectionByID(id);
+
+    if (res instanceof Error) return;
+
+    product.value = res;
+    isLoading.value = false;
+    return res;
   };
 
   const requestGetProductsByCategory = async (ids: string[]) => {
@@ -42,5 +54,5 @@ export const useProductStore = defineStore('product_store', () => {
     return products;
   };
 
-  return { requestGetProduct, requestGetProductsByCategory, requestProductSearch };
+  return { requestGetProduct, requestGetProductsByCategory, requestProductSearch, requestGetProductById };
 });

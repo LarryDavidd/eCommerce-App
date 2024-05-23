@@ -23,6 +23,10 @@ useProductStore()
   .then((data) => console.log(data));
 
 useProductStore()
+  .requestGetProductById('21f7c944-ae91-4c3c-a687-dbe1a7041f51')
+  .then((data) => console.log(data));
+
+useProductStore()
   .requestGetProductsByCategory(['7b172f57-cde7-4f2d-a76a-53a96313278a'])
   .then((data) => console.log(data));
 
