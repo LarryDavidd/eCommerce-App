@@ -19,5 +19,13 @@ app.use(router);
 app.mount('#app');
 
 useProductStore()
-  .getProduct()
+  .requestGetProduct()
+  .then((data) => console.log(data));
+
+useProductStore()
+  .requestGetProductsByCategory(['7b172f57-cde7-4f2d-a76a-53a96313278a'])
+  .then((data) => console.log(data));
+
+useProductStore()
+  .requestProductSearch('en', 'a')
   .then((data) => console.log(data));

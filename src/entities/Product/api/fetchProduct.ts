@@ -5,6 +5,7 @@ class ProductApi {
     const client = Client.getInstance().credentialsClient;
     return await client
       .productProjections()
+      .search()
       .get({
         queryArgs: {
           offset,
@@ -14,20 +15,28 @@ class ProductApi {
       .execute()
       .then((data) => data)
       .catch((err) => err);
-    // console.log()
-    // const urlEndpoint = `${URL}/product-projections?limit=${limit}&offset=${offset}`;
+  }
 
-    // try {
-    //   const res = await http.get<ProductProjectionPagedQueryResponseType>(urlEndpoint);
-    //   const resOK = res.status >= 200 && res.status < 300;
-    //   if (resOK) {
-    //     const result = res.data;
-    //     return result;
-    //   }
-    //   throw new Error('QueryProductProjections Response was not OK');
-    // } catch (error) {
-    //   return error as Error;
-    // }
+  async fetchQueryProductProjectionsByCategory(ids: string[]) {
+    const client = Client.getInstance().credentialsClient;
+    return await client
+      .productProjections()
+      .search()
+      .get({ queryArgs: { filter: ids.map((id) => `categories.id:"${id}"`) } })
+      .execute()
+      .then((data) => data)
+      .catch((err) => err);
+  }
+
+  async fetchProductProjectionSearch(language: string, text: string) {
+    const client = Client.getInstance().credentialsClient;
+    return await client
+      .productProjections()
+      .search()
+      .get({ queryArgs: { fuzzy: true, 'text.en': text } })
+      .execute()
+      .then((data) => data)
+      .catch((err) => err);
   }
 }
 
