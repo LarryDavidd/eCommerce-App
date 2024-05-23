@@ -1,14 +1,82 @@
 import { defineStore } from 'pinia';
 import ProductApi from '../api/fetchProduct';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import type { ProductProjection, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
+import { useAppState } from '@shared/Store/AppStore';
 
 export const useProductStore = defineStore('product_store', () => {
+  // State
+  const appState = useAppState();
   const productApi = new ProductApi();
   const data = ref<ProductProjectionPagedQueryResponse | null>(null);
   const product = ref<ProductProjection | null>(null);
   const isLoading = ref<boolean>(false);
+  // << State
+  // Getters
+  const IsLoading = computed(() => isLoading.value);
 
+  const Data = computed(() => data.value);
+
+  const Product = computed(() => product.value);
+
+  const GetProduct = computed(() => {
+    if (product.value === null) return null;
+
+    const findPriceData = findPriceInCurrency(product.value.masterVariant.prices, appState.getState.currencyCode);
+
+    const result = {
+      id: product.value.id,
+      name: product.value.name[appState.getState.language],
+      descriptions: product.value.description ? product.value.description[appState.getState.language] : '',
+      urlImages: product.value.masterVariant.images?.map((img) => img.url),
+      priceData: {
+        price: findPriceData?.price,
+        currency: findPriceData?.currency
+      }
+    };
+
+    return result;
+  });
+
+  const GetProducts = computed(() => {
+    if (data.value) {
+      return data.value.results.map((product) => {
+        const id = product.id;
+        const name = product.name[appState.getState.language];
+        const description = product.description ? product.description[appState.getState.language] : '';
+        const urlImage = product.masterVariant.images ? product.masterVariant.images[0].url : ''; // Берем первый попавшийся Image
+        const findCurrencyPrice = product.masterVariant.prices?.find((_price) => {
+          if (_price.value.currencyCode === appState.getState.currencyCode) {
+            return _price.value;
+          }
+          return null;
+        });
+        let symbolCurrency = '$';
+        let price = '';
+        if (findCurrencyPrice) {
+          if (findCurrencyPrice.value.currencyCode === 'RUB') symbolCurrency = 'P';
+          if (findCurrencyPrice.value.currencyCode === 'EUR') symbolCurrency = 'Э';
+          price = `${symbolCurrency} ${findCurrencyPrice.value.centAmount / 100}`;
+        }
+        return {
+          id,
+          name,
+          description,
+          urlImage,
+          price
+        };
+      });
+    }
+    return null;
+  });
+
+  const GetTotalPaginationNumber = computed(() => {
+    if (data.value === null) return 0;
+    return Math.ceil(data.value.total / data.value.limit);
+  });
+  // << Getters
+
+  // Actions
   const requestGetProduct = async (offset = 0, limit = 10) => {
     if (offset <= 0) offset = 0;
     isLoading.value = true;
