@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-6 flex justify-between md:mx-20">
+  <div class="aaa mx-6 flex justify-between md:mx-20">
     <div>home page</div>
     <div class="flex gap-4">
       <router-link to="/login">
@@ -15,13 +15,23 @@
         logout
       </p>
     </div>
+    <FilterBlock />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
+import FilterBlock from '@features/Filter/ui/FilterBlock.vue';
 
 const logout = () => {
   if (useCostumerStore().isLogined) useCostumerStore().LogoutCostumer();
 };
 </script>
+<style lang="scss" scoped>
+.filter-wrapper {
+  min-width: 250px;
+}
+.aaa {
+  background-color: white;
+}
+</style>
