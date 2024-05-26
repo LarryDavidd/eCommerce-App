@@ -1,32 +1,32 @@
 <script setup lang="ts">
 import Slider from '@vueform/slider';
 import { ref, watch } from 'vue';
+import type { RangeFilter } from '@features/store/useFilter';
 const props = defineProps({
-  min: {
-    type: Number,
-    default: 0
-  },
-  max: {
-    type: Number,
-    default: 5000
+  modelValue: {
+    type: Object as () => RangeFilter,
+    default: () => ({ min: 0, max: 100, title: '' })
   },
   step: {
     type: Number,
     default: 1
   }
 });
-
-const emit = defineEmits(['update:rangeValue']);
-const value = ref([props.min, props.max]);
-watch(value, (newValue) => {
-  emit('update:rangeValue', newValue);
-});
-const min = ref(props.min);
-const max = ref(props.max);
+const emit = defineEmits(['update:modelValue']);
+const value = ref([props.modelValue.min, props.modelValue.max]);
+watch(
+  value,
+  (newValue) => {
+    emit('update:modelValue', { min: newValue[0], max: newValue[1], title: props.modelValue.title });
+  },
+  { deep: true }
+);
+const min = ref(props.modelValue.min);
+const max = ref(props.modelValue.max);
 watch(
   props,
   () => {
-    value.value = [props.min, props.max];
+    value.value = [props.modelValue.min, props.modelValue.max];
   },
   { deep: true }
 );

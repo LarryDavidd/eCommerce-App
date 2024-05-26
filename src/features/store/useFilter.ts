@@ -18,18 +18,23 @@ type RadioElement = {
     name: string;
   }[];
 };
-
-type CheckboxFilter = {
+type CategoryElement = {
+  type: 'category';
+  title: string;
+  subcategories: (RadioElement | CheckboxElement)[];
+};
+export type CheckboxFilter = {
   label: string;
   value: boolean;
 };
 
-type RangeFilter = {
+export type RangeFilter = {
   min: number;
   max: number;
+  title: string;
 };
 
-type FilterElement = CheckboxElement | RadioElement;
+export type FilterElement = CheckboxElement | RadioElement | CategoryElement;
 
 interface FilterState {
   filtersAccordion: FilterElement[];
@@ -40,19 +45,11 @@ interface FilterState {
 const initialFiltersAccordion: FilterElement[] = [
   {
     type: 'checkbox',
-    title: 'categories',
+    title: 'brands',
     elements: [
       {
         valueCheckbox: false,
         label: 'dresses'
-        // subcategories: {
-        //   type: 'checkbox',
-        //   title: 'categories',
-        //   elements: [
-        //     { valueCheckbox: false, label: 'short' },
-        //     { valueCheckbox: false, label: 'long' }
-        //   ]
-        // }
       },
       { valueCheckbox: false, label: 'pants' }
     ]
@@ -65,6 +62,28 @@ const initialFiltersAccordion: FilterElement[] = [
       { value: 'red', label: 'red', name: 'color' },
       { value: 'green', label: 'green', name: 'color' }
     ]
+  },
+  {
+    type: 'category',
+    title: 'Categories',
+    subcategories: [
+      {
+        type: 'checkbox',
+        title: 'outerwear',
+        elements: [
+          { label: 'jacket', valueCheckbox: false },
+          { label: 'coat', valueCheckbox: false }
+        ]
+      },
+      {
+        type: 'checkbox',
+        title: 'hats',
+        elements: [
+          { label: 'cap', valueCheckbox: false },
+          { label: 'hat', valueCheckbox: false }
+        ]
+      }
+    ]
   }
 ];
 
@@ -76,6 +95,7 @@ const initialCheckboxFilters: CheckboxFilter[] = [
 ];
 
 const initialRangeFilter: RangeFilter = {
+  title: 'price',
   min: 0,
   max: 5000
 };
@@ -102,15 +122,6 @@ export const useFilterStore = defineStore('filter', {
       this.filtersAccordion = JSON.parse(JSON.stringify(initialFiltersAccordion));
       this.checkboxFilters = JSON.parse(JSON.stringify(initialCheckboxFilters));
       this.rangeFilter = { ...initialRangeFilter };
-    },
-    updateFilterData(title: string, elementData: { valueCheckbox: boolean; label: string }) {
-      const filterIdx = this.filtersAccordion.findIndex((f) => f.title === title);
-      if (filterIdx !== -1) {
-        const idxElem = this.filtersAccordion[filterIdx].elements.findIndex((f) => f.label === elementData.label);
-        if (idxElem !== -1) {
-          this.filtersAccordion[filterIdx].elements[idxElem] = elementData;
-        }
-      }
     }
   }
 });
