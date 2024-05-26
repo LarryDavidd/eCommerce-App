@@ -7,6 +7,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import App from '@app/App.vue';
 import router from '@app/router';
 import { useProductStore } from './entities/Product/store/productStore';
+import { useCategoriesStore } from './entities/Categories/store/categoriesStore';
 
 const app = createApp(App);
 
@@ -27,9 +28,13 @@ useProductStore()
   .then((data) => console.log(data));
 
 useProductStore()
-  .requestGetProductsByCategory(['7b172f57-cde7-4f2d-a76a-53a96313278a'])
+  .requestGetProductsByCategory(['7b172f57-cde7-4f2d-a76a-53a96313278a', '8ce86a8c-1ed5-4cfa-a8f6-fd75db28ed51'])
   .then((data) => console.log(data));
 
 useProductStore()
   .requestProductSearch('en', 'a')
+  .then((data) => console.log(data));
+
+useCategoriesStore()
+  .requestGetCategories()
   .then((data) => console.log(data));

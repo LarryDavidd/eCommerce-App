@@ -1,21 +1,35 @@
 import { defineStore } from 'pinia';
 import ProductApi from '../api/fetchProduct';
 import { computed, ref } from 'vue';
-import type { ProductProjection, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
+import type { Price, ProductProjection, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
 import { useAppState } from '@shared/Store/AppStore';
 
+const findPriceInCurrency = (prices?: Price[], currencyCode?: string) => {
+  if (prices === undefined || currencyCode === undefined) return;
+
+  const find = prices.find((price) => price.value.currencyCode === currencyCode);
+
+  if (find === undefined) return;
+
+  let symbolCurrency = '$';
+  if (find.value.currencyCode === 'RUB') symbolCurrency = 'P';
+  if (find.value.currencyCode === 'EUR') symbolCurrency = 'Э';
+  const resultPrice = ` ${find.value.centAmount / 100}`;
+
+  return { price: resultPrice, currency: symbolCurrency };
+};
+
 export const useProductStore = defineStore('product_store', () => {
-  // State
   const appState = useAppState();
   const productApi = new ProductApi();
   const data = ref<ProductProjectionPagedQueryResponse | null>(null);
   const product = ref<ProductProjection | null>(null);
   const isLoading = ref<boolean>(false);
-  // << State
+
   // Getters
   const IsLoading = computed(() => isLoading.value);
 
-  const Data = computed(() => data.value);
+  const GetData = computed(() => data.value);
 
   const Product = computed(() => product.value);
 
@@ -72,9 +86,9 @@ export const useProductStore = defineStore('product_store', () => {
 
   const GetTotalPaginationNumber = computed(() => {
     if (data.value === null) return 0;
+    if (data.value.total === undefined) return 0;
     return Math.ceil(data.value.total / data.value.limit);
   });
-  // << Getters
 
   // Actions
   const requestGetProduct = async (offset = 0, limit = 10) => {

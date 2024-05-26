@@ -30,7 +30,7 @@ class Client {
       this.cachedClients.clientCredentials = this.authTokenFlow.createCredentialsUser();
     }
 
-    return this.cachedClients.clientCredentials as ByProjectKeyRequestBuilder;
+    return this.cachedClients.clientCredentials;
   }
 
   getPasswordFlowClient(email: string, password: string) {

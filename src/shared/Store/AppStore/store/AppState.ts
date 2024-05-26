@@ -5,7 +5,7 @@ import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
 const NAME_SPACE = 'AppState';
 const KEY_LOCAL_STORAGE = 'state';
 
-type LangType = 'ru' | 'en';
+type LangType = 'ru' | 'en-US';
 
 type CurrencyCodeType = 'EUR' | 'USD' | 'RUB';
 
@@ -18,7 +18,10 @@ export const useAppState = defineStore(NAME_SPACE, () => {
   const ls = useLocalStorage();
   const loadState = ls.load<StateType>(KEY_LOCAL_STORAGE);
 
-  const state = reactive<StateType>(loadState || { language: 'en', currencyCode: 'USD' });
+  const state = reactive<StateType>(loadState || { language: 'en-US', currencyCode: 'USD' });
+
+  const getCurrentLang = computed(() => state.language);
+  const getCurrentCurrency = computed(() => state.currencyCode);
 
   const changeLanguage = (lang: LangType) => {
     state.language = lang;
@@ -34,5 +37,5 @@ export const useAppState = defineStore(NAME_SPACE, () => {
     return state;
   });
 
-  return { getState, changeLanguage, changeCurrencyCode };
+  return { getState, changeLanguage, changeCurrencyCode, getCurrentLang, getCurrentCurrency };
 });

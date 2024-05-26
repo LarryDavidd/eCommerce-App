@@ -33,7 +33,7 @@ class ProductApi {
     return await client
       .productProjections()
       .search()
-      .get({ queryArgs: { filter: ids.map((id) => `categories.id:"${id}"`) } })
+      .get({ queryArgs: { filter: `categories.id:${ids.map((id) => `subtree("${id}")`).join(', ')}` } })
       .execute()
       .then((data) => data)
       .catch((err) => err);
