@@ -1,5 +1,5 @@
 import Client from '@/shared/api/client/Client';
-import { ByProjectKeyRequestBuilder, type CustomerDraft, type ErrorResponse } from '@commercetools/platform-sdk';
+import { ByProjectKeyRequestBuilder, type CustomerDraft, type CustomerSignInResult, type ErrorResponse } from '@commercetools/platform-sdk';
 import type { ClientResponse } from '@commercetools/sdk-client-v2';
 
 class CostumerApi {
@@ -17,7 +17,7 @@ class CostumerApi {
         }
       })
       .execute()
-      .then((data) => data)
+      .then((data) => data as ClientResponse<CustomerSignInResult>)
       .catch((err) => JSON.parse(JSON.stringify(err.body)) as ClientResponse<ErrorResponse>);
     return res;
   }

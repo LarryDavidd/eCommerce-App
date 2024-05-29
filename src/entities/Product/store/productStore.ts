@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
 import ProductApi from '../api/fetchProduct';
-import { computed, ref } from 'vue';
-import type { Price, ProductProjection, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
+import { computed, ref, watch, watchEffect } from 'vue';
+import type { Price, ProductProjection, ProductProjectionPagedQueryResponse, ProductProjectionPagedSearchResponse } from '@commercetools/platform-sdk';
 import { useAppState } from '@shared/Store/AppStore';
+import { useFilterStore } from './filterStore';
 
 const findPriceInCurrency = (prices?: Price[], currencyCode?: string) => {
   if (prices === undefined || currencyCode === undefined) return;
@@ -21,10 +22,17 @@ const findPriceInCurrency = (prices?: Price[], currencyCode?: string) => {
 
 export const useProductStore = defineStore('product_store', () => {
   const appState = useAppState();
+  const filterStore = useFilterStore();
   const productApi = new ProductApi();
-  const data = ref<ProductProjectionPagedQueryResponse | null>(null);
+  const data = ref<ProductProjectionPagedSearchResponse | null>(null);
   const product = ref<ProductProjection | null>(null);
   const isLoading = ref<boolean>(false);
+
+  watch(
+    () => filterStore.getQueryArgs,
+    () => requestGetProduct(),
+    { deep: true }
+  );
 
   // Getters
   const IsLoading = computed(() => isLoading.value);
@@ -100,7 +108,7 @@ export const useProductStore = defineStore('product_store', () => {
 
     data.value = products;
     isLoading.value = false;
-    return products;
+    console.log(data.value);
   };
 
   const requestGetProductById = async (id: string) => {
@@ -125,9 +133,9 @@ export const useProductStore = defineStore('product_store', () => {
     return products;
   };
 
-  const requestProductSearch = async (language: string, text: string) => {
+  const requestProductSearch = async (text: string) => {
     isLoading.value = true;
-    const products = await productApi.fetchProductProjectionSearch(language, text);
+    const products = await productApi.fetchProductProjectionSearch(appState.getState.language, text);
 
     if (products instanceof Error) return;
 
@@ -136,5 +144,5 @@ export const useProductStore = defineStore('product_store', () => {
     return products;
   };
 
-  return { requestGetProduct, requestGetProductsByCategory, requestProductSearch, requestGetProductById };
+  return { requestGetProduct, requestGetProductsByCategory, requestProductSearch, requestGetProductById, GetProducts, isLoading };
 });

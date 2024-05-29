@@ -4,6 +4,7 @@ import { LoginPage } from '@pages/LoginPage';
 import { FavoritesPage } from '@pages/FavoritesPage';
 import { CartPage } from '@pages/CartPage';
 import NotFoundPage from '@/pages/NotFoundPage/ui/NotFoundPage.vue';
+import CatalogPage from '@/pages/CatalopPage';
 
 export const routes = [
   {
@@ -23,6 +24,14 @@ export const routes = [
     path: '/registration',
     name: 'registration',
     component: RegistrationPage,
+    meta: {
+      requiresGuest: true
+    }
+  },
+  {
+    path: '/catalog',
+    name: 'catalog',
+    component: CatalogPage,
     meta: {
       requiresGuest: true
     }

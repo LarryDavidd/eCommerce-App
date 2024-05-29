@@ -13,7 +13,7 @@ class ProductApi {
         }
       })
       .execute()
-      .then((data) => data)
+      .then((data) => data.body)
       .catch((err) => err);
   }
 
@@ -44,7 +44,7 @@ class ProductApi {
     return await client
       .productProjections()
       .search()
-      .get({ queryArgs: { fuzzy: true, 'text.en': text } })
+      .get({ queryArgs: { ['text.' + language]: text, fuzzy: true } })
       .execute()
       .then((data) => data)
       .catch((err) => err);
