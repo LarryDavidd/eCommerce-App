@@ -68,7 +68,7 @@ const changeSize = (value: string) => {
   background-size: cover;
   background-position: center;
   width: 100%;
-  height: 450px; // чтоб уменьшалась пропорционально
+  aspect-ratio: 2 / 3;
 }
 .strike-through {
   text-decoration-color: red; /* Цвет зачеркивания */

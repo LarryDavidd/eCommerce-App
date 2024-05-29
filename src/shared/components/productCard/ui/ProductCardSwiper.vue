@@ -16,7 +16,7 @@ const bgContainer: Ref<HTMLDivElement | null> = ref(null);
 let resizeObserver: ResizeObserver | null = null;
 const backgroundIndex = ref(0);
 const mousePositionControl = ref(0);
-const isChecked = ref(true);
+const isChecked = ref(false);
 
 //swiper
 
@@ -25,7 +25,6 @@ const endX = ref(0);
 
 const startTouch = (event: TouchEvent) => {
   startX.value = event.touches[0].clientX;
-  console.log('startTouch', startX.value);
 };
 
 const moveTouch = (event: TouchEvent) => {
