@@ -17,6 +17,7 @@
     </transition>
     <div class="content flex flex-grow justify-between">
       <div>home page</div>
+      <ProductCard></ProductCard>
       <div class="flex gap-4">
         <router-link to="/login">
           <p class="underline hover:text-blue-500">Login</p>
@@ -41,6 +42,7 @@ import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
 import FilterBlock from '@features/Filter/ui/FilterBlock.vue';
 import { type RangeFilter, useFilterStore } from '@features/store/useFilter';
 import BurgerButton from '@shared/ui-kit/Buttons/BurgerButton/BurgerButton.vue';
+import { ProductCard } from '@shared/components/productCard';
 
 const filtersAccordion = computed(() => useFilterStore().getFiltersAccordion);
 const checkboxFilters = computed(() => useFilterStore().getCheckboxFilters);
