@@ -47,3 +47,8 @@ defineProps({
     </g>
   </svg>
 </template>
+<style scoped lang="scss">
+.checked path {
+  fill: rgb(218, 37, 28);
+}
+</style>
