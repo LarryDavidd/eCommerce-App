@@ -66,7 +66,7 @@ export const useProductStore = defineStore('product_store', () => {
         const id = product.id;
         const name = product.name[appState.getState.language];
         const description = product.description ? product.description[appState.getState.language] : '';
-        const urlImage = product.masterVariant.images ? product.masterVariant.images[0].url : ''; // Берем первый попавшийся Image
+        const urlImage = product.masterVariant.images ?? [];
         const findCurrencyPrice = product.masterVariant.prices?.find((_price) => {
           if (_price.value.currencyCode === appState.getState.currencyCode) {
             return _price.value;

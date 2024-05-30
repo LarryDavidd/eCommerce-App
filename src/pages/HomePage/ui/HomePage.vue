@@ -17,7 +17,7 @@
     </transition>
     <div class="content flex flex-grow justify-between">
       <div>home page</div>
-      <ProductCard></ProductCard>
+      <!-- <ProductCard></ProductCard> -->
       <div class="flex gap-4">
         <router-link to="/login">
           <p class="underline hover:text-blue-500">Login</p>
