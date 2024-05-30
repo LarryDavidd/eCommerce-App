@@ -3,7 +3,8 @@ import { RegistrationPage } from '@pages/RegistrationPage';
 import { LoginPage } from '@pages/LoginPage';
 import { FavoritesPage } from '@pages/FavoritesPage';
 import { CartPage } from '@pages/CartPage';
-import NotFoundPage from '@/pages/NotFoundPage/ui/NotFoundPage.vue';
+import { NotFoundPage } from '@/pages/NotFoundPage';
+import { DetailedProductPage } from '@pages/DetailedProductPage';
 
 export const routes = [
   {
@@ -42,6 +43,11 @@ export const routes = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: '/detailed',
+    name: 'detailed',
+    component: DetailedProductPage
   },
   {
     path: '/404',
