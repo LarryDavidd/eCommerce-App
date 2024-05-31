@@ -30,13 +30,11 @@ export const useProductStore = defineStore('product_store', () => {
 
   watch(
     () => filterStore.getQueryArgs,
-    () => requestGetProduct(),
+    () => requestGetProductByQueryParams(),
     { deep: true }
   );
 
   // Getters
-  const IsLoading = computed(() => isLoading.value);
-
   const GetData = computed(() => data.value);
 
   const Product = computed(() => product.value);
@@ -111,6 +109,18 @@ export const useProductStore = defineStore('product_store', () => {
     console.log(data.value);
   };
 
+  const requestGetProductByQueryParams = async (offset = 0) => {
+    if (offset <= 0) offset = 0;
+    isLoading.value = true;
+    const products = await productApi.fetchQueryProductProjectionsByQP();
+
+    if (products instanceof Error) return;
+
+    data.value = products;
+    isLoading.value = false;
+    console.log(data.value);
+  };
+
   const requestGetProductById = async (id: string) => {
     isLoading.value = true;
     const res = await productApi.fetchGetProductProjectionByID(id);
@@ -144,5 +154,5 @@ export const useProductStore = defineStore('product_store', () => {
     return products;
   };
 
-  return { requestGetProduct, requestGetProductsByCategory, requestProductSearch, requestGetProductById, GetProducts, isLoading };
+  return { requestGetProduct, requestGetProductByQueryParams, requestGetProductsByCategory, requestProductSearch, requestGetProductById, GetProducts, isLoading };
 });

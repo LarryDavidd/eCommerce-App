@@ -9,7 +9,7 @@ const productStore = useProductStore();
 const data = ref<ProductProjection[]>([]);
 
 onMounted(() => {
-  productStore.requestGetProduct();
+  productStore.requestGetProductByQueryParams();
 });
 </script>
 

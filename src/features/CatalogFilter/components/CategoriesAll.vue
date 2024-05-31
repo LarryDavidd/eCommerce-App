@@ -65,7 +65,7 @@ const filterCategories = (categories: Category[], lang: string) => {
         v-for="subcategory in category.children"
         :label="subcategory.name"
         :key="subcategory.id"
-        @update:model-value="() => useFilters.addCategory(subcategory.name)"
+        @update:model-value="() => useFilters.addRemoveCategory(subcategory.id)"
       />
     </Accordion>
   </template>
