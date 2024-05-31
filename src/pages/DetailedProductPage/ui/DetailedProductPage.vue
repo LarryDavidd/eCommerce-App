@@ -1,5 +1,5 @@
 <template>
-  <div class="test">
+  <div class="test mx-20 py-4">
     <Splide
       :options="{ rewind: true }"
       aria-label="My Favorite Images"
@@ -7,6 +7,7 @@
       <SplideSlide
         v-for="(image, i) in images"
         :key="i"
+        @click="openLightbox(i)"
       >
         <img
           :src="image"
@@ -14,6 +15,12 @@
         />
       </SplideSlide>
     </Splide>
+    <vue-easy-lightbox
+      :visible="visible"
+      :imgs="images"
+      :index="index"
+      @hide="handleHide"
+    />
   </div>
 </template>
 
@@ -21,11 +28,13 @@
 import { defineComponent, ref } from 'vue';
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
 import '@splidejs/vue-splide/css';
+import VueEasyLightbox from 'vue-easy-lightbox';
 
 defineComponent({
   components: {
     Splide,
-    SplideSlide
+    SplideSlide,
+    VueEasyLightbox
   }
 });
 
@@ -36,11 +45,22 @@ const images = ref<string[]>([
   'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/c36/c36edba7dfad1f33b2cbbe8853ffaafd/59cc5dba5feec14859f3395a02ad4b1e.jpg',
   'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/9ec/9ecd300c6eb1960918e8efe4396967c3/b8beded126408d6f5e7a4e459832c23d.jpg'
 ]);
+
+const visible = ref(false);
+const index = ref(0);
+
+const openLightbox = (currentIndex: number) => {
+  index.value = currentIndex;
+  visible.value = true;
+};
+const handleHide = () => {
+  visible.value = false;
+};
 </script>
 
 <style scoped lang="scss">
 .test {
-  width: 300px;
-  height: 500px;
+  width: 30%;
+  aspect-ratio: 3 / 5;
 }
 </style>
