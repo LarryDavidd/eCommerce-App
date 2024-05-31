@@ -3,7 +3,9 @@ import { RegistrationPage } from '@pages/RegistrationPage';
 import { LoginPage } from '@pages/LoginPage';
 import { FavoritesPage } from '@pages/FavoritesPage';
 import { CartPage } from '@pages/CartPage';
+
 import NotFoundPage from '@/pages/NotFoundPage/ui/NotFoundPage.vue';
+import { UserProfilePage } from '@pages/UserProfilePage';
 
 export const routes = [
   {
@@ -47,6 +49,11 @@ export const routes = [
     path: '/404',
     name: '404',
     component: NotFoundPage
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: UserProfilePage
   },
   {
     path: '/:pathMatch(.*)*',

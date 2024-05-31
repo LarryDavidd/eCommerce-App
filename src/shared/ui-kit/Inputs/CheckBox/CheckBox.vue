@@ -8,6 +8,10 @@ const props = defineProps({
   label: {
     type: String,
     required: true
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -21,6 +25,7 @@ const handleChange = () => {
 <template>
   <div class="checkbox-wrapper">
     <input
+      :disabled="disabled"
       type="checkbox"
       id="myCheckbox"
       :checked="props.modelValue"
@@ -34,6 +39,7 @@ const handleChange = () => {
 label {
   line-height: 1.1;
 }
+
 input[type='checkbox'] {
   position: relative;
   appearance: none;
@@ -68,5 +74,8 @@ input[type='checkbox']:checked::before {
   width: 100%;
   display: flex;
   gap: 5px;
+}
+input[type='checkbox']:disabled {
+  cursor: auto;
 }
 </style>
