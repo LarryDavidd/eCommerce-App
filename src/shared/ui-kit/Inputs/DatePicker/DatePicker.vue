@@ -27,6 +27,7 @@ function handleSelect(data: Date) {
 
 <template>
   <VueDatePicker
+    :disabled="disabled"
     v-model="date"
     :enable-time-picker="false"
     @update:model-value="handleSelect"
