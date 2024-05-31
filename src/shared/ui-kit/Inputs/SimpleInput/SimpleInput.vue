@@ -2,10 +2,11 @@
 import ErrorIcon from '@shared/ui-kit/Icons/ErrorIcon.vue';
 
 type PropsType = {
+  id?: string;
   name?: string;
   placeholder: string;
   type?: 'text' | 'password' | 'phone' | 'email' | 'number';
-  error: string[] | null;
+  error?: string[] | null;
   required?: boolean;
   disabled?: boolean;
   modelValue: string | number;
@@ -37,7 +38,7 @@ function handleInput(event: Event) {
       :class="['simple-input', error ? 'error-input' : '']"
       :required="required"
       :type="type"
-      :id="placeholder"
+      :id="id ? id : placeholder"
       :placeholder="placeholder"
       :value="modelValue"
       @input="handleInput"
