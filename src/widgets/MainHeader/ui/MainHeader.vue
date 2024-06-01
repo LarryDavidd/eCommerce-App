@@ -33,7 +33,7 @@ const selectedCurrency = ref('RUB');
             title="Language"
           />
           <CustomSelect
-            :options="['RUB', 'USD']"
+            :options="['RUB', 'USD', 'EUR']"
             v-model="selectedCurrency"
             :icon="CurrencyIcon"
             title="Currency"
