@@ -3,8 +3,8 @@ import { RegistrationPage } from '@pages/RegistrationPage';
 import { LoginPage } from '@pages/LoginPage';
 import { FavoritesPage } from '@pages/FavoritesPage';
 import { CartPage } from '@pages/CartPage';
-
-import NotFoundPage from '@/pages/NotFoundPage/ui/NotFoundPage.vue';
+import { NotFoundPage } from '@/pages/NotFoundPage';
+import { DetailedProductPage } from '@pages/DetailedProductPage';
 import { UserProfilePage } from '@pages/UserProfilePage';
 
 export const routes = [
@@ -46,14 +46,19 @@ export const routes = [
     }
   },
   {
-    path: '/404',
-    name: '404',
-    component: NotFoundPage
+    path: '/detailed',
+    name: 'detailed',
+    component: DetailedProductPage
   },
   {
     path: '/profile',
     name: 'profile',
     component: UserProfilePage
+  },
+  {
+    path: '/404',
+    name: '404',
+    component: NotFoundPage
   },
   {
     path: '/:pathMatch(.*)*',
