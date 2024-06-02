@@ -18,6 +18,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@splidejs/vue-splide": "^0.6.12",
     "@vueform/slider": "^2.1.10",
     "@vueuse/components": "^10.9.0",
     "@vueuse/core": "^10.9.0",
@@ -26,6 +27,7 @@
     "vest": "^5.2.12",
     "vitest": "^1.5.3",
     "vue": "^3.4.26",
+    "vue-easy-lightbox": "^1.19.0",
     "vue-router": "^4.3.2"
   },
   "devDependencies": {
