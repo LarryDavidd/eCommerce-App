@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import MyAccordion from '@/shared/ui-kit/Accordion/MyAccordion.vue';
 import CategoriesAll from '../components/CategoriesAll.vue';
+import SortCheckboxes from '../components/SortCheckboxes.vue';
+SortCheckboxes;
 </script>
 
 <template>
@@ -12,10 +14,10 @@ import CategoriesAll from '../components/CategoriesAll.vue';
       <CategoriesAll></CategoriesAll>
     </MyAccordion>
     <MyAccordion
-      key="categories"
-      title="categories"
+      key="Sort"
+      title="Sort"
     >
-      <CategoriesAll></CategoriesAll>
+      <SortCheckboxes></SortCheckboxes>
     </MyAccordion>
   </div>
 </template>

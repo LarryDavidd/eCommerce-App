@@ -23,17 +23,28 @@ class ProductApi {
 
   async fetchQueryProductProjectionsByQP() {
     const client = Client.getInstance().credentialsClient;
+    const limit = this.filterStore.getQueryArgs.limit;
     const categories = this.filterStore.getQueryArgs.categories;
+    const sortNames = this.filterStore.getQueryArgs.sort;
     const text = this.filterStore.getQueryArgs.searchText;
     const language = this.appStore.getCurrentLang;
-    // const price = this.filterStore.getQueryArgs.price;
+    const price = this.filterStore.getQueryArgs.price;
     console.log(categories);
-    const filter =
-      categories.size > 0
-        ? `categories.id:${Array.from(categories)
-            .map((id) => `subtree("${id}")`)
-            .join(', ')}`
-        : undefined;
+    const filter: string[] = [];
+    const sort: string[] = [];
+    if (categories.size > 0) {
+      filter.push(
+        `categories.id:${Array.from(categories)
+          .map((id) => `subtree("${id}")`)
+          .join(', ')}`
+      );
+    }
+    if (sortNames.size > 0) {
+      Array.from(sortNames).forEach((sortName) => sort.push(sortName));
+    }
+    if (price.max) {
+      filter.push(`variants.price.centAmount:range (${price.min} to ${price.max})`);
+    }
     // if (price.max & price.min) filter += ``
     return await client
       .productProjections()
@@ -41,12 +52,12 @@ class ProductApi {
       .get({
         queryArgs: {
           offset: 0,
-          limit: 10,
+          limit,
           filter,
-          'filter.query': 'variants.price.centAmount:range (0 to 5000)',
+          sort,
           facet: 'variants.price.centAmount',
-          ['text.' + language]: text,
-          fuzzy: true
+          ['text.' + language]: text ? text : undefined
+          // fuzzy: text ? undefined : true
         }
       })
       .execute()
