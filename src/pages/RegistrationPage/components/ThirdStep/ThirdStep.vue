@@ -93,7 +93,6 @@ const prevStep = () => {
         <span class="title">Registration</span>
         <span>Step 3</span>
       </div>
-
       <SelectInput
         v-model="data.countryShipping"
         :options="['Russia', 'United States', 'United Kingdom']"
