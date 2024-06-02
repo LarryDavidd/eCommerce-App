@@ -39,8 +39,11 @@ class ProductApi {
           .join(', ')}`
       );
     }
-    if (sortNames.size > 0) {
-      Array.from(sortNames).forEach((sortName) => sort.push(sortName));
+    if (sortNames.nameCondition !== 'none') {
+      sort.push(sortNames.nameCondition);
+    }
+    if (sortNames.priceCondition !== 'none') {
+      sort.push(sortNames.priceCondition);
     }
     if (price.max) {
       filter.push(`variants.price.centAmount:range (${price.min} to ${price.max})`);
