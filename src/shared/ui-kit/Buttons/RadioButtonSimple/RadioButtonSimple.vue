@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<PropsType>(), {
 
 const emits = defineEmits(['update:modelValue']);
 
-const isSelected = ref<boolean>(props.value);
+const isSelected = computed(() => props.value);
 </script>
 
 <template>

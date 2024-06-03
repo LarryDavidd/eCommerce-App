@@ -40,6 +40,11 @@ export const routes = [
     }
   },
   {
+    path: '/product-page/:id',
+    name: 'product-page',
+    component: DetailedProductPage
+  },
+  {
     path: '/favorites',
     name: 'favorites',
     component: FavoritesPage,

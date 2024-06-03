@@ -14,6 +14,9 @@ export const useFilterStore = defineStore(NAME_SPACE, () => {
     sort: { priceCondition: 'none', nameCondition: 'none' }
   });
 
+  const getPriceCondition = computed(() => queryArgs.sort.priceCondition);
+  const getNameCondition = computed(() => queryArgs.sort.nameCondition);
+
   const appState = useAppState();
 
   const getQueryArgs = computed(() => queryArgs);
@@ -22,13 +25,13 @@ export const useFilterStore = defineStore(NAME_SPACE, () => {
 
   const addRemoveCategory = (category: string) => (queryArgs.categories.has(category) ? queryArgs.categories.delete(category) : queryArgs.categories.add(category));
 
-  const changeSortByPrice = (newCondition: string) => (queryArgs.sort.priceCondition = newCondition === 'none' ? 'none' : 'price' + ' ' + newCondition);
-  const changeSortByName = (newCondition: string) => (queryArgs.sort.nameCondition = newCondition === 'none' ? 'none' : 'name.' + appState.getCurrentLang + ' ' + newCondition);
+  const changeSortByPrice = (newCondition: string) => (queryArgs.sort.priceCondition = newCondition);
+  const changeSortByName = (newCondition: string) => (queryArgs.sort.nameCondition = newCondition);
 
   const setMinPrice = (mixPrice: number) => (queryArgs.price.min = mixPrice);
   const setMaxPrice = (maxPrice: number) => (queryArgs.price.max = maxPrice);
 
   const setSearchText = (text: string) => (queryArgs.searchText = text);
 
-  return { addRemoveCategory, setMaxPrice, setMinPrice, setSearchText, changeSortByPrice, changeSortByName, getQueryArgs };
+  return { getPriceCondition, getNameCondition, addRemoveCategory, setMaxPrice, setMinPrice, setSearchText, changeSortByPrice, changeSortByName, getQueryArgs };
 });

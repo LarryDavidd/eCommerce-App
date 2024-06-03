@@ -10,6 +10,7 @@ import ModalWrapper from '@shared/ui-kit/ModalWrapper/ModalWrapper.vue';
 import PasswordChangeModal from '@pages/UserProfilePage/components/PasswordChangeModal.vue';
 import { type Address, ConvertDataForServer, type UserData, useUserData } from '@pages/UserProfilePage/model/useUserData';
 import AddAddressModal from '@pages/UserProfilePage/components/AddAddressModal.vue';
+import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
 
 export type PersonalErrors = {
   name: string[] | null;
@@ -30,6 +31,9 @@ const errorsPersonal: Ref<PersonalErrors> = ref({
   password: null,
   dateOfBirth: null
 });
+
+// const costumerStore = useCostumerStore();
+// costumerStore.requestCredentialsCostumer();
 
 const userData: UserData = {
   email: 'seb@example.com',

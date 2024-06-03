@@ -59,7 +59,7 @@ class CostumerApi {
 
   public async existingCostumer(access_token: string) {
     return Client.getInstance()
-      .clientWithExistTokenFlow(access_token)
+      .clientWithRefreshTokenFlow(access_token)
       .get()
       .execute()
       .then((data) => data)

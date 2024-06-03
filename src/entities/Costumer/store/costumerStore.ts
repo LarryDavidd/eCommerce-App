@@ -6,11 +6,14 @@ import type { CustomerDraft } from '@commercetools/platform-sdk';
 import { revokingToken } from '@/auth/api/revokeToken';
 import { useNotificationStore } from '@/shared/Store/AlertMessageStore';
 import router from '@/app/router';
+import type { Client } from '@commercetools/sdk-client-v2';
 
 export const useCostumerStore = defineStore('costumer_store', () => {
   const costumerApi = new CostumerApi();
   const ls = useLocalStorage();
   const alert = useNotificationStore();
+
+  const costumerCredentials = ref<Client | null>(null);
 
   const isLogined = ref<boolean>(false);
   const isLoading = ref<boolean>(false);
@@ -55,10 +58,11 @@ export const useCostumerStore = defineStore('costumer_store', () => {
 
   async function LoginExistigCostumer() {
     isLoading.value = true;
-    const accessToken = ls.load('access_token');
+    const refresh_token = ls.load('refresh_token');
 
-    if (accessToken) {
-      const existCostumer = await costumerApi.existingCostumer(String(accessToken));
+    if (refresh_token) {
+      const existCostumer = await costumerApi.refreshCostumer(String(refresh_token));
+      console.log(existCostumer);
 
       if (existCostumer?.statusCode === 200) {
         isLogined.value = true;
@@ -78,6 +82,7 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLoading.value = true;
 
     const res = await costumerApi.loginCostumer(email, password);
+    console.log(res);
 
     if (res.statusCode === 200) {
       isExist.value = true;
@@ -142,7 +147,7 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLogined.value = false;
 
     if (res instanceof Error) {
-      alert.SetMessage({ status: 'error', message: 'Please reload page' });
+      alert.addNotification({ status: 'error', message: 'Please reload page' });
     } else {
       AnonCostumer();
       router.push({ name: 'login' });
@@ -151,5 +156,36 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLoading.value = false;
   }
 
-  return { AnonCostumer, LoginExistigCostumer, LoginCostumer, RegistrationCostumer, LogoutCostumer, isLogined, isLoading, isExist, userAccessToken, userRefreshToken };
+  const requestCredentialsCostumer = async () => {
+    isLoading.value = true;
+
+    const refresh_token = ls.load('refresh_token');
+
+    if (refresh_token) {
+      const res = await costumerApi.credentialsCostumer();
+
+      if (res instanceof Error) {
+        alert.addNotification({ status: 'error', message: 'Please reload page' });
+      } else {
+        console.log(res);
+        costumerCredentials.value = res.body;
+      }
+    }
+
+    isLoading.value = false;
+  };
+
+  return {
+    requestCredentialsCostumer,
+    AnonCostumer,
+    LoginExistigCostumer,
+    LoginCostumer,
+    RegistrationCostumer,
+    LogoutCostumer,
+    isLogined,
+    isLoading,
+    isExist,
+    userAccessToken,
+    userRefreshToken
+  };
 });

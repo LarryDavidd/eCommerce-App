@@ -41,6 +41,7 @@ export const useProductStore = defineStore('product_store', () => {
 
   const GetProduct = computed(() => {
     if (product.value === null) return null;
+    console.log(product);
 
     const findPriceData = findPriceInCurrency(product.value.masterVariant.prices, appState.getState.currencyCode);
 
@@ -127,9 +128,9 @@ export const useProductStore = defineStore('product_store', () => {
 
     if (res instanceof Error) return;
 
-    product.value = res;
+    product.value = res.body;
     isLoading.value = false;
-    return res;
+    return res.body;
   };
 
   const requestGetProductsByCategory = async (ids: string[]) => {
@@ -154,5 +155,5 @@ export const useProductStore = defineStore('product_store', () => {
     return products;
   };
 
-  return { requestGetProduct, requestGetProductByQueryParams, requestGetProductsByCategory, requestProductSearch, requestGetProductById, GetProducts, isLoading };
+  return { requestGetProduct, requestGetProductByQueryParams, requestGetProductsByCategory, requestProductSearch, requestGetProductById, GetProducts, GetProduct, isLoading };
 });

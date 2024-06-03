@@ -40,10 +40,10 @@ class ProductApi {
       );
     }
     if (sortNames.nameCondition !== 'none') {
-      sort.push(sortNames.nameCondition);
+      sort.push('name.' + this.appStore.getCurrentLang + ' ' + sortNames.nameCondition);
     }
     if (sortNames.priceCondition !== 'none') {
-      sort.push(sortNames.priceCondition);
+      sort.push('price' + ' ' + sortNames.priceCondition);
     }
     if (price.max) {
       filter.push(`variants.price.centAmount:range (${price.min} to ${price.max})`);

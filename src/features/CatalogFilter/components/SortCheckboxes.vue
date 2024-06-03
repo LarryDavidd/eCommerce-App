@@ -2,7 +2,7 @@
 import { useFilterStore } from '@/entities/Product/store/filterStore';
 import MyAccordion from '@/shared/ui-kit/Accordion/MyAccordion.vue';
 import RadioButtonSimple from '@/shared/ui-kit/Buttons/RadioButtonSimple/RadioButtonSimple.vue';
-import { ref } from 'vue';
+import { computed } from 'vue';
 
 const filterStore = useFilterStore();
 
@@ -14,8 +14,8 @@ const changeSortByPrice = (sort: string) => {
   filterStore.changeSortByPrice(sort);
 };
 
-const priceCondition = ref(filterStore.getQueryArgs.sort.priceCondition);
-const nameCondition = ref(filterStore.getQueryArgs.sort.nameCondition);
+const priceCondition = computed(() => filterStore.getPriceCondition);
+const nameCondition = computed(() => filterStore.getNameCondition);
 </script>
 
 <template>
@@ -28,7 +28,7 @@ const nameCondition = ref(filterStore.getQueryArgs.sort.nameCondition);
       name="asc"
       :value="priceCondition === 'asc'"
       @update:model-value="changeSortByPrice('asc')"
-    />{{ priceCondition }}
+    />
     <RadioButtonSimple
       group="sort-by-price"
       name="desc"
