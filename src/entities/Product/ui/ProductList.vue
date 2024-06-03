@@ -3,6 +3,8 @@ import { onMounted, ref } from 'vue';
 import { useProductStore } from '../store/productStore';
 import type { ProductProjection } from '@commercetools/platform-sdk';
 import { ProductCard } from '@shared/components/productCard';
+import Loading from '@shared/ui-kit/Loading/CustomLoading.vue';
+import CustomLoading from '@shared/ui-kit/Loading/CustomLoading.vue';
 
 const productStore = useProductStore();
 
@@ -29,4 +31,5 @@ onMounted(() => {
     >
     </ProductCard>
   </section>
+  <CustomLoading v-else />
 </template>
