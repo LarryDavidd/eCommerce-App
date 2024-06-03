@@ -1,5 +1,5 @@
-<script setup>
-import { ref, defineProps, defineEmits, watch } from 'vue';
+<script setup lang="ts">
+import { ref, defineProps, defineEmits, watch, type Component } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -8,10 +8,10 @@ const props = defineProps({
   },
   options: {
     required: true,
-    type: Array
+    type: Array as () => string[]
   },
   icon: {
-    type: Object,
+    type: Object as () => Component,
     required: false,
     default: null
   },
@@ -29,8 +29,8 @@ const emits = defineEmits(['update:modelValue']);
 
 const selected = ref(props.modelValue);
 
-const updateValue = (event) => {
-  const value = event.target.value;
+const updateValue = (event: Event) => {
+  const value = (event.target as HTMLSelectElement).value;
   emits('update:modelValue', value);
 };
 
