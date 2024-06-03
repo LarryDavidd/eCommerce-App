@@ -2,22 +2,16 @@
 import { onMounted, onUnmounted, ref, type Ref, watchEffect } from 'vue';
 import LikeHeart from '@shared/ui-kit/Icons/LikeHeart.vue';
 import type { Image } from '@commercetools/platform-sdk';
+import { useRouter } from 'vue-router';
 
 type PropsType = {
   urlImg: Image[];
+  prodId: string;
 };
 
 const props = defineProps<PropsType>();
 
 const images = props.urlImg.map((img) => img.url);
-
-// const images: string[] = [
-//   'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/e1d/e1dcaddcc2b601226e2f1e420cf8b7e4/6d016c8434cefcb2bbc3b7913e60e20a.jpg',
-//   'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/6e5/6e57a17ad59a79572cc63c35c707dcb3/688371b85619f5f1a709d34364bc5451.jpg',
-//   'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/14d/14d7785d8e2ba001584b50109bf3326a/7cce0a93fd1d9f74f69826d014c6c049.jpg',
-//   'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/c36/c36edba7dfad1f33b2cbbe8853ffaafd/59cc5dba5feec14859f3395a02ad4b1e.jpg',
-//   'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/9ec/9ecd300c6eb1960918e8efe4396967c3/b8beded126408d6f5e7a4e459832c23d.jpg'
-// ];
 
 const bgWidth: Ref<number> = ref(0);
 const mousePositionX = ref(0);
@@ -26,6 +20,12 @@ let resizeObserver: ResizeObserver | null = null;
 const backgroundIndex = ref(0);
 const mousePositionControl = ref(0);
 const isChecked = ref(false);
+
+const router = useRouter();
+
+const onClick = () => {
+  router.push({ name: 'product-page', params: { id: props.prodId } });
+};
 
 //swiper
 
@@ -71,7 +71,8 @@ const prevSlide = () => {
   }
 };
 // swiper end
-const toggleChecked = () => {
+const toggleChecked = (event: Event) => {
+  event.stopPropagation();
   isChecked.value = !isChecked.value;
 };
 
@@ -118,10 +119,11 @@ onUnmounted(() => {
   <div
     ref="bgContainer"
     :style="{ backgroundImage: `url(${images[backgroundIndex]})` }"
-    class="bg flex flex-row-reverse"
+    class="bg flex cursor-pointer flex-row-reverse"
     @mousemove="mousePosition"
     @touchstart="startTouch"
     @touchmove="moveTouch"
+    @click="onClick"
   >
     <LikeHeart
       :class="{ checked: isChecked }"
