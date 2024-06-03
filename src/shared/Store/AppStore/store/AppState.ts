@@ -5,9 +5,9 @@ import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
 const NAME_SPACE = 'AppState';
 const KEY_LOCAL_STORAGE = 'state';
 
-type LangType = 'ru' | 'en-US';
+export type LangType = 'ru' | 'en-US';
 
-type CurrencyCodeType = 'EUR' | 'USD' | 'RUB';
+export type CurrencyCodeType = 'EUR' | 'USD' | 'RUB';
 
 type StateType = {
   language: LangType;
