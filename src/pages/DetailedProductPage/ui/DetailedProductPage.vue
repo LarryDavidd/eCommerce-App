@@ -28,8 +28,12 @@
         <p class="text-3xl font-bold lg:text-4xl">{{ product?.name }}</p>
         <p class="text-3xl font-black text-[rgb(110,15,23)]">Sale</p>
         <div class="flex flex-wrap items-center gap-4">
-          <p class="text-3xl font-bold lg:text-4xl">{{ product?.priceData.price + ' ' + product?.priceData.currency }}</p>
-          <p class="text-2xl font-bold text-gray-400 line-through lg:text-4xl">{{ product?.priceData.price + ' ' + product?.priceData.currency }}</p>
+          <p class="text-3xl font-bold lg:text-4xl">
+            {{ product?.priceData.price + ' ' + product?.priceData.currency }}
+          </p>
+          <p class="text-2xl font-bold text-gray-400 line-through lg:text-4xl">
+            {{ product?.priceData.price + ' ' + product?.priceData.currency }}
+          </p>
         </div>
         <div class="flex gap-4">
           <div
@@ -63,6 +67,7 @@
       </div>
     </div>
   </template>
+  <CustomLoading v-else />
 </template>
 
 <script setup lang="ts">
@@ -74,6 +79,7 @@ import LikeHeart from '@shared/ui-kit/Icons/LikeHeart.vue';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 import { useProductStore } from '@/entities/Product/store/productStore';
 import { useRouter } from 'vue-router';
+import CustomLoading from '@shared/ui-kit/Loading/CustomLoading.vue';
 
 defineComponent({
   components: {
@@ -137,10 +143,12 @@ const handleHide = () => {
   border: 1px solid rgb(0, 0, 0);
   background: rgb(240, 240, 240);
 }
+
 .selected,
 .size-btn:hover {
   box-shadow: 2px 2px 0 0 rgb(0, 0, 0);
 }
+
 .card-btn {
   margin: 0;
 }
