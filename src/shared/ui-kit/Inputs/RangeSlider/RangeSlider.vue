@@ -5,14 +5,14 @@ import type { RangeFilter } from '@features/store/useFilter';
 const props = defineProps({
   modelValue: {
     type: Object as () => RangeFilter,
-    default: () => ({ min: 0, max: 100, title: '' })
+    default: () => ({ min: 0, max: 500, title: '' })
   }
 });
 const emit = defineEmits(['update:modelValue']);
 const value = ref([props.modelValue.min, props.modelValue.max]);
 watch(value, (newValue) => {
   console.log(newValue);
-  emit('update:modelValue', { min: newValue[0], max: newValue[1], title: props.modelValue.title });
+  emit('update:modelValue', { min: newValue[0], max: newValue[1] });
 });
 const min = ref(props.modelValue.min);
 const max = ref(props.modelValue.max);
@@ -31,7 +31,7 @@ const max = ref(props.modelValue.max);
   <div class="range-slider">
     <Slider
       :lazy="true"
-      :tooltips="true"
+      :tooltips="false"
       :min="min"
       :max="max"
       v-model="value"

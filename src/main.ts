@@ -6,7 +6,7 @@ import { createApp } from 'vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import App from '@app/App.vue';
 import router from '@app/router';
-import { useCostumerStore } from './entities/Costumer/store/costumerStore';
+// import { useCostumerStore } from './entities/Costumer/store/costumerStore';
 // import { useProductStore } from './entities/Product/store/productStore';
 // import { useCategoriesStore } from './entities/Categories/store/categoriesStore';
 
@@ -20,7 +20,7 @@ app.use(router);
 
 app.mount('#app');
 
-useCostumerStore().LoginExistigCostumer();
+// useCostumerStore().LoginExistigCostumer();
 
 // useProductStore()
 //   .requestGetProduct()

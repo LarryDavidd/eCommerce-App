@@ -46,7 +46,7 @@ class ProductApi {
       sort.push('price' + ' ' + sortNames.priceCondition);
     }
     if (price.max) {
-      filter.push(`variants.price.centAmount:range (${price.min} to ${price.max})`);
+      filter.push(`variants.price.centAmount:range (${price.min ? price.min + '00' : 0} to ${price.max}00)`);
     }
     // if (price.max & price.min) filter += ``
     return await client
