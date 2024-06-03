@@ -20,6 +20,7 @@ const nameCondition = computed(() => filterStore.getNameCondition);
 
 <template>
   <MyAccordion
+    class="inner-accordion"
     key="By Price"
     title="By Price"
   >
@@ -43,6 +44,7 @@ const nameCondition = computed(() => filterStore.getNameCondition);
     />
   </MyAccordion>
   <MyAccordion
+    class="inner-accordion"
     key="By Name"
     title="By Name"
   >
@@ -63,3 +65,8 @@ const nameCondition = computed(() => filterStore.getNameCondition);
     />
   </MyAccordion>
 </template>
+<style scoped>
+.inner-accordion {
+  border: none;
+}
+</style>
