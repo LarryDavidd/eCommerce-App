@@ -8,11 +8,14 @@ import CustomSelect from '@shared/ui-kit/Inputs/CustomSelect/CustomSelect.vue';
 import GlobeIcon from '@shared/ui-kit/Icons/GlobeIcon.vue';
 import CurrencyIcon from '@shared/ui-kit/Icons/CurrencyIcon.vue';
 import UserProfile from '@features/UserProfile/ui/UserProfile.vue';
+import { useAppState } from '@/shared/Store/AppStore';
 
 const count = ref<number>(0);
 
-const selectedLang = ref('RU');
-const selectedCurrency = ref('RUB');
+const appStore = useAppState();
+
+const selectedLang = ref(appStore.getCurrentLang);
+const selectedCurrency = ref(appStore.getCurrentCurrency);
 </script>
 
 <template>
@@ -27,16 +30,18 @@ const selectedCurrency = ref('RUB');
       <div class="flex flex-col items-end gap-4 md:flex-row md:items-start">
         <div class="flex gap-4 text-xs">
           <CustomSelect
-            :options="['RU', 'ENG']"
+            :options="['ru', 'en-US']"
             v-model="selectedLang"
             :icon="GlobeIcon"
             title="Language"
+            @update:model-value="(lang) => appStore.changeLanguage(lang)"
           />
           <CustomSelect
             :options="['RUB', 'USD', 'EUR']"
             v-model="selectedCurrency"
             :icon="CurrencyIcon"
             title="Currency"
+            @update:model-value="(currency) => appStore.changeCurrencyCode(currency)"
           />
         </div>
 

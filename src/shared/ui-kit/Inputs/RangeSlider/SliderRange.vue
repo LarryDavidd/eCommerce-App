@@ -1,32 +1,20 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import Slider from '@vueform/slider';
 import { ref, watch } from 'vue';
-import type { RangeFilter } from '@features/store/useFilter';
-const props = defineProps({
-  modelValue: {
-    type: Object as () => RangeFilter,
-    default: () => ({ min: 0, max: 500, title: '' })
-  }
-});
+type PropsType = {
+  min: number;
+  max: number;
+};
+
+const props = defineProps<PropsType>();
+
+const value = ref([props.min, props.max]);
+
 const emit = defineEmits(['update:modelValue']);
-const value = ref([props.modelValue.min, props.modelValue.max]);
-watch(value, (newValue) => {
-  console.log(newValue);
-  emit('update:modelValue', { min: newValue[0], max: newValue[1] });
-});
-const min = ref(props.modelValue.min);
-const max = ref(props.modelValue.max);
-// const changePrice = () => {
-//   emit('update:modelValue', { min: newValue[0], max: newValue[1], title: props.modelValue.title });
-// }
-// watch(
-//   props,
-//   () => {
-//     value.value = [props.modelValue.min, props.modelValue.max];
-//   },
-//   { deep: true }
-// );
+
+watch(value, (newValue) => emit('update:modelValue', { min: newValue[0], max: newValue[1] }));
 </script>
+
 <template>
   <div class="range-slider">
     <Slider
@@ -52,7 +40,6 @@ const max = ref(props.modelValue.max);
         class="price max-price"
         type="number"
         v-model="value[1]"
-        @input="() => console.log('change', value)"
       />
     </div>
   </div>

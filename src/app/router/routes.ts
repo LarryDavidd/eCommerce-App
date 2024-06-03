@@ -3,8 +3,10 @@ import { RegistrationPage } from '@pages/RegistrationPage';
 import { LoginPage } from '@pages/LoginPage';
 import { FavoritesPage } from '@pages/FavoritesPage';
 import { CartPage } from '@pages/CartPage';
+
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { DetailedProductPage } from '@pages/DetailedProductPage';
+import CatalogPage from '@/pages/CatalopPage';
 import { UserProfilePage } from '@pages/UserProfilePage';
 
 export const routes = [
@@ -28,6 +30,19 @@ export const routes = [
     meta: {
       requiresGuest: true
     }
+  },
+  {
+    path: '/catalog',
+    name: 'catalog',
+    component: CatalogPage,
+    meta: {
+      requiresGuest: true
+    }
+  },
+  {
+    path: '/product-page/:id',
+    name: 'product-page',
+    component: DetailedProductPage
   },
   {
     path: '/favorites',

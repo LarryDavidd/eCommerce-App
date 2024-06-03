@@ -37,10 +37,8 @@ const rotation = ref(0);
       </button>
     </div>
     <div
-      :class="classesAccordion"
-      v-if="isOpen"
+      :class="isOpen ? 'accordion-body' : 'hidden'"
       ref="accordionBody"
-      class="accordion-body"
     >
       <slot />
     </div>

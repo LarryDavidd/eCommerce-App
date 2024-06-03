@@ -3,5 +3,5 @@
 import * as defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
-  content: ['./index.html', './src/**/*.vue', './src/**/*.ts'],
+  content: ['./index.html', './src/**/*.vue', './src/**/*.ts']
 };

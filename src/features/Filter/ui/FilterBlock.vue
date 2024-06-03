@@ -6,6 +6,7 @@ import type { FilterElement, RangeFilter, CheckboxFilter } from '@features/store
 import RangeSlider from '@shared/ui-kit/Inputs/RangeSlider/RangeSlider.vue';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 import { defineProps } from 'vue';
+import SliderRange from '@/shared/ui-kit/Inputs/RangeSlider/SliderRange.vue';
 
 const props = defineProps<{
   dataFilter?: FilterElement[];
@@ -79,6 +80,8 @@ const updateRangeValue = (value: RangeFilter) => {
       :model-value="props.dataRange"
       @update:model-value="updateRangeValue"
     />
+
+    <!-- <SliderRange /> -->
 
     <MainButton
       v-if="props.isMainBlock"

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 import ProductCardSwiper from '@shared/components/productCard/ui/ProductCardSwiper.vue';
+import { useRouter } from 'vue-router';
 import { type Ref, ref } from 'vue';
+import type { Image } from '@commercetools/platform-sdk';
 
 const sizes: string[] = ['S', 'M', 'L'];
 const sizeSelected: Ref<string> = ref(sizes[0]);
@@ -9,16 +11,35 @@ const sizeSelected: Ref<string> = ref(sizes[0]);
 const changeSize = (value: string) => {
   sizeSelected.value = value;
 };
+
+type PropsType = {
+  id: string;
+  urlImg: Image[];
+  title: string;
+  descriptions: string;
+  price: string;
+};
+
+const router = useRouter();
+
+const props = defineProps<PropsType>();
+
+const onClick = () => {
+  router.push({ name: 'product-page', params: { id: props.id } });
+};
 </script>
 
 <template>
-  <div class="product-card flex flex-col">
-    <ProductCardSwiper />
+  <div
+    class="product-card flex flex-col"
+    @click="onClick"
+  >
+    <ProductCardSwiper :url-img="props.urlImg" />
     <div class="description">
-      <p>Шелковое платье миди</p>
+      <p>{{ props.title }}</p>
       <div class="flex gap-4">
-        <p>24 990 ₽</p>
-        <p class="strike-through line-through">24 990 ₽</p>
+        <p>{{ props.price }}</p>
+        <p class="strike-through line-through">{{ props.price }}</p>
       </div>
     </div>
     <div class="to-cart">
