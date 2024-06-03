@@ -26,7 +26,6 @@ export const useCategoriesStore = defineStore(NAME_SPACE, () => {
 
     data.value = categories;
     isLoading.value = false;
-    console.log(data.value);
     return categories;
   };
 

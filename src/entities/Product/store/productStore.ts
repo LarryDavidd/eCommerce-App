@@ -41,7 +41,6 @@ export const useProductStore = defineStore('product_store', () => {
 
   const GetProduct = computed(() => {
     if (product.value === null) return null;
-    console.log(product);
 
     const findPriceData = findPriceInCurrency(product.value.masterVariant.prices, appState.getState.currencyCode);
 
@@ -107,7 +106,6 @@ export const useProductStore = defineStore('product_store', () => {
 
     data.value = products;
     isLoading.value = false;
-    console.log(data.value);
   };
 
   const requestGetProductByQueryParams = async (offset = 0) => {
@@ -119,7 +117,6 @@ export const useProductStore = defineStore('product_store', () => {
 
     data.value = products;
     isLoading.value = false;
-    console.log(data.value);
   };
 
   const requestGetProductById = async (id: string) => {

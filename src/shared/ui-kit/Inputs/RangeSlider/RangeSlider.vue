@@ -11,7 +11,6 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 const value = ref([props.modelValue.min, props.modelValue.max]);
 watch(value, (newValue) => {
-  console.log(newValue);
   emit('update:modelValue', { min: newValue[0], max: newValue[1] });
 });
 const min = ref(props.modelValue.min);
@@ -52,7 +51,6 @@ const max = ref(props.modelValue.max);
         class="price max-price"
         type="number"
         v-model="value[1]"
-        @input="() => console.log('change', value)"
       />
     </div>
   </div>
