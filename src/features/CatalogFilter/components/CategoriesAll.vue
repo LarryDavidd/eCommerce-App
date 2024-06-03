@@ -56,6 +56,7 @@ const filterCategories = (categories: Category[], lang: string) => {
   <template v-if="useCategories.IsLoading"> Loading </template>
   <template v-else>
     <Accordion
+      class="inner-accordion"
       v-for="category in data"
       :key="category.id"
       :title="category.name"
@@ -70,3 +71,8 @@ const filterCategories = (categories: Category[], lang: string) => {
     </Accordion>
   </template>
 </template>
+<style scoped lang="scss">
+.inner-accordion {
+  border: none;
+}
+</style>
