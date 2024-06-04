@@ -102,7 +102,6 @@ const shortDescription = props.descriptions.split('.').shift();
   display: flex;
   flex-direction: column;
   background: #fff;
-  transform: translateY(140px);
   opacity: 0;
   transition: all 0.2s ease-in-out;
   z-index: 2;
@@ -110,6 +109,7 @@ const shortDescription = props.descriptions.split('.').shift();
 .product-card:hover .to-cart {
   opacity: 1;
   box-shadow: 0 15px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(140px);
 }
 .product-card:hover {
   box-shadow: 0 15px 16px rgba(0, 0, 0, 0.1);
