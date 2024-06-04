@@ -124,6 +124,7 @@ onUnmounted(() => {
     @touchstart="startTouch"
     @touchmove="moveTouch"
     @click="onClick"
+    @mouseout="backgroundIndex = 0"
   >
     <LikeHeart
       :class="{ checked: isChecked }"
