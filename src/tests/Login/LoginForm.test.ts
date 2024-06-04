@@ -1,11 +1,19 @@
 import AuthForm from '@pages/LoginPage/components/AuthForm/AuthForm.vue';
 import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
+import { createPinia, setActivePinia } from 'pinia';
 import OpenedEye from '@shared/ui-kit/Icons/OpenedEye.vue';
 import ClosedEye from '@shared/ui-kit/Icons/ClosedEye.vue';
 
+const setupPinia = () => {
+  const pinia = createPinia();
+  setActivePinia(pinia);
+  return pinia;
+};
+
 describe('Login form tests', () => {
   it('should render form', () => {
+    setupPinia();
     const wrapper = mount(AuthForm);
     expect(wrapper.find('h1').exists()).toBeTruthy();
     expect(wrapper.find('input[type="text"]').exists()).toBeTruthy();
@@ -18,6 +26,7 @@ describe('Login form tests', () => {
 
 describe('Email validation', () => {
   it('operability of the validation function', () => {
+    setupPinia();
     const wrapper = mount(AuthForm);
     wrapper.vm.checkEmail('hello@world.com');
     expect(wrapper.vm.errorsEmail).toBeNull();
@@ -28,6 +37,7 @@ describe('Email validation', () => {
   });
 
   it('checking the processing of correct input', () => {
+    setupPinia();
     const wrapper = mount(AuthForm);
     const inputElement = wrapper.find('input[type="text"]');
     inputElement.setValue('hello@world.com');
@@ -35,6 +45,7 @@ describe('Email validation', () => {
   });
 
   it('checking the processing of incorrect input', () => {
+    setupPinia();
     const wrapper = mount(AuthForm);
     const inputElement = wrapper.find('input[type="text"]');
     inputElement.setValue('helloworld.com');
@@ -46,6 +57,7 @@ describe('Email validation', () => {
 
 describe('Password validation', () => {
   it('operability of the validation function', () => {
+    setupPinia();
     const wrapper = mount(AuthForm);
     wrapper.vm.checkPassword('asdLj7d!3');
     expect(wrapper.vm.errorsPassword).toBeNull();
@@ -56,6 +68,7 @@ describe('Password validation', () => {
   });
 
   it('checking the processing of correct input', () => {
+    setupPinia();
     const wrapper = mount(AuthForm);
     const inputElement = wrapper.find('input[type="password"]');
     inputElement.setValue('123!Wetfhgh');
@@ -63,6 +76,7 @@ describe('Password validation', () => {
   });
 
   it('checking the processing of incorrect input', () => {
+    setupPinia();
     const wrapper = mount(AuthForm);
     const inputElement = wrapper.find('input[type="password"]');
     inputElement.setValue('12345678Ty');
@@ -74,6 +88,7 @@ describe('Password validation', () => {
 
 describe('The operability of the submit button', () => {
   it('enables the login button when you enter your email address and password correctly and turns it off otherwise', async () => {
+    setupPinia();
     const wrapper = mount(AuthForm);
     const emailInputElement = wrapper.find('input[type="text"]');
     const passwordInputElement = wrapper.find('input[type="password"]');
@@ -91,6 +106,7 @@ describe('The operability of the submit button', () => {
 
 describe('Password field', () => {
   it('should toggle password visibility when eye icon is clicked', async () => {
+    setupPinia();
     const wrapper = mount(AuthForm);
 
     const passwordInput = wrapper.find('input[type="password"]');
