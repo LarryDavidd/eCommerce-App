@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 import ProductCardSwiper from '@shared/components/productCard/ui/ProductCardSwiper.vue';
-import { useRouter } from 'vue-router';
 import { type Ref, ref } from 'vue';
 import type { Image } from '@commercetools/platform-sdk';
 
@@ -20,40 +19,38 @@ type PropsType = {
   price: string;
 };
 
-const router = useRouter();
-
 const props = defineProps<PropsType>();
-
-const onClick = () => {
-  router.push({ name: 'product-page', params: { id: props.id } });
-};
+const shortDescription = props.descriptions.split('.').shift();
 </script>
 
 <template>
-  <div
-    class="product-card flex flex-col"
-    @click="onClick"
-  >
-    <ProductCardSwiper :url-img="props.urlImg" />
+  <div class="product-card flex flex-col">
+    <ProductCardSwiper
+      :url-img="props.urlImg"
+      :prod-id="props.id"
+    />
     <div class="description">
       <p>{{ props.title }}</p>
       <div class="flex gap-4">
-        <p>{{ props.price }}</p>
+        <p class="font-semibold">{{ props.price }}</p>
         <p class="strike-through line-through">{{ props.price }}</p>
       </div>
     </div>
-    <div class="to-cart">
-      <div class="flex gap-5">
-        <p>Size:</p>
-        <div class="flex gap-2.5">
-          <div
-            v-for="size in sizes"
-            :key="size"
-            :class="{ selected: size === sizeSelected }"
-            @click="changeSize(size)"
-            class="size-btn cursor-pointer"
-          >
-            {{ size }}
+    <div class="to-cart flex flex-col justify-between">
+      <div>
+        <p class="text-[12px] text-gray-700">{{ shortDescription }}</p>
+        <div class="flex gap-5">
+          <p>Size:</p>
+          <div class="flex gap-2.5">
+            <div
+              v-for="size in sizes"
+              :key="size"
+              :class="{ selected: size === sizeSelected }"
+              @click="changeSize(size)"
+              class="size-btn cursor-pointer"
+            >
+              {{ size }}
+            </div>
           </div>
         </div>
       </div>
@@ -100,14 +97,15 @@ const onClick = () => {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100px;
+  height: 140px;
   padding: 0 15px;
   display: flex;
   flex-direction: column;
   background: #fff;
-  transform: translateY(100px);
+  transform: translateY(140px);
   opacity: 0;
   transition: all 0.2s ease-in-out;
+  z-index: 2;
 }
 .product-card:hover .to-cart {
   opacity: 1;

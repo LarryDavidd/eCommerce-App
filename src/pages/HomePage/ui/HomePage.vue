@@ -1,45 +1,21 @@
 <template>
   <div class="home-page-container mx-6 flex md:mx-20">
-    <div :class="{ hidden: windowWidth >= 768 }">
-      <BurgerButton v-model="isFilterVisible" />
-    </div>
-    <transition name="slide">
-      <FilterBlock
-        :class="{ active: isFilterVisible }"
-        v-if="isFilterVisible"
-        @reset-filters="resetFilters"
-        @update:data-range="updateRange"
-        :data-range="rangeFilter"
-        :data-filter="filtersAccordion"
-        :data-checkbox="checkboxFilters"
-        :is-main-block="true"
-      />
-    </transition>
     <div class="content flex flex-grow justify-between">
       <div>home page</div>
       <!-- <ProductCard></ProductCard> -->
       <div class="flex gap-4">
-        <router-link to="/login">
-          <p class="underline hover:text-blue-500">Login</p>
+        <router-link to="/catalog">
+          <p class="underline hover:text-blue-500">catalog</p>
         </router-link>
-        <router-link to="/registration">
-          <p class="underline hover:text-blue-500">Registration</p>
-        </router-link>
-        <p
-          class="cursor-pointer underline hover:text-blue-500"
-          @click="logout"
-        >
-          logout
-        </p>
       </div>
     </div>
   </div>
+  <h1 class="text-center text-5xl">We didn't have time to finish the job. And we would be very grateful if you would check out our work a little later!</h1>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
-import FilterBlock from '@features/Filter/ui/FilterBlock.vue';
 import { type RangeFilter, useFilterStore } from '@features/store/useFilter';
 import BurgerButton from '@shared/ui-kit/Buttons/BurgerButton/BurgerButton.vue';
 import { ProductCard } from '@shared/components/productCard';
