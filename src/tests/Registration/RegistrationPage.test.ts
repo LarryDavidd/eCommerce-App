@@ -5,20 +5,27 @@ import FirstStep from '@pages/RegistrationPage/components/FirstStep/FirstStep.vu
 import SecondStep from '@pages/RegistrationPage/components/SecondStep/SecondStep.vue';
 import ThirdStep from '@pages/RegistrationPage/components/ThirdStep/ThirdStep.vue';
 import ForthStep from '@pages/RegistrationPage/components/ForthStep/ForthStep.vue';
+import { createPinia, setActivePinia } from 'pinia';
 
 describe('RegistrationPage tests', () => {
   it('should render FirstStep by default', () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
     const wrapper = mount(RegistrationPage);
     expect(wrapper.findComponent(FirstStep).exists()).toBeTruthy();
   });
 
   it('should render SecondStep when step is 2', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
     const wrapper = mount(RegistrationPage);
     await wrapper.vm.changeStep();
     expect(wrapper.findComponent(SecondStep).exists()).toBeTruthy();
   });
 
   it('should render ThirdStep when step is 3', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
     const wrapper = mount(RegistrationPage);
     await wrapper.vm.changeStep(true);
     await wrapper.vm.changeStep(true);
@@ -26,6 +33,8 @@ describe('RegistrationPage tests', () => {
   });
 
   it('should render ForthStep when step is 4', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
     const wrapper = mount(RegistrationPage);
     await wrapper.vm.changeStep(true);
     await wrapper.vm.changeStep(true);
@@ -34,6 +43,8 @@ describe('RegistrationPage tests', () => {
   });
 
   it('should change to the next step when changeStep is called with true', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
     const wrapper = mount(RegistrationPage);
     await wrapper.vm.changeStep(true);
     await wrapper.vm.$nextTick();
@@ -41,6 +52,8 @@ describe('RegistrationPage tests', () => {
   });
 
   it('should change to the previous step when changeStep is called with false', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
     const wrapper = mount(RegistrationPage);
     await wrapper.vm.changeStep(true);
     await wrapper.vm.changeStep(false);
@@ -49,6 +62,8 @@ describe('RegistrationPage tests', () => {
   });
 
   it('should call register method when submit-form event is emitted in ForthStep', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
     const wrapper = mount(RegistrationPage);
     const registerSpy = vi.spyOn(wrapper.vm, 'register');
     await wrapper.vm.changeStep(true);

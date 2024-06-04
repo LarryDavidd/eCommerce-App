@@ -1,7 +1,9 @@
-import ForthStep from '@pages/RegistrationPage/components/ForthStep/ForthStep.vue';
 import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
+import ForthStep from '@pages/RegistrationPage/components/ForthStep/ForthStep.vue';
 import CheckBox from '@shared/ui-kit/Inputs/CheckBox/CheckBox.vue';
+import { createPinia, setActivePinia } from 'pinia';
+
 const testData = {
   countryBilling: 'Russia',
   cityBilling: 'SPB',
@@ -11,15 +13,12 @@ const testData = {
   isSameAddresses: true
 };
 
-const wrapper = mount(ForthStep, {
-  props: {
-    data: testData,
-    cb: () => console.log('next')
-  }
-});
-
 describe('Fourth Step', () => {
   it('correctly render component', () => {
+    // Initialize Pinia
+    const pinia = createPinia();
+    setActivePinia(pinia);
+
     const wrapper = mount(ForthStep, {
       props: {
         data: testData,
@@ -43,17 +42,39 @@ describe('Fourth Step', () => {
   });
 
   it('correctly switching disabled at the submit button', async () => {
+    // Initialize Pinia
+    const pinia = createPinia();
+    setActivePinia(pinia);
+
+    const wrapper = mount(ForthStep, {
+      props: {
+        data: testData,
+        cb: () => console.log('next')
+      }
+    });
+
     const prevBut = wrapper.find('button.prev-step');
     const submitBut = wrapper.find('button.submit');
     expect(prevBut.attributes('disabled')).toBeUndefined();
-
     expect(submitBut.attributes('disabled')).toBeUndefined();
 
     await wrapper.setProps({ data: { ...testData, cityBilling: '153' } });
 
     expect(submitBut.attributes('disabled')).not.toBeUndefined();
   });
+
   it('checkbox isSameAddresses', async () => {
+    // Initialize Pinia
+    const pinia = createPinia();
+    setActivePinia(pinia);
+
+    const wrapper = mount(ForthStep, {
+      props: {
+        data: testData,
+        cb: () => console.log('next')
+      }
+    });
+
     expect(wrapper.props('data').isSameAddresses).toBeTruthy();
     const checkbox = wrapper.findComponent(CheckBox);
     const inputCheckBox = checkbox.find('input[type="checkbox"]');
