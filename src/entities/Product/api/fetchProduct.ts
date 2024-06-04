@@ -57,7 +57,6 @@ class ProductApi {
           limit,
           filter,
           sort,
-          facet: 'variants.price.centAmount',
           ['text.' + language]: text ? text : undefined
           // fuzzy: text ? undefined : true
         }

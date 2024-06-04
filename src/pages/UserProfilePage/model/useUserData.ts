@@ -1,6 +1,7 @@
 import { type Ref, ref } from 'vue';
 
 export interface UserData {
+  id: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -46,14 +47,14 @@ export type Personal = {
   dateOfBirth: Date;
 };
 
-const transformDate = (date: Date) => {
+export const transformDate = (date: Date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
 
-function mapCountryToCode(country: string) {
+export function mapCountryToCode(country: string) {
   switch (country) {
     case 'United States':
       return 'US';
@@ -124,7 +125,7 @@ export function useUserData(userData: UserData) {
   return { personal, addresses };
 }
 
-function mapCountry(country: string): Country {
+export function mapCountry(country: string): Country {
   switch (country) {
     case 'US':
       return Country.UnitedStates;

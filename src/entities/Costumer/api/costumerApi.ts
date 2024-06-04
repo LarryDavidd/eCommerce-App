@@ -51,6 +51,7 @@ class CostumerApi {
   public async refreshCostumer(refreshToken: string) {
     return Client.getInstance()
       .clientWithRefreshTokenFlow(refreshToken)
+      .me()
       .get()
       .execute()
       .then((data) => data)
