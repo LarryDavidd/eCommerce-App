@@ -1,23 +1,34 @@
 import { defineStore } from 'pinia';
 import CostumerApi from '../api/costumerApi';
 import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
-import { ref } from 'vue';
-import type { CustomerDraft } from '@commercetools/platform-sdk';
+import { computed, ref } from 'vue';
+import type { Customer, CustomerDraft } from '@commercetools/platform-sdk';
 import { revokingToken } from '@/auth/api/revokeToken';
 import { useNotificationStore } from '@/shared/Store/AlertMessageStore';
 import router from '@/app/router';
+import type { Client, ClientResponse } from '@commercetools/sdk-client-v2';
 
 export const useCostumerStore = defineStore('costumer_store', () => {
   const costumerApi = new CostumerApi();
   const ls = useLocalStorage();
   const alert = useNotificationStore();
 
+  const costumerCredentials = ref<Customer | null>(null);
+
   const isLogined = ref<boolean>(false);
   const isLoading = ref<boolean>(false);
   const isExist = ref<boolean>(false);
 
+  const getIsLoading = computed(() => isLoading.value);
+
   const userAccessToken = ref<string>('');
   const userRefreshToken = ref<string>('');
+
+  const getCostumerCredentials = computed(() => {
+    if (costumerCredentials.value === null) return null;
+
+    return costumerCredentials.value;
+  });
 
   const setTokenToLs = () => {
     if (isLogined.value) {
@@ -55,10 +66,10 @@ export const useCostumerStore = defineStore('costumer_store', () => {
 
   async function LoginExistigCostumer() {
     isLoading.value = true;
-    const accessToken = ls.load('access_token');
+    const refresh_token = ls.load('refresh_token');
 
-    if (accessToken) {
-      const existCostumer = await costumerApi.existingCostumer(String(accessToken));
+    if (refresh_token) {
+      const existCostumer = await costumerApi.refreshCostumer(String(refresh_token));
 
       if (existCostumer?.statusCode === 200) {
         isLogined.value = true;
@@ -142,7 +153,7 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLogined.value = false;
 
     if (res instanceof Error) {
-      alert.SetMessage({ status: 'error', message: 'Please reload page' });
+      alert.addNotification({ status: 'error', message: 'Please reload page' });
     } else {
       AnonCostumer();
       router.push({ name: 'login' });
@@ -151,5 +162,37 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLoading.value = false;
   }
 
-  return { AnonCostumer, LoginExistigCostumer, LoginCostumer, RegistrationCostumer, LogoutCostumer, isLogined, isLoading, isExist, userAccessToken, userRefreshToken };
+  const requestCostumer = async () => {
+    isLoading.value = true;
+
+    const refresh_token = ls.load('refresh_token');
+
+    if (refresh_token) {
+      const res = await costumerApi.refreshCostumer(String(refresh_token));
+
+      if (res instanceof Error) {
+        alert.addNotification({ status: 'error', message: 'Please reload page' });
+      } else {
+        costumerCredentials.value = res.body;
+      }
+    }
+
+    isLoading.value = false;
+  };
+
+  return {
+    getCostumerCredentials,
+    getIsLoading,
+    requestCostumer,
+    AnonCostumer,
+    LoginExistigCostumer,
+    LoginCostumer,
+    RegistrationCostumer,
+    LogoutCostumer,
+    isLogined,
+    isLoading,
+    isExist,
+    userAccessToken,
+    userRefreshToken
+  };
 });

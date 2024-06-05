@@ -1,18 +1,26 @@
 <script lang="ts" setup>
 import SearchBar from '@shared/ui-kit/SearchBar/SearchBar.vue';
 import ButtonIconCounter from '@shared/ui-kit/Buttons/ButtonIconCounter/ButtonIconCounter.vue';
-import ButtonIcon from '@shared/ui-kit/Buttons/ButtonIcon/ButtonIcon.vue';
 import LikeHeart from '@shared/ui-kit/Icons/LikeHeart.vue';
 import CartIcon from '@/shared/ui-kit/Icons/CartIcon.vue';
-import LoginIcon from '@/shared/ui-kit/Icons/LoginIcon.vue';
 import { ref } from 'vue';
-import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
+import CustomSelect from '@shared/ui-kit/Inputs/CustomSelect/CustomSelect.vue';
+import GlobeIcon from '@shared/ui-kit/Icons/GlobeIcon.vue';
+import CurrencyIcon from '@shared/ui-kit/Icons/CurrencyIcon.vue';
+import UserProfile from '@features/UserProfile/ui/UserProfile.vue';
+import { useAppState } from '@/shared/Store/AppStore';
 
 const count = ref<number>(0);
+
+const appStore = useAppState();
+
+const selectedLang = ref(appStore.getCurrentLang);
+const selectedCurrency = ref(appStore.getCurrentCurrency);
 </script>
 
 <template>
   <header class="flex h-20 w-full flex-col justify-center">
+    <!--    lg:gap-32 убрать-->
     <div class="header__wrapper mx-6 flex justify-between gap-4 md:mx-20 lg:gap-32">
       <div class="flex w-1/2 flex-col gap-4 md:w-4/5 md:flex-row md:gap-8">
         <router-link to="/"><div class="text-base font-bold lg:text-xl">Shop Name</div></router-link>
@@ -21,44 +29,24 @@ const count = ref<number>(0);
 
       <div class="flex flex-col items-end gap-4 md:flex-row md:items-start">
         <div class="flex gap-4 text-xs">
-          <template v-if="!useCostumerStore().isLogined">
-            <router-link to="/registration">
-              <div class="login__button flex gap-2">
-                <div class="login__button-text flex flex-col justify-center">Registration</div>
-                <ButtonIcon>
-                  <template v-slot:icon>
-                    <LoginIcon />
-                  </template>
-                </ButtonIcon></div
-            ></router-link>
-
-            <router-link to="/login">
-              <div class="login__button flex gap-2">
-                <div class="login__button-text flex flex-col justify-center">Login</div>
-                <ButtonIcon>
-                  <template v-slot:icon>
-                    <LoginIcon />
-                  </template>
-                </ButtonIcon></div
-            ></router-link>
-          </template>
-
-          <template v-else>
-            <div
-              class="login__button flex cursor-pointer gap-2"
-              @click="useCostumerStore().LogoutCostumer()"
-            >
-              <div class="login__button-text flex flex-col justify-center">Logout</div>
-              <ButtonIcon style="transform: scaleX(-1)">
-                <template v-slot:icon>
-                  <LoginIcon />
-                </template>
-              </ButtonIcon>
-            </div>
-          </template>
+          <CustomSelect
+            :options="['ru', 'en-US']"
+            v-model="selectedLang"
+            :icon="GlobeIcon"
+            title="Language"
+            @update:model-value="(lang) => appStore.changeLanguage(lang)"
+          />
+          <CustomSelect
+            :options="['RUB', 'USD', 'EUR']"
+            v-model="selectedCurrency"
+            :icon="CurrencyIcon"
+            title="Currency"
+            @update:model-value="(currency) => appStore.changeCurrencyCode(currency)"
+          />
         </div>
 
         <div class="flex gap-4">
+          <UserProfile />
           <router-link to="/favorites">
             <ButtonIconCounter :count="count">
               <template v-slot:icon>

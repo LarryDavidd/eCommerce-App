@@ -1,5 +1,5 @@
 import Client from '@/shared/api/client/Client';
-import { ByProjectKeyRequestBuilder, type CustomerDraft, type ErrorResponse } from '@commercetools/platform-sdk';
+import { ByProjectKeyRequestBuilder, type CustomerDraft, type CustomerSignInResult, type ErrorResponse } from '@commercetools/platform-sdk';
 import type { ClientResponse } from '@commercetools/sdk-client-v2';
 
 class CostumerApi {
@@ -7,8 +7,10 @@ class CostumerApi {
   constructor() {}
 
   public async loginCostumer(username: string, password: string) {
+    Client.getInstance().clearTokenCashe();
     const res = await Client.getInstance()
       .getPasswordFlowClient(username, password)
+      .me()
       .login()
       .post({
         body: {
@@ -17,7 +19,7 @@ class CostumerApi {
         }
       })
       .execute()
-      .then((data) => data)
+      .then((data) => data as ClientResponse<CustomerSignInResult>)
       .catch((err) => JSON.parse(JSON.stringify(err.body)) as ClientResponse<ErrorResponse>);
     return res;
   }
@@ -51,6 +53,7 @@ class CostumerApi {
   public async refreshCostumer(refreshToken: string) {
     return Client.getInstance()
       .clientWithRefreshTokenFlow(refreshToken)
+      .me()
       .get()
       .execute()
       .then((data) => data)
@@ -59,7 +62,7 @@ class CostumerApi {
 
   public async existingCostumer(access_token: string) {
     return Client.getInstance()
-      .clientWithExistTokenFlow(access_token)
+      .clientWithRefreshTokenFlow(access_token)
       .get()
       .execute()
       .then((data) => data)

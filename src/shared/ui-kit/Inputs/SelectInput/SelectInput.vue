@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, defineProps, defineEmits, watch } from 'vue';
 
 const props = defineProps({
@@ -8,7 +8,7 @@ const props = defineProps({
   },
   options: {
     required: true,
-    type: Array
+    type: Array as () => string[]
   }
 });
 
@@ -16,7 +16,7 @@ const emits = defineEmits(['update:modelValue']);
 
 const selected = ref(props.modelValue);
 
-const updateValue = (value) => {
+const updateValue = (value: string) => {
   emits('update:modelValue', value);
 };
 

@@ -3,7 +3,11 @@ import { RegistrationPage } from '@pages/RegistrationPage';
 import { LoginPage } from '@pages/LoginPage';
 import { FavoritesPage } from '@pages/FavoritesPage';
 import { CartPage } from '@pages/CartPage';
-import NotFoundPage from '@/pages/NotFoundPage/ui/NotFoundPage.vue';
+
+import { NotFoundPage } from '@/pages/NotFoundPage';
+import { DetailedProductPage } from '@pages/DetailedProductPage';
+import CatalogPage from '@/pages/CatalopPage';
+import { UserProfilePage } from '@pages/UserProfilePage';
 
 export const routes = [
   {
@@ -28,6 +32,16 @@ export const routes = [
     }
   },
   {
+    path: '/catalog',
+    name: 'catalog',
+    component: CatalogPage
+  },
+  {
+    path: '/product-page/:id',
+    name: 'product-page',
+    component: DetailedProductPage
+  },
+  {
     path: '/favorites',
     name: 'favorites',
     component: FavoritesPage,
@@ -39,6 +53,19 @@ export const routes = [
     path: '/cart',
     name: 'cart',
     component: CartPage,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/detailed',
+    name: 'detailed',
+    component: DetailedProductPage
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: UserProfilePage,
     meta: {
       requiresAuth: true
     }
