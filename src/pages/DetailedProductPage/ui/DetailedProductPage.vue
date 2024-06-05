@@ -26,12 +26,23 @@
       </div>
       <div class="flex w-full flex-col gap-8 py-4 sm:w-2/5">
         <p class="text-3xl font-bold lg:text-4xl">{{ product?.name }}</p>
-        <p class="text-3xl font-black text-[rgb(110,15,23)]">Sale</p>
+        <p
+          class="text-3xl font-black text-[rgb(110,15,23)]"
+          v-if="product?.discount"
+        >
+          Sale
+        </p>
         <div class="flex flex-wrap items-center gap-4">
-          <p class="text-3xl font-bold lg:text-4xl">
-            {{ product?.priceData.price + ' ' + product?.priceData.currency }}
+          <p
+            class="text-3xl font-bold lg:text-4xl"
+            v-if="product?.discount"
+          >
+            {{ product.discount }}
           </p>
-          <p class="text-2xl font-bold text-gray-400 line-through lg:text-4xl">
+          <p
+            :class="{ 'text-gray-400 line-through': product?.discount }"
+            class="text-2xl font-bold lg:text-4xl"
+          >
             {{ product?.priceData.price + ' ' + product?.priceData.currency }}
           </p>
         </div>
