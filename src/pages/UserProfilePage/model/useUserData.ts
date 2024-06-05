@@ -101,28 +101,26 @@ export function ConvertDataForServer(personal: Personal, addresses: Address[]): 
 }
 
 export function useUserData(userData: UserData) {
-  const personal = ref({
+  const personal = {
     name: userData.firstName,
     surname: userData.lastName,
     email: userData.email,
     password: userData.password,
     dateOfBirth: new Date(userData.dateOfBirth)
-  });
+  };
 
-  const addresses: Ref<Address[]> = ref(
-    userData.addresses.map((address) => {
-      const { streetName, ...rest } = address;
-      return {
-        ...rest,
-        street: streetName, // Используем street вместо streetName
-        country: mapCountry(address.country),
-        isShippingDefault: address.id === userData.defaultShippingAddressId,
-        isBillingDefault: address.id === userData.defaultBillingAddressId,
-        isShipping: userData.shippingAddressIds.includes(address.id),
-        isBilling: userData.billingAddressIds.includes(address.id)
-      };
-    })
-  );
+  const addresses = userData.addresses.map((address) => {
+    const { streetName, ...rest } = address;
+    return {
+      ...rest,
+      street: streetName, // Используем street вместо streetName
+      country: mapCountry(address.country),
+      isShippingDefault: address.id === userData.defaultShippingAddressId,
+      isBillingDefault: address.id === userData.defaultBillingAddressId,
+      isShipping: userData.shippingAddressIds.includes(address.id),
+      isBilling: userData.billingAddressIds.includes(address.id)
+    };
+  });
 
   return { personal, addresses };
 }

@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { type Ref, ref, watch } from 'vue';
+import { type Ref, ref, watch, reactive } from 'vue';
 import SelectInput from '@shared/ui-kit/Inputs/SelectInput/SelectInput.vue';
 import CheckBox from '@shared/ui-kit/Inputs/CheckBox/CheckBox.vue';
 import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
 import { ValidateAddress } from '@pages/UserProfilePage/model/useValidate';
 import type { Address } from '@pages/UserProfilePage/model/useUserData';
-import CheckBoxSimple from '@/shared/ui-kit/Inputs/CheckBoxSimple/CheckBoxSimple.vue';
 
 export type AddressErrors = {
   street: string[] | null;
@@ -39,7 +38,7 @@ const errorsAddress: Ref<AddressErrors> = ref({
   postalCode: null
 });
 
-const localModelValue = ref({ ...props.modelValue });
+const localModelValue = reactive({ ...props.modelValue });
 
 watch(
   localModelValue,

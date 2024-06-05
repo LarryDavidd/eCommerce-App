@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type Ref, ref, watch } from 'vue';
+import { computed, type Ref, ref, watch, reactive } from 'vue';
 import ToggleInput from '@shared/ui-kit/Inputs/ToggleInput/ToggleInput.vue';
 import PersonalInfo from '@pages/UserProfilePage/components/PersonalInfo.vue';
 import { validateBirthDate, validateEmail, validateName } from '@shared/utils/validation';
@@ -31,14 +31,18 @@ const errorsPersonal: Ref<PersonalErrors> = ref({
 
 const profileStore = useProfileStore();
 
-let { personal, addresses } = useUserData(profileStore.getCostumer);
+let personal = ref(useUserData(profileStore.getCostumer).personal);
+let addresses = ref(useUserData(profileStore.getCostumer).addresses);
 
 watch(
   () => profileStore.getCostumer,
   () => {
-    addresses = useUserData(profileStore.getCostumer).addresses;
-    personal = useUserData(profileStore.getCostumer).personal;
-  }
+    console.log('change');
+    addresses.value = useUserData(profileStore.getCostumer).addresses;
+    personal.value = useUserData(profileStore.getCostumer).personal;
+    console.log(profileStore.getCostumer);
+  },
+  { deep: true }
 );
 
 const validationsPersonal = {
@@ -59,7 +63,7 @@ watch(
 const hasAddressesErrors = ref(false);
 
 watch(
-  () => addresses,
+  () => addresses.value,
   () => {
     let flag = false;
     for (let i = 0; i < addresses.value.length; i++) {
@@ -106,6 +110,7 @@ const openAddAddressWindow = () => {
 </script>
 
 <template>
+  {{ addresses }}{{ personal }}
   <div class="profile-page">
     <div class="wrapper">
       <ToggleInput
