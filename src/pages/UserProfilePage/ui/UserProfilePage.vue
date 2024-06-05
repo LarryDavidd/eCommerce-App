@@ -37,10 +37,8 @@ let addresses = ref(useUserData(profileStore.getCostumer).addresses);
 watch(
   () => profileStore.getCostumer,
   () => {
-    console.log('change');
     addresses.value = useUserData(profileStore.getCostumer).addresses;
     personal.value = useUserData(profileStore.getCostumer).personal;
-    console.log(profileStore.getCostumer);
   },
   { deep: true }
 );
@@ -128,7 +126,7 @@ const openAddAddressWindow = () => {
         <div
           class="data-block"
           v-for="(address, idx) in addresses"
-          :key="idx"
+          :key="address.id"
         >
           <AddressInfo
             title="Address"
