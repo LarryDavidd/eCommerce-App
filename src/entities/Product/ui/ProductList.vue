@@ -1,14 +1,10 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import { useProductStore } from '../store/productStore';
-import type { ProductProjection } from '@commercetools/platform-sdk';
 import { ProductCard } from '@shared/components/productCard';
-import Loading from '@shared/ui-kit/Loading/CustomLoading.vue';
 import CustomLoading from '@shared/ui-kit/Loading/CustomLoading.vue';
 
 const productStore = useProductStore();
-
-const data = ref<ProductProjection[]>([]);
 
 onMounted(() => {
   productStore.requestGetProductByQueryParams();

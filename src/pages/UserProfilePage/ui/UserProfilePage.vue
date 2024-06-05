@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { computed, reactive, type Ref, ref, watch } from 'vue';
+import { computed, type Ref, ref, watch } from 'vue';
 import ToggleInput from '@shared/ui-kit/Inputs/ToggleInput/ToggleInput.vue';
 import PersonalInfo from '@pages/UserProfilePage/components/PersonalInfo.vue';
-import { validateBirthDate, validateEmail, validateName, validatePostalCode, validateStreet } from '@shared/utils/validation';
+import { validateBirthDate, validateEmail, validateName } from '@shared/utils/validation';
 import { ValidateAddress, ValidatePersonal } from '@pages/UserProfilePage/model/useValidate';
 import AddressInfo from '@pages/UserProfilePage/components/AddressInfo.vue';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 import ModalWrapper from '@shared/ui-kit/ModalWrapper/ModalWrapper.vue';
 import PasswordChangeModal from '@pages/UserProfilePage/components/PasswordChangeModal.vue';
-import { type Address, ConvertDataForServer, type UserData, useUserData } from '@pages/UserProfilePage/model/useUserData';
+import { type Address, ConvertDataForServer, useUserData } from '@pages/UserProfilePage/model/useUserData';
 import AddAddressModal from '@pages/UserProfilePage/components/AddAddressModal.vue';
-import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
-
+import useProfileStore from '@/entities/Profile';
 export type PersonalErrors = {
   name: string[] | null;
   surname: string[] | null;
@@ -19,9 +18,7 @@ export type PersonalErrors = {
   password: string[] | null;
   dateOfBirth: string | null;
 };
-
 const isEditMode = ref(false);
-
 const passwordWindowIsOpen = ref(false);
 const addAddressWindowIsOpen = ref(false);
 const errorsPersonal: Ref<PersonalErrors> = ref({
@@ -32,38 +29,17 @@ const errorsPersonal: Ref<PersonalErrors> = ref({
   dateOfBirth: null
 });
 
-// const costumerStore = useCostumerStore();
-// costumerStore.requestCredentialsCostumer();
+const profileStore = useProfileStore();
 
-const userData: UserData = {
-  email: 'seb@example.com',
-  firstName: 'Sebastian',
-  lastName: 'Franklin',
-  password: '****+po=',
-  dateOfBirth: new Date(2003, 1, 17),
-  addresses: [
-    {
-      id: 'h3lwu1In',
-      streetName: 'South Road',
-      postalCode: '27517',
-      city: 'Durham',
-      country: 'US'
-    },
-    {
-      id: 'AeOy_U0W',
-      streetName: 'Leningradskaya',
-      postalCode: '123456',
-      city: 'Moscow',
-      country: 'RU'
-    }
-  ],
-  defaultShippingAddressId: 'AeOy_U0W',
-  defaultBillingAddressId: 'h3lwu1In',
-  shippingAddressIds: ['AeOy_U0W'],
-  billingAddressIds: ['h3lwu1In']
-};
+let { personal, addresses } = useUserData(profileStore.getCostumer);
 
-const { personal, addresses } = useUserData(userData);
+watch(
+  () => profileStore.getCostumer,
+  () => {
+    addresses = useUserData(profileStore.getCostumer).addresses;
+    personal = useUserData(profileStore.getCostumer).personal;
+  }
+);
 
 const validationsPersonal = {
   name: validateName,
@@ -106,22 +82,24 @@ const isValidData = computed(() => {
 });
 
 const saveData = () => {
-  console.log('save data', ConvertDataForServer(personal.value, addresses.value));
+  profileStore.updateCustomerData(ConvertDataForServer(personal.value, addresses.value));
 };
 
-const changePassword = (data: { currentPassword: string; newPassword: string }) => {
+const changePassword = ({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) => {
   passwordWindowIsOpen.value = false;
-  console.log('received password data', data);
+  profileStore.updatePassword(currentPassword, newPassword);
 };
 
 const deleteAddress = (id: string) => {
-  console.log('Delete id', id);
+  profileStore.removeAddress(id);
 };
 
-const addNewAddress = (newAddress: Omit<Address, 'id'>) => {
+const addNewAddress = async (newAddress: Omit<Address, 'id'>) => {
   addAddressWindowIsOpen.value = false;
-  console.log('new address', newAddress);
+  await profileStore.addNewCustomerAddress(newAddress);
+  await profileStore.setTagsToNewAddress(newAddress);
 };
+
 const openAddAddressWindow = () => {
   addAddressWindowIsOpen.value = true;
 };
@@ -213,47 +191,39 @@ const openAddAddressWindow = () => {
   width: fit-content;
   padding: 5px 20px;
   transition: all 0.3s ease;
-
   &:hover:not(:disabled) {
     background-color: #666666;
   }
 }
-
 .buttons-cont {
   gap: 20px;
   flex-wrap: wrap;
   display: flex;
   justify-content: space-around;
 }
-
 .but {
   display: inline-block;
   margin: 10px auto;
   transition: all 0.3s;
-
   &:hover:not(:disabled) {
     background-color: #c6c6c6;
   }
 }
-
 .personal-block,
 .toggle-input,
 .address-block,
 .data-block {
   width: fit-content;
 }
-
 .data-blocks {
   gap: 15px;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   display: grid;
   justify-content: center;
 }
-
 .toggle-input {
   margin-bottom: 10px;
 }
-
 .profile-page {
   padding: 20px;
   display: flex;
@@ -261,7 +231,6 @@ const openAddAddressWindow = () => {
   min-height: 500px;
   background-color: white;
 }
-
 .wrapper {
   background-color: #f3f2f2;
   width: 90%;
@@ -270,7 +239,6 @@ const openAddAddressWindow = () => {
   display: flex;
   flex-direction: column;
 }
-
 .data-block {
   max-width: 300px;
   justify-self: center;
@@ -281,13 +249,11 @@ const openAddAddressWindow = () => {
   row-gap: 10px;
   margin-bottom: 20px;
 }
-
 .input-wrap {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
-
 .title-block {
   font-size: 20px;
 }

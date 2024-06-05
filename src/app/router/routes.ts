@@ -34,10 +34,7 @@ export const routes = [
   {
     path: '/catalog',
     name: 'catalog',
-    component: CatalogPage,
-    meta: {
-      requiresGuest: true
-    }
+    component: CatalogPage
   },
   {
     path: '/product-page/:id',
@@ -68,7 +65,10 @@ export const routes = [
   {
     path: '/profile',
     name: 'profile',
-    component: UserProfilePage
+    component: UserProfilePage,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/404',

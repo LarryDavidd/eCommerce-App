@@ -29,7 +29,6 @@ class ProductApi {
     const text = this.filterStore.getQueryArgs.searchText;
     const language = this.appStore.getCurrentLang;
     const price = this.filterStore.getQueryArgs.price;
-    console.log(categories);
     const filter: string[] = [];
     const sort: string[] = [];
     if (categories.size > 0) {
@@ -58,7 +57,6 @@ class ProductApi {
           limit,
           filter,
           sort,
-          facet: 'variants.price.centAmount',
           ['text.' + language]: text ? text : undefined
           // fuzzy: text ? undefined : true
         }

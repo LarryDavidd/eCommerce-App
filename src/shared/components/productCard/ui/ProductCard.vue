@@ -76,7 +76,7 @@ const shortDescription = props.descriptions.split('.').shift();
 }
 .product-card {
   position: relative;
-  width: 30%;
+  width: 400px;
 }
 .description {
   padding: 0 15px;

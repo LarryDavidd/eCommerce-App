@@ -17,8 +17,6 @@ export const useFilterStore = defineStore(NAME_SPACE, () => {
   const getPriceCondition = computed(() => queryArgs.sort.priceCondition);
   const getNameCondition = computed(() => queryArgs.sort.nameCondition);
 
-  const appState = useAppState();
-
   const getQueryArgs = computed(() => queryArgs);
 
   const setOffset = (offset: number) => (queryArgs.offset = offset);
@@ -36,13 +34,14 @@ export const useFilterStore = defineStore(NAME_SPACE, () => {
   const setSearchText = (text: string) => (queryArgs.searchText = text);
 
   return {
-    getPriceCondition,
-    getNameCondition,
     addRemoveCategory,
     setPrice,
     setSearchText,
+    setOffset,
     changeSortByPrice,
     changeSortByName,
+    getPriceCondition,
+    getNameCondition,
     getQueryArgs,
     getMinPrice,
     getMaxPrice

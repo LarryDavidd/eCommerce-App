@@ -1,26 +1,34 @@
 import { defineStore } from 'pinia';
 import CostumerApi from '../api/costumerApi';
 import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
-import { ref } from 'vue';
-import type { CustomerDraft } from '@commercetools/platform-sdk';
+import { computed, ref } from 'vue';
+import type { Customer, CustomerDraft } from '@commercetools/platform-sdk';
 import { revokingToken } from '@/auth/api/revokeToken';
 import { useNotificationStore } from '@/shared/Store/AlertMessageStore';
 import router from '@/app/router';
-import type { Client } from '@commercetools/sdk-client-v2';
+import type { Client, ClientResponse } from '@commercetools/sdk-client-v2';
 
 export const useCostumerStore = defineStore('costumer_store', () => {
   const costumerApi = new CostumerApi();
   const ls = useLocalStorage();
   const alert = useNotificationStore();
 
-  const costumerCredentials = ref<Client | null>(null);
+  const costumerCredentials = ref<Customer | null>(null);
 
   const isLogined = ref<boolean>(false);
   const isLoading = ref<boolean>(false);
   const isExist = ref<boolean>(false);
 
+  const getIsLoading = computed(() => isLoading.value);
+
   const userAccessToken = ref<string>('');
   const userRefreshToken = ref<string>('');
+
+  const getCostumerCredentials = computed(() => {
+    if (costumerCredentials.value === null) return null;
+
+    return costumerCredentials.value;
+  });
 
   const setTokenToLs = () => {
     if (isLogined.value) {
@@ -62,7 +70,6 @@ export const useCostumerStore = defineStore('costumer_store', () => {
 
     if (refresh_token) {
       const existCostumer = await costumerApi.refreshCostumer(String(refresh_token));
-      console.log(existCostumer);
 
       if (existCostumer?.statusCode === 200) {
         isLogined.value = true;
@@ -82,7 +89,6 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLoading.value = true;
 
     const res = await costumerApi.loginCostumer(email, password);
-    console.log(res);
 
     if (res.statusCode === 200) {
       isExist.value = true;
@@ -156,18 +162,17 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLoading.value = false;
   }
 
-  const requestCredentialsCostumer = async () => {
+  const requestCostumer = async () => {
     isLoading.value = true;
 
     const refresh_token = ls.load('refresh_token');
 
     if (refresh_token) {
-      const res = await costumerApi.credentialsCostumer();
+      const res = await costumerApi.refreshCostumer(String(refresh_token));
 
       if (res instanceof Error) {
         alert.addNotification({ status: 'error', message: 'Please reload page' });
       } else {
-        console.log(res);
         costumerCredentials.value = res.body;
       }
     }
@@ -176,7 +181,9 @@ export const useCostumerStore = defineStore('costumer_store', () => {
   };
 
   return {
-    requestCredentialsCostumer,
+    getCostumerCredentials,
+    getIsLoading,
+    requestCostumer,
     AnonCostumer,
     LoginExistigCostumer,
     LoginCostumer,

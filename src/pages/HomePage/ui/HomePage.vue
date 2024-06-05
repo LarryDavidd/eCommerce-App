@@ -1,6 +1,6 @@
 <template>
   <div class="home-page-container mx-6 flex md:mx-20">
-    <div class="content flex flex-grow justify-between">
+    <div class="content flex grow justify-between">
       <div>home page</div>
       <!-- <ProductCard></ProductCard> -->
       <div class="flex gap-4">
@@ -10,47 +10,9 @@
       </div>
     </div>
   </div>
-  <h1 class="text-center text-5xl">We didn't have time to finish the job. And we would be very grateful if you would check out our work a little later!</h1>
 </template>
 
-<script lang="ts" setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
-import { type RangeFilter, useFilterStore } from '@features/store/useFilter';
-import BurgerButton from '@shared/ui-kit/Buttons/BurgerButton/BurgerButton.vue';
-import { ProductCard } from '@shared/components/productCard';
-
-const filtersAccordion = computed(() => useFilterStore().getFiltersAccordion);
-const checkboxFilters = computed(() => useFilterStore().getCheckboxFilters);
-const rangeFilter = computed(() => useFilterStore().getRangeFilter);
-const { resetFilters } = useFilterStore();
-
-const updateRange = (value: RangeFilter) => {
-  rangeFilter.value.min = value.min;
-  rangeFilter.value.max = value.max;
-};
-
-const logout = () => {
-  if (useCostumerStore().isLogined) useCostumerStore().LogoutCostumer();
-};
-
-const isFilterVisible = ref(false);
-const windowWidth = ref(window.innerWidth);
-
-const handleResize = () => {
-  windowWidth.value = window.innerWidth;
-  if (windowWidth.value >= 768) isFilterVisible.value = windowWidth.value >= 768;
-};
-
-onMounted(() => {
-  handleResize();
-  window.addEventListener('resize', handleResize);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleResize);
-});
-</script>
+<script lang="ts" setup></script>
 
 <style lang="scss" scoped>
 .home-page-container {
