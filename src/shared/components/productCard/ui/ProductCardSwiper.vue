@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router';
 type PropsType = {
   urlImg: Image[];
   prodId: string;
+  discount: boolean;
 };
 
 const props = defineProps<PropsType>();
@@ -119,13 +120,19 @@ onUnmounted(() => {
   <div
     ref="bgContainer"
     :style="{ backgroundImage: `url(${images[backgroundIndex]})` }"
-    class="bg flex cursor-pointer flex-row-reverse"
+    class="image-card bg flex cursor-pointer flex-row-reverse"
     @mousemove="mousePosition"
     @touchstart="startTouch"
     @touchmove="moveTouch"
     @click="onClick"
     @mouseout="backgroundIndex = 0"
   >
+    <div
+      class="sale-block"
+      v-if="discount"
+    >
+      SALE
+    </div>
     <LikeHeart
       :class="{ checked: isChecked }"
       @click="toggleChecked"
@@ -134,4 +141,19 @@ onUnmounted(() => {
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.image-card {
+  position: relative;
+}
+.sale-block {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: fit-content;
+  background-color: #9a0e07;
+  color: white;
+  padding: 4px 22px 4px 13px;
+  clip-path: polygon(0 0, 100% 0%, 90% 100%, 0 100%);
+  font-weight: bold;
+}
+</style>
