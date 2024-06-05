@@ -1,6 +1,6 @@
-import type { Address } from '@/pages/UserProfilePage/model/useUserData';
+import type { Address, UserData } from '@/pages/UserProfilePage/model/useUserData';
 import Client from '@/shared/api/client/Client';
-import { type Customer, type ErrorResponse, type MyCustomerUpdate, type MyCustomerUpdateAction } from '@commercetools/platform-sdk';
+import { type BaseAddress, type Customer, type ErrorResponse, type MyCustomerUpdate, type MyCustomerUpdateAction } from '@commercetools/platform-sdk';
 import type { ClientResponse } from '@commercetools/sdk-client-v2';
 
 enum Countries {
@@ -122,6 +122,106 @@ class ProfileApi {
       .then((data) => data as ClientResponse<Customer>)
       .catch((err) => JSON.parse(JSON.stringify(err.body)) as ClientResponse<ErrorResponse>);
   }
+
+  public async updateCustomerData(costumer: Customer, data: UserData, refresh_token: string) {
+    const client = Client.getInstance().clientWithRefreshTokenFlow(refresh_token);
+
+    return await client
+      .me()
+      .post({
+        body: {
+          version: costumer.version,
+          actions: [
+            {
+              action: 'setFirstName',
+              firstName: data.firstName
+            },
+            {
+              action: 'setLastName',
+              lastName: data.lastName
+            },
+            {
+              action: 'setDateOfBirth',
+              dateOfBirth: data.dateOfBirth
+            },
+            {
+              action: 'changeEmail',
+              email: `${data.email}`
+            },
+            ...getAddressUpdateActions(data, costumer)
+          ]
+        }
+      })
+      .execute()
+      .then((data) => data as ClientResponse<Customer>)
+      .catch((err) => JSON.parse(JSON.stringify(err.body)) as ClientResponse<ErrorResponse>);
+  }
 }
+
+const getAddressUpdateActions = (data: UserData, costumer: Customer) => {
+  const updateActions: MyCustomerUpdateAction[] = [];
+
+  data.shippingAddressIds.forEach((shippingAddressId) => {
+    if (!costumer.shippingAddressIds?.includes(shippingAddressId)) {
+      updateActions.push({
+        action: 'addShippingAddressId',
+        addressId: shippingAddressId
+      });
+    }
+  });
+
+  costumer.shippingAddressIds?.forEach((shippingAddressId) => {
+    if (!data.shippingAddressIds?.includes(shippingAddressId)) {
+      updateActions.push({
+        action: 'removeShippingAddressId',
+        addressId: shippingAddressId
+      });
+    }
+  });
+
+  data.billingAddressIds.forEach((billingAddressId) => {
+    if (!costumer.billingAddressIds?.includes(billingAddressId)) {
+      updateActions.push({
+        action: 'addBillingAddressId',
+        addressId: billingAddressId
+      });
+    }
+  });
+
+  costumer.billingAddressIds?.forEach((billingAddressId) => {
+    if (!data.billingAddressIds?.includes(billingAddressId)) {
+      updateActions.push({
+        action: 'removeBillingAddressId',
+        addressId: billingAddressId
+      });
+    }
+  });
+
+  if (costumer.defaultBillingAddressId !== data.defaultBillingAddressId) {
+    updateActions.push({
+      action: `setDefaultBillingAddress`,
+      addressId: data.defaultBillingAddressId
+    });
+  }
+
+  if (costumer.defaultShippingAddressId !== data.defaultShippingAddressId) {
+    updateActions.push({
+      action: `setDefaultShippingAddress`,
+      addressId: data.defaultShippingAddressId
+    });
+  }
+
+  costumer.addresses.forEach((value, index) => {
+    if (JSON.stringify(data.addresses[index]) !== JSON.stringify(value)) {
+      updateActions.push({
+        action: 'changeAddress',
+        addressId: value.id,
+        address: value
+      });
+    }
+  });
+
+  return updateActions;
+};
 
 export default ProfileApi;

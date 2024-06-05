@@ -7,8 +7,10 @@ class CostumerApi {
   constructor() {}
 
   public async loginCostumer(username: string, password: string) {
+    Client.getInstance().clearTokenCashe();
     const res = await Client.getInstance()
       .getPasswordFlowClient(username, password)
+      .me()
       .login()
       .post({
         body: {

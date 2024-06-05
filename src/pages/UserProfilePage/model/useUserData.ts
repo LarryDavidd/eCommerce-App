@@ -64,10 +64,10 @@ export function mapCountryToCode(country: string) {
       return country;
   }
 }
-export function ConvertDataForServer(personal: Personal, addresses: Address[]) {
+export function ConvertDataForServer(personal: Personal, addresses: Address[]): UserData {
   // если не будет дефолтного, то null
-  let defaultShippingAddressId = '';
-  let defaultBillingAddressId = '';
+  let defaultShippingAddressId = null;
+  let defaultBillingAddressId = null;
   const shippingAddressIds: string[] = [];
   const billingAddressIds: string[] = [];
   const addressArray: AddressSDK[] = [];
@@ -86,6 +86,8 @@ export function ConvertDataForServer(personal: Personal, addresses: Address[]) {
     if (address.isShippingDefault) defaultShippingAddressId = address.id;
   });
   return {
+    id: '',
+    password: '',
     email: personal.email,
     firstName: personal.name,
     lastName: personal.surname,

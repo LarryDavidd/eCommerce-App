@@ -70,7 +70,6 @@ export const useCostumerStore = defineStore('costumer_store', () => {
 
     if (refresh_token) {
       const existCostumer = await costumerApi.refreshCostumer(String(refresh_token));
-      console.log(String(refresh_token));
 
       if (existCostumer?.statusCode === 200) {
         isLogined.value = true;
@@ -90,7 +89,6 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLoading.value = true;
 
     const res = await costumerApi.loginCostumer(email, password);
-    console.log(res);
 
     if (res.statusCode === 200) {
       isExist.value = true;
@@ -175,7 +173,6 @@ export const useCostumerStore = defineStore('costumer_store', () => {
       if (res instanceof Error) {
         alert.addNotification({ status: 'error', message: 'Please reload page' });
       } else {
-        console.log(res);
         costumerCredentials.value = res.body;
       }
     }

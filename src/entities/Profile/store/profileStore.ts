@@ -5,7 +5,7 @@ import type { Customer, CustomerDraft, ErrorResponse } from '@commercetools/plat
 import { useNotificationStore } from '@/shared/Store/AlertMessageStore';
 import type { Client, ClientResponse } from '@commercetools/sdk-client-v2';
 import ProfileApi from '../api/profileApi';
-import { mapCountry, type Address } from '@/pages/UserProfilePage/model/useUserData';
+import { mapCountry, type Address, type UserData } from '@/pages/UserProfilePage/model/useUserData';
 import CostumerApi from '@/entities/Costumer/api/costumerApi';
 import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
 
@@ -24,8 +24,6 @@ export const useProfileStore = defineStore('profileStore', () => {
   const getCostumer = computed(() => {
     if (costumer.value === null) return null;
 
-    console.log(costumer);
-
     return costumer.value;
   });
 
@@ -36,11 +34,9 @@ export const useProfileStore = defineStore('profileStore', () => {
 
     if (refresh_token) {
       const res = await costumerApi.refreshCostumer(String(refresh_token));
-      console.log(res instanceof Error, res);
       if (res.statusCode >= 400) {
         alert.addNotification({ status: 'error', message: 'Please reload page' });
       } else {
-        console.log(res);
         costumer.value = res.body;
       }
     }
@@ -54,12 +50,12 @@ export const useProfileStore = defineStore('profileStore', () => {
     const refresh_token = ls.load('refresh_token') as string;
 
     const res = await profileApi.addNewCustomerAddress(newAddressData, costumer.value?.version, refresh_token);
-    console.log(res);
 
     if (res instanceof Error) {
       alert.addNotification({ status: 'error', message: (res as ClientResponse<ErrorResponse>).message });
     } else {
       costumer.value = (res as ClientResponse<Customer>).body;
+      setNotificationAboutRemoveAdressSuccess();
     }
 
     isLoading.value = false;
@@ -71,7 +67,7 @@ export const useProfileStore = defineStore('profileStore', () => {
     const refresh_token = ls.load('refresh_token') as string;
 
     const res = await profileApi.setTagsToNewAddress(newAddressData, costumer.value?.version, refresh_token, costumer.value?.addresses.at(-1).id);
-    console.log(res);
+
     if (res instanceof Error) {
       alert.addNotification({ status: 'error', message: (res as ClientResponse<ErrorResponse>).message });
     } else {
@@ -92,28 +88,82 @@ export const useProfileStore = defineStore('profileStore', () => {
       alert.addNotification({ status: 'error', message: (res as ClientResponse<ErrorResponse>).message });
     } else {
       costumer.value = (res as ClientResponse<Customer>).body;
+      setNotificationAboutRemoveAdressSuccess();
     }
 
     isLoading.value = false;
   }
 
-  async function updatePassword(currentPassword: string, newPassword: strin) {
+  const updatePassword = async (currentPassword: string, newPassword: string) => {
     isLoading.value = true;
 
     const refresh_token = ls.load('refresh_token') as string;
 
     const res = await profileApi.updatePassword(costumer.value?.version, currentPassword, newPassword, refresh_token);
-    console.log(res);
+
     if (res instanceof Error) {
       alert.addNotification({ status: 'error', message: (res as ClientResponse<ErrorResponse>).message });
     } else {
       costumer.value = (res as ClientResponse<Customer>).body;
-      costumerApi.logout();
       await useCostumerStore().LoginCostumer(costumer.value?.email, newPassword);
+      setNotificationAboutChangePasswordSuccess();
+    }
+
+    isLoading.value = false;
+  };
+
+  async function updateCustomerData(formData: UserData) {
+    isLoading.value = true;
+
+    const refresh_token = localStorage.getItem('refresh_token') as string;
+
+    const res = await profileApi.updateCustomerData(costumer.value, formData, refresh_token);
+
+    if (res instanceof Error) {
+      alert.addNotification({ status: 'error', message: res.message });
+    } else {
+      costumer.value = res.body;
+      setNotificationAboutSavedUserDataSuccess();
     }
 
     isLoading.value = false;
   }
+
+  const setNotificationAboutChangePasswordSuccess = () => {
+    const notification = {
+      id: Date.now(),
+      message: 'Password has been successfully changed',
+      type: 'success'
+    };
+    alert.addNotification(notification);
+  };
+
+  const setNotificationAboutAddAdressSuccess = () => {
+    const notification = {
+      id: Date.now(),
+      message: 'Address has been added successfully',
+      type: 'success'
+    };
+    alert.addNotification(notification);
+  };
+
+  const setNotificationAboutRemoveAdressSuccess = () => {
+    const notification = {
+      id: Date.now(),
+      message: 'Address has been removed successfully',
+      type: 'success'
+    };
+    alert.addNotification(notification);
+  };
+
+  const setNotificationAboutSavedUserDataSuccess = () => {
+    const notification = {
+      id: Date.now(),
+      message: 'Data has been changed successfully',
+      type: 'success'
+    };
+    alert.addNotification(notification);
+  };
 
   return {
     getIsLoading,
@@ -122,6 +172,7 @@ export const useProfileStore = defineStore('profileStore', () => {
     addNewCustomerAddress,
     setTagsToNewAddress,
     removeAddress,
-    updatePassword
+    updatePassword,
+    updateCustomerData
   };
 });

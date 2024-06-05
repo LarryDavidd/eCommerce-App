@@ -3,11 +3,11 @@ import useProfileStore from '@/entities/Profile';
 import UserProfilePage from './UserProfilePage.vue';
 
 const profileStore = useProfileStore();
-profileStore.requestCostumer().then(() => console.log(profileStore.getCostumer));
+profileStore.requestCostumer();
 </script>
 
 <template>
   <template v-if="profileStore.getCostumer !== null">
-    <UserProfilePage :credentials="profileStore.getCostumer" />
+    <UserProfilePage />
   </template>
 </template>

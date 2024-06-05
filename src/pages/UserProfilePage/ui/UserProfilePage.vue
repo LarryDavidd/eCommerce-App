@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { computed, reactive, type Ref, ref, watch } from 'vue';
+import { computed, type Ref, ref, watch } from 'vue';
 import ToggleInput from '@shared/ui-kit/Inputs/ToggleInput/ToggleInput.vue';
 import PersonalInfo from '@pages/UserProfilePage/components/PersonalInfo.vue';
-import { validateBirthDate, validateEmail, validateName, validatePostalCode, validateStreet } from '@shared/utils/validation';
+import { validateBirthDate, validateEmail, validateName } from '@shared/utils/validation';
 import { ValidateAddress, ValidatePersonal } from '@pages/UserProfilePage/model/useValidate';
 import AddressInfo from '@pages/UserProfilePage/components/AddressInfo.vue';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 import ModalWrapper from '@shared/ui-kit/ModalWrapper/ModalWrapper.vue';
 import PasswordChangeModal from '@pages/UserProfilePage/components/PasswordChangeModal.vue';
-import { type Address, ConvertDataForServer, type UserData, useUserData } from '@pages/UserProfilePage/model/useUserData';
+import { type Address, ConvertDataForServer, useUserData } from '@pages/UserProfilePage/model/useUserData';
 import AddAddressModal from '@pages/UserProfilePage/components/AddAddressModal.vue';
-import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
 import useProfileStore from '@/entities/Profile';
 export type PersonalErrors = {
   name: string[] | null;
@@ -29,35 +28,6 @@ const errorsPersonal: Ref<PersonalErrors> = ref({
   password: null,
   dateOfBirth: null
 });
-// const costumerStore = useCostumerStore();
-// costumerStore.requestCredentialsCostumer();
-const userData: UserData = {
-  email: 'seb@example.com',
-  firstName: 'Sebastian',
-  lastName: 'Franklin',
-  password: '****+po=',
-  dateOfBirth: new Date(2003, 1, 17),
-  addresses: [
-    {
-      id: 'h3lwu1In',
-      streetName: 'South Road',
-      postalCode: '27517',
-      city: 'Durham',
-      country: 'US'
-    },
-    {
-      id: 'AeOy_U0W',
-      streetName: 'Leningradskaya',
-      postalCode: '123456',
-      city: 'Moscow',
-      country: 'RU'
-    }
-  ],
-  defaultShippingAddressId: 'AeOy_U0W',
-  defaultBillingAddressId: 'h3lwu1In',
-  shippingAddressIds: ['AeOy_U0W'],
-  billingAddressIds: ['h3lwu1In']
-};
 
 const profileStore = useProfileStore();
 
@@ -77,6 +47,7 @@ const validationsPersonal = {
   surname: validateName,
   dateOfBirth: validateBirthDate
 };
+
 watch(
   () => personal,
   () => {
@@ -84,7 +55,9 @@ watch(
   },
   { deep: true }
 );
+
 const hasAddressesErrors = ref(false);
+
 watch(
   () => addresses,
   () => {
@@ -103,25 +76,30 @@ watch(
   },
   { deep: true }
 );
+
 const isValidData = computed(() => {
   return Object.values(errorsPersonal.value).every((value) => value === null) && !hasAddressesErrors.value;
 });
+
 const saveData = () => {
-  console.log('save data', ConvertDataForServer(personal.value, addresses.value));
+  profileStore.updateCustomerData(ConvertDataForServer(personal.value, addresses.value));
 };
+
 const changePassword = ({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) => {
   passwordWindowIsOpen.value = false;
   profileStore.updatePassword(currentPassword, newPassword);
-  console.log('received password data', currentPassword, newPassword);
 };
+
 const deleteAddress = (id: string) => {
   profileStore.removeAddress(id);
 };
+
 const addNewAddress = async (newAddress: Omit<Address, 'id'>) => {
   addAddressWindowIsOpen.value = false;
   await profileStore.addNewCustomerAddress(newAddress);
   await profileStore.setTagsToNewAddress(newAddress);
 };
+
 const openAddAddressWindow = () => {
   addAddressWindowIsOpen.value = true;
 };
