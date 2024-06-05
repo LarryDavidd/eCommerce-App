@@ -110,7 +110,6 @@ const openAddAddressWindow = () => {
 </script>
 
 <template>
-  {{ addresses }}{{ personal }}
   <div class="profile-page">
     <div class="wrapper">
       <ToggleInput
