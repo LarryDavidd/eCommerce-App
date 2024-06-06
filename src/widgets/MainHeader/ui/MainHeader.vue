@@ -21,9 +21,9 @@ const selectedCurrency = ref(appStore.getCurrentCurrency);
 <template>
   <header class="flex h-20 w-full flex-col justify-center">
     <!--    lg:gap-32 убрать-->
-    <div class="header__wrapper mx-6 flex justify-between gap-4 md:mx-20 lg:gap-32">
+    <div class="header__wrapper mx-3 flex justify-between gap-4 md:mx-20 lg:gap-32">
       <div class="flex w-1/2 flex-col gap-4 md:w-4/5 md:flex-row md:gap-8">
-        <router-link to="/"><div class="text-base font-bold lg:text-xl">Shop</div></router-link>
+        <router-link to="/"><div class="text-base font-bold lg:text-xl">Shop Name</div></router-link>
         <SearchBar></SearchBar>
       </div>
 
@@ -47,11 +47,6 @@ const selectedCurrency = ref(appStore.getCurrentCurrency);
 
         <div class="flex gap-4">
           <UserProfile />
-
-          <router-link to="/catalog">
-            <CartIcon />
-          </router-link>
-
           <router-link to="/favorites">
             <ButtonIconCounter :count="count">
               <template v-slot:icon>
@@ -66,6 +61,10 @@ const selectedCurrency = ref(appStore.getCurrentCurrency);
                 <CartIcon />
               </template>
             </ButtonIconCounter>
+          </router-link>
+
+          <router-link to="/catalog">
+            <CartIcon />
           </router-link>
         </div>
       </div>
