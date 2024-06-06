@@ -14,6 +14,8 @@ export const useFilterStore = defineStore(NAME_SPACE, () => {
     sort: { priceCondition: 'none', nameCondition: 'none' }
   });
 
+  const getCategories = computed(() => queryArgs.categories);
+
   const getPriceCondition = computed(() => queryArgs.sort.priceCondition);
   const getNameCondition = computed(() => queryArgs.sort.nameCondition);
 
@@ -33,6 +35,15 @@ export const useFilterStore = defineStore(NAME_SPACE, () => {
 
   const setSearchText = (text: string) => (queryArgs.searchText = text);
 
+  const resetFilter = () => {
+    (queryArgs.offset = 0),
+      (queryArgs.limit = 10),
+      (queryArgs.categories = new Set<string>(new Set())),
+      (queryArgs.price = <{ min: number; max: null | number }>{}),
+      (queryArgs.searchText = <string>''),
+      (queryArgs.sort = { priceCondition: 'none', nameCondition: 'none' });
+  };
+
   return {
     addRemoveCategory,
     setPrice,
@@ -40,6 +51,8 @@ export const useFilterStore = defineStore(NAME_SPACE, () => {
     setOffset,
     changeSortByPrice,
     changeSortByName,
+    resetFilter,
+    getCategories,
     getPriceCondition,
     getNameCondition,
     getQueryArgs,

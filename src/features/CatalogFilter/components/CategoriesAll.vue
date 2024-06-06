@@ -2,7 +2,7 @@
 import useCategoriesStore from '@entities/Categories';
 import type { Category } from '@commercetools/platform-sdk';
 import { useAppState } from '@shared/Store/AppStore';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, reactive } from 'vue';
 import Accordion from '@/shared/ui-kit/Accordion/MyAccordion.vue';
 import CheckBox from '@/shared/ui-kit/Inputs/CheckBox/CheckBox.vue';
 import { useFilterStore } from '@/entities/Product/store/filterStore';
@@ -13,7 +13,13 @@ const useFilters = useFilterStore();
 
 const appState = useAppState();
 
-const categories = ref(useFilters.getQueryArgs.categories);
+const categories = ref(useFilters.getCategories);
+
+watch(
+  () => useFilters.getCategories,
+  () => (categories.value = useFilters.getCategories),
+  { deep: true }
+);
 
 const data = ref<SimpleCategory[]>([]);
 

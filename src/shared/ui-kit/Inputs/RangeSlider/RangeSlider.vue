@@ -13,8 +13,14 @@ const value = ref([props.modelValue.min, props.modelValue.max]);
 watch(value, (newValue) => {
   emit('update:modelValue', { min: newValue[0], max: newValue[1] });
 });
-const min = ref(props.modelValue.min);
-const max = ref(props.modelValue.max);
+
+watch(
+  () => props.modelValue,
+  () => (value.value = [props.modelValue.min, props.modelValue.max]),
+  { deep: true }
+);
+// const min = ref(props.modelValue.min);
+// const max = ref(props.modelValue.max);
 // const changePrice = () => {
 //   emit('update:modelValue', { min: newValue[0], max: newValue[1], title: props.modelValue.title });
 // }

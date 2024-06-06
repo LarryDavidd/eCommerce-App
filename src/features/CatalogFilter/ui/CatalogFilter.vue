@@ -6,6 +6,7 @@ import RangeSlider from '@/shared/ui-kit/Inputs/RangeSlider/RangeSlider.vue';
 import { useFilterStore } from '@/entities/Product/store/filterStore';
 import { ref } from 'vue';
 import FilterIcon from '@shared/ui-kit/Icons/FilterIcon.vue';
+import MainButton from '@/shared/ui-kit/Buttons/MainButton/MainButton.vue';
 
 const filterStore = useFilterStore();
 
@@ -15,9 +16,15 @@ const maxPrice = ref(filterStore.getMaxPrice);
 const updateRangeValue = (newPrice) => {
   filterStore.setPrice(newPrice);
 };
+
 const isVisible = ref(false);
+
 const toggleBlock = () => {
   isVisible.value = !isVisible.value;
+};
+
+const resetFilters = () => {
+  filterStore.resetFilter();
 };
 </script>
 
@@ -57,11 +64,21 @@ const toggleBlock = () => {
         :model-value="{ min: minPrice ? minPrice : 0, max: maxPrice ? maxPrice : 500 }"
         @update:model-value="(newPrice) => updateRangeValue(newPrice)"
       />
+      <MainButton
+        :options="{ buttonStyle: 'light-grey--font-light' }"
+        name="Reset"
+        class="reset-button"
+        @click="resetFilters"
+      />
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+.reset-button {
+  margin: 5px 0;
+}
+
 .filter-title {
   color: #525252;
   text-transform: uppercase;
