@@ -4,8 +4,7 @@ import CategoriesAll from '../components/CategoriesAll.vue';
 import SortCheckboxes from '../components/SortCheckboxes.vue';
 import RangeSlider from '@/shared/ui-kit/Inputs/RangeSlider/RangeSlider.vue';
 import { useFilterStore } from '@/entities/Product/store/filterStore';
-import { onMounted, onUnmounted, ref } from 'vue';
-import AccordionIcon from '@shared/ui-kit/Icons/AccordionIcon.vue';
+import { ref } from 'vue';
 import FilterIcon from '@shared/ui-kit/Icons/FilterIcon.vue';
 
 const filterStore = useFilterStore();

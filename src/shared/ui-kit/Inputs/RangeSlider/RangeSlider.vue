@@ -31,8 +31,8 @@ const max = ref(props.modelValue.max);
     <Slider
       :lazy="true"
       :tooltips="false"
-      :min="min"
-      :max="max"
+      :min="0"
+      :max="500"
       v-model="value"
     />
   </div>

@@ -13,6 +13,8 @@ const useFilters = useFilterStore();
 
 const appState = useAppState();
 
+const categories = ref(useFilters.getQueryArgs.categories);
+
 const data = ref<SimpleCategory[]>([]);
 
 onMounted(() => {
@@ -66,6 +68,7 @@ const filterCategories = (categories: Category[], lang: string) => {
         v-for="subcategory in category.children"
         :label="subcategory.name"
         :key="subcategory.id"
+        :model-value="categories.has(subcategory.id)"
         @update:model-value="() => useFilters.addRemoveCategory(subcategory.id)"
       />
     </Accordion>
