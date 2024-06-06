@@ -51,8 +51,8 @@ export const useProfileStore = defineStore('profileStore', () => {
 
     const res = await profileApi.addNewCustomerAddress(newAddressData, costumer.value?.version, refresh_token);
 
-    if (res instanceof Error) {
-      alert.addNotification({ status: 'error', message: (res as ClientResponse<ErrorResponse>).message });
+    if (res?.statusCode >= 300) {
+      setError(res.message);
     } else {
       costumer.value = (res as ClientResponse<Customer>).body;
       setNotificationAboutAddAdressSuccess();
@@ -68,8 +68,8 @@ export const useProfileStore = defineStore('profileStore', () => {
 
     const res = await profileApi.setTagsToNewAddress(newAddressData, costumer.value?.version, refresh_token, costumer.value?.addresses.at(-1).id);
 
-    if (res instanceof Error) {
-      alert.addNotification({ status: 'error', message: (res as ClientResponse<ErrorResponse>).message });
+    if (res?.statusCode >= 300) {
+      setError(res.message);
     } else {
       costumer.value = (res as ClientResponse<Customer>).body;
     }
@@ -84,8 +84,8 @@ export const useProfileStore = defineStore('profileStore', () => {
 
     const res = await profileApi.removeAddress(costumer.value?.version, addressId, refresh_token);
 
-    if (res instanceof Error) {
-      alert.addNotification({ status: 'error', message: (res as ClientResponse<ErrorResponse>).message });
+    if (res?.statusCode >= 300) {
+      setError(res.message);
     } else {
       costumer.value = (res as ClientResponse<Customer>).body;
       setNotificationAboutRemoveAdressSuccess();
@@ -101,12 +101,13 @@ export const useProfileStore = defineStore('profileStore', () => {
 
     const res = await profileApi.updatePassword(costumer.value?.version, currentPassword, newPassword, refresh_token);
 
-    if (res instanceof Error) {
-      alert.addNotification({ status: 'error', message: (res as ClientResponse<ErrorResponse>).message });
+    if (res?.statusCode >= 300) {
+      setError(res.message);
     } else {
+      console.log(newPassword);
       costumer.value = (res as ClientResponse<Customer>).body;
-      await useCostumerStore().LoginCostumer(costumer.value?.email, newPassword);
       setNotificationAboutChangePasswordSuccess();
+      await useCostumerStore().LoginCostumer(costumer.value?.email, newPassword);
     }
 
     isLoading.value = false;
@@ -119,8 +120,8 @@ export const useProfileStore = defineStore('profileStore', () => {
 
     const res = await profileApi.updateCustomerData(costumer.value, formData, refresh_token);
 
-    if (res instanceof Error) {
-      alert.addNotification({ status: 'error', message: res.message });
+    if (res?.statusCode >= 300) {
+      setError(res.message);
     } else {
       costumer.value = res.body;
       setNotificationAboutSavedUserDataSuccess();
@@ -161,6 +162,15 @@ export const useProfileStore = defineStore('profileStore', () => {
       id: Date.now(),
       message: 'Data has been changed successfully',
       type: 'success'
+    };
+    alert.addNotification(notification);
+  };
+
+  const setError = (err: string) => {
+    const notification = {
+      id: Date.now(),
+      message: err,
+      type: 'error'
     };
     alert.addNotification(notification);
   };

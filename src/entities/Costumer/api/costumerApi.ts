@@ -7,7 +7,7 @@ class CostumerApi {
   constructor() {}
 
   public async loginCostumer(username: string, password: string) {
-    Client.getInstance().clearTokenCashe();
+    this.logout();
     const res = await Client.getInstance()
       .getPasswordFlowClient(username, password)
       .me()
