@@ -8,10 +8,12 @@ const filterStore = useFilterStore();
 
 const changeSortByName = (sort: string) => {
   filterStore.changeSortByName(sort);
+  filterStore.changeSortByPrice('none');
 };
 
 const changeSortByPrice = (sort: string) => {
   filterStore.changeSortByPrice(sort);
+  filterStore.changeSortByName('none');
 };
 
 const priceCondition = computed(() => filterStore.getPriceCondition);
