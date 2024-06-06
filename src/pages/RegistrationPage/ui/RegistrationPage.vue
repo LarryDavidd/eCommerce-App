@@ -91,8 +91,8 @@ const register = () => {
     {
       country: Countries[data.value.forthStep.countryBilling],
       city: data.value.forthStep.cityBilling,
-      streetName: data.value.forthStep.cityBilling,
-      postalCode: data.value.forthStep.cityBilling
+      streetName: data.value.forthStep.streetBilling,
+      postalCode: data.value.forthStep.postalCodeBilling
     }
   ];
   costumerStore
