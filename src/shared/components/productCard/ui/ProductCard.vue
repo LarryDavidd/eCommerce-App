@@ -17,6 +17,7 @@ type PropsType = {
   title: string;
   descriptions: string;
   price: string;
+  discount?: string;
 };
 
 const props = defineProps<PropsType>();
@@ -26,14 +27,22 @@ const shortDescription = props.descriptions.split('.').shift();
 <template>
   <div class="product-card flex flex-col">
     <ProductCardSwiper
+      :discount="!!discount"
       :url-img="props.urlImg"
       :prod-id="props.id"
     />
     <div class="description">
       <p>{{ props.title }}</p>
       <div class="flex gap-4">
-        <p class="font-semibold">{{ props.price }}</p>
-        <p class="strike-through line-through">{{ props.price }}</p>
+        <p
+          class="font-semibold"
+          v-if="props.discount"
+        >
+          {{ props.discount }}
+        </p>
+        <p :class="{ 'strike-through line-through': props.discount, 'font-semibold': !props.discount }">
+          {{ props.price }}
+        </p>
       </div>
     </div>
     <div class="to-cart flex flex-col justify-between">

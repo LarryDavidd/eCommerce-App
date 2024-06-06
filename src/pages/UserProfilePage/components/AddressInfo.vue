@@ -42,6 +42,11 @@ const errorsAddress: Ref<AddressErrors> = ref({
 let localModelValue = reactive({ ...props.modelValue });
 
 watch(
+  () => props.modelValue,
+  () => (localModelValue = props.modelValue)
+);
+
+watch(
   localModelValue,
   (newValue) => {
     errorsAddress.value = ValidateAddress(newValue);

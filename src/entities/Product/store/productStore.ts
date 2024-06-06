@@ -41,9 +41,17 @@ export const useProductStore = defineStore('product_store', () => {
 
   const GetProduct = computed(() => {
     if (product.value === null) return null;
-
+    let discount = '';
     const findPriceData = findPriceInCurrency(product.value.masterVariant.prices, appState.getState.currencyCode);
-
+    const discountObj = product.value.masterVariant.prices?.find((_price) => {
+      if (_price.discounted?.value.currencyCode === appState.getState.currencyCode && _price.value.centAmount !== _price.discounted?.value.centAmount) {
+        return _price.discounted.value;
+      }
+      return null;
+    });
+    if (discountObj) {
+      if (discountObj?.discounted?.value?.centAmount) discount = `${discountObj?.discounted?.value?.centAmount / 100} ${findPriceData?.currency}`;
+    }
     const result = {
       id: product.value.id,
       name: product.value.name[appState.getState.language],
@@ -52,7 +60,8 @@ export const useProductStore = defineStore('product_store', () => {
       priceData: {
         price: findPriceData?.price,
         currency: findPriceData?.currency
-      }
+      },
+      discount: discount
     };
 
     return result;
@@ -65,6 +74,12 @@ export const useProductStore = defineStore('product_store', () => {
         const name = product.name[appState.getState.language];
         const description = product.description ? product.description[appState.getState.language] : '';
         const urlImage = product.masterVariant.images ?? [];
+        const discountObj = product.masterVariant.prices?.find((_price) => {
+          if (_price.discounted?.value.currencyCode === appState.getState.currencyCode && _price.value.centAmount !== _price.discounted?.value.centAmount) {
+            return _price.discounted.value;
+          }
+          return null;
+        });
         const findCurrencyPrice = product.masterVariant.prices?.find((_price) => {
           if (_price.value.currencyCode === appState.getState.currencyCode) {
             return _price.value;
@@ -73,17 +88,24 @@ export const useProductStore = defineStore('product_store', () => {
         });
         let symbolCurrency = '$';
         let price = '';
+        let discount = '';
         if (findCurrencyPrice) {
           if (findCurrencyPrice.value.currencyCode === 'RUB') symbolCurrency = 'P';
           if (findCurrencyPrice.value.currencyCode === 'EUR') symbolCurrency = 'Э';
           price = `${symbolCurrency} ${findCurrencyPrice.value.centAmount / 100}`;
+        }
+        if (discountObj) {
+          if (discountObj?.discounted?.value.currencyCode === 'RUB') symbolCurrency = 'P';
+          if (discountObj?.discounted?.value.currencyCode === 'EUR') symbolCurrency = 'Э';
+          if (discountObj?.discounted?.value?.centAmount) discount = `${symbolCurrency} ${discountObj?.discounted?.value?.centAmount / 100}`;
         }
         return {
           id,
           name,
           description,
           urlImage,
-          price
+          price,
+          discount
         };
       });
     }
@@ -152,5 +174,14 @@ export const useProductStore = defineStore('product_store', () => {
     return products;
   };
 
-  return { requestGetProduct, requestGetProductByQueryParams, requestGetProductsByCategory, requestProductSearch, requestGetProductById, GetProducts, GetProduct, isLoading };
+  return {
+    requestGetProduct,
+    requestGetProductByQueryParams,
+    requestGetProductsByCategory,
+    requestProductSearch,
+    requestGetProductById,
+    GetProducts,
+    GetProduct,
+    isLoading
+  };
 });
