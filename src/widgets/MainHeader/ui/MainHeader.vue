@@ -47,6 +47,11 @@ const selectedCurrency = ref(appStore.getCurrentCurrency);
 
         <div class="flex gap-4">
           <UserProfile />
+
+          <router-link to="/catalog">
+            <CartIcon />
+          </router-link>
+
           <router-link to="/favorites">
             <ButtonIconCounter :count="count">
               <template v-slot:icon>
