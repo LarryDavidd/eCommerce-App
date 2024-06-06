@@ -14,7 +14,7 @@ onMounted(() => {
 <template>
   <section
     v-if="!productStore.isLoading"
-    class="flex flex-wrap justify-center gap-x-8 gap-y-28"
+    class="mx-6 flex flex-wrap justify-center gap-x-8 gap-y-28 md:mx-20"
   >
     <ProductCard
       v-for="product in productStore.GetProducts"
