@@ -15,6 +15,8 @@ const props = defineProps({
   }
 });
 
+const checkboxId = Date.now().toString();
+
 const emit = defineEmits(['update:modelValue']);
 
 const handleChange = () => {
@@ -27,11 +29,11 @@ const handleChange = () => {
     <input
       :disabled="disabled"
       type="checkbox"
-      id="myCheckbox"
+      :id="checkboxId"
       :checked="props.modelValue"
       @change="handleChange"
     />
-    <label for="myCheckbox">{{ label }}</label>
+    <label :for="checkboxId">{{ label }}</label>
   </div>
 </template>
 
