@@ -17,11 +17,13 @@ app.component('VueDatePicker', VueDatePicker);
 
 app.use(createPinia());
 
-app.use(router);
+useCostumerStore()
+  .LoginExistigCostumer()
+  .then(() => {
+    app.use(router);
 
-app.mount('#app');
-
-useCostumerStore().LoginExistigCostumer();
+    app.mount('#app');
+  });
 
 // getClient().then((res) => console.log(res));
 
