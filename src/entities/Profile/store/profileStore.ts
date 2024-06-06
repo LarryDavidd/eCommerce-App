@@ -55,7 +55,7 @@ export const useProfileStore = defineStore('profileStore', () => {
       alert.addNotification({ status: 'error', message: (res as ClientResponse<ErrorResponse>).message });
     } else {
       costumer.value = (res as ClientResponse<Customer>).body;
-      setNotificationAboutRemoveAdressSuccess();
+      setNotificationAboutAddAdressSuccess();
     }
 
     isLoading.value = false;

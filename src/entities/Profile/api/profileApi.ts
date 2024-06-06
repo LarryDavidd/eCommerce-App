@@ -2,6 +2,7 @@ import type { Address, UserData } from '@/pages/UserProfilePage/model/useUserDat
 import Client from '@/shared/api/client/Client';
 import { type BaseAddress, type Customer, type ErrorResponse, type MyCustomerUpdate, type MyCustomerUpdateAction } from '@commercetools/platform-sdk';
 import type { ClientResponse } from '@commercetools/sdk-client-v2';
+import { isEqual } from 'lodash';
 
 enum Countries {
   'Russia' = 'RU',
@@ -212,11 +213,11 @@ const getAddressUpdateActions = (data: UserData, costumer: Customer) => {
   }
 
   costumer.addresses.forEach((value, index) => {
-    if (JSON.stringify(data.addresses[index]) !== JSON.stringify(value)) {
+    if (!isEqual(data.addresses[index], value)) {
       updateActions.push({
         action: 'changeAddress',
-        addressId: value.id,
-        address: value
+        addressId: data.addresses[index].id,
+        address: data.addresses[index]
       });
     }
   });
