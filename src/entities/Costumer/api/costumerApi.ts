@@ -60,6 +60,15 @@ class CostumerApi {
       .catch((err) => JSON.parse(JSON.stringify(err.body)) as ClientResponse<ErrorResponse>);
   }
 
+  public async refreshAnonCostumer(refreshToken: string) {
+    return Client.getInstance()
+      .clientWithRefreshTokenFlow(refreshToken)
+      .get()
+      .execute()
+      .then((data) => data)
+      .catch((err) => JSON.parse(JSON.stringify(err.body)) as ClientResponse<ErrorResponse>);
+  }
+
   public async existingCostumer(access_token: string) {
     return Client.getInstance()
       .clientWithRefreshTokenFlow(access_token)
