@@ -43,6 +43,24 @@ class CartApi {
       .then((data) => data.body)
       .catch((err) => err);
   }
+
+  public async removeProductFromCart(cartId: string, cartVersion: number, lineItemId: string) {
+    const client = Client.getInstance().anonymousClient;
+
+    return await client
+      .me()
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion,
+          actions: [{ action: 'removeLineItem', lineItemId }]
+        }
+      })
+      .execute()
+      .then((data) => data.body)
+      .catch((err) => err);
+  }
 }
 
 export default CartApi;
