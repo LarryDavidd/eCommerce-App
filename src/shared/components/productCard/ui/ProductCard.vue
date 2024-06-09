@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 import ProductCardSwiper from '@shared/components/productCard/ui/ProductCardSwiper.vue';
-import { type Ref, ref } from 'vue';
+import { type Ref, ref, computed } from 'vue';
 import type { Image } from '@commercetools/platform-sdk';
+import useCartStore from '@/entities/Cart';
+import { AddRemoveButton } from '@/shared/ui-kit/Buttons';
 
 const sizes: string[] = ['S', 'M', 'L'];
 const sizeSelected: Ref<string> = ref(sizes[0]);
@@ -63,10 +64,9 @@ const shortDescription = props.descriptions.split('.').shift();
           </div>
         </div>
       </div>
-      <MainButton
-        name="ADD TO CART"
-        :options="{ buttonStyle: 'dark-grey' }"
-        class="card-btn"
+      <AddRemoveButton
+        classes="w-full h-auto self-center p-4"
+        :id="props.id"
       />
     </div>
   </div>
