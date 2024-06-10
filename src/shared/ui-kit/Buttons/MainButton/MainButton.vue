@@ -70,6 +70,7 @@ button {
   line-height: 24px;
   text-transform: uppercase;
 
+  width: 300px;
   height: 60px;
 
   background: rgb(82, 82, 82);

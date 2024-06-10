@@ -9,8 +9,7 @@ import GlobeIcon from '@shared/ui-kit/Icons/GlobeIcon.vue';
 import CurrencyIcon from '@shared/ui-kit/Icons/CurrencyIcon.vue';
 import UserProfile from '@features/UserProfile/ui/UserProfile.vue';
 import { useAppState } from '@/shared/Store/AppStore';
-
-const count = ref<number>(0);
+import CartButtonCounter from '../component/CartButtonCounter.vue';
 
 const appStore = useAppState();
 
@@ -47,20 +46,9 @@ const selectedCurrency = ref(appStore.getCurrentCurrency);
 
         <div class="flex gap-4">
           <UserProfile />
-          <router-link to="/favorites">
-            <ButtonIconCounter :count="count">
-              <template v-slot:icon>
-                <LikeHeart />
-              </template>
-            </ButtonIconCounter>
-          </router-link>
 
           <router-link to="/cart">
-            <ButtonIconCounter :count="count">
-              <template v-slot:icon>
-                <CartIcon />
-              </template>
-            </ButtonIconCounter>
+            <CartButtonCounter> </CartButtonCounter>
           </router-link>
 
           <router-link to="/catalog">

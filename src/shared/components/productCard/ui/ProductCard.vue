@@ -66,7 +66,7 @@ const shortDescription = props.descriptions.split('.').shift();
         </div>
       </div>
       <AddRemoveButton
-        classes="w-full h-auto self-center p-4"
+        classes="card-btn"
         :id="props.id"
       />
     </div>

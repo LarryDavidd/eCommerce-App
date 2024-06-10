@@ -24,6 +24,8 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
 
   const getInProcess = computed(() => inProcess.value);
 
+  const getDataCount = computed(() => data.value?.lineItems.length);
+
   // Actions
   const requestCreateCart = async () => {
     const ls = useLocalStorage();
@@ -89,5 +91,5 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
     }
   );
 
-  return { requestGetCart, requestCreateCart, requestAddProductToCart, requestRemoveProductFromCart, getData, IsLoading, getInProcess };
+  return { requestGetCart, requestCreateCart, requestAddProductToCart, requestRemoveProductFromCart, getData, IsLoading, getInProcess, getDataCount };
 });
