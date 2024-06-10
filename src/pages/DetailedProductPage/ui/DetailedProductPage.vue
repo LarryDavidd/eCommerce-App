@@ -1,3 +1,63 @@
+<script setup lang="ts">
+import { defineComponent, type Ref, ref, onMounted, computed } from 'vue';
+import { Splide, SplideSlide } from '@splidejs/vue-splide';
+import '@splidejs/vue-splide/css';
+import VueEasyLightbox from 'vue-easy-lightbox';
+import LikeHeart from '@shared/ui-kit/Icons/LikeHeart.vue';
+import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
+import { useProductStore } from '@/entities/Product/store/productStore';
+import { useRouter } from 'vue-router';
+import CustomLoading from '@shared/ui-kit/Loading/CustomLoading.vue';
+
+defineComponent({
+  components: {
+    Splide,
+    SplideSlide,
+    VueEasyLightbox
+  }
+});
+
+const router = useRouter();
+const productStore = useProductStore();
+
+onMounted(() => {
+  const productId = router.currentRoute.value.params.id;
+  productStore.requestGetProductById(productId as string);
+});
+
+const product = computed(() => productStore.GetProduct);
+
+const sizeSelected: Ref<string> = ref(product?.value?.sizes[0] || '');
+
+const changeSize = (value: string) => {
+  sizeSelected.value = value;
+};
+const isChecked = ref(false);
+
+const toggleChecked = () => {
+  isChecked.value = !isChecked.value;
+};
+
+const images = ref<string[]>([
+  'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/e1d/e1dcaddcc2b601226e2f1e420cf8b7e4/6d016c8434cefcb2bbc3b7913e60e20a.jpg',
+  'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/6e5/6e57a17ad59a79572cc63c35c707dcb3/688371b85619f5f1a709d34364bc5451.jpg',
+  'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/14d/14d7785d8e2ba001584b50109bf3326a/7cce0a93fd1d9f74f69826d014c6c049.jpg',
+  'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/c36/c36edba7dfad1f33b2cbbe8853ffaafd/59cc5dba5feec14859f3395a02ad4b1e.jpg',
+  'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/9ec/9ecd300c6eb1960918e8efe4396967c3/b8beded126408d6f5e7a4e459832c23d.jpg'
+]);
+
+const visible = ref(false);
+const index = ref(0);
+
+const openLightbox = (currentIndex: number) => {
+  index.value = currentIndex;
+  visible.value = true;
+};
+const handleHide = () => {
+  visible.value = false;
+};
+</script>
+
 <template>
   <template v-if="!productStore.isLoading">
     <div class="mx-6 flex flex-col items-center gap-0 sm:flex-row sm:items-start sm:justify-center sm:gap-16 md:mx-20">
@@ -46,12 +106,15 @@
             {{ product?.priceData.price + ' ' + product?.priceData.currency }}
           </p>
         </div>
-        <div class="flex gap-4">
+        <div
+          class="flex gap-4"
+          v-if="product && product.sizes.length > 0"
+        >
           <div
-            v-for="(size, i) in sizes"
-            :key="i"
+            v-for="size in product.sizes"
+            :key="size"
             class="size-btn"
-            :class="{ selected: size === sizeSelected }"
+            :class="{ selected: size === (sizeSelected ? sizeSelected : product.sizes[0]) }"
             @click="changeSize(size)"
           >
             {{ size }}
@@ -79,60 +142,6 @@
   </template>
   <CustomLoading v-else />
 </template>
-
-<script setup lang="ts">
-import { defineComponent, type Ref, ref, onMounted, computed } from 'vue';
-import { Splide, SplideSlide } from '@splidejs/vue-splide';
-import '@splidejs/vue-splide/css';
-import VueEasyLightbox from 'vue-easy-lightbox';
-import LikeHeart from '@shared/ui-kit/Icons/LikeHeart.vue';
-import { useProductStore } from '@/entities/Product/store/productStore';
-import { useRouter } from 'vue-router';
-import CustomLoading from '@shared/ui-kit/Loading/CustomLoading.vue';
-import AddRemoveButton from '@/shared/ui-kit/Buttons/AddRemoreButton/AddRemoveButton.vue';
-
-defineComponent({
-  components: {
-    Splide,
-    SplideSlide,
-    VueEasyLightbox
-  }
-});
-
-const router = useRouter();
-const productStore = useProductStore();
-
-onMounted(() => {
-  const productId = router.currentRoute.value.params.id;
-  productStore.requestGetProductById(productId as string);
-});
-
-const product = computed(() => productStore.GetProduct);
-
-const sizes: string[] = ['XS', 'S', 'M', 'L'];
-
-const sizeSelected: Ref<string> = ref(sizes[0]);
-
-const changeSize = (value: string) => {
-  sizeSelected.value = value;
-};
-const isChecked = ref(false);
-
-const toggleChecked = () => {
-  isChecked.value = !isChecked.value;
-};
-
-const visible = ref(false);
-const index = ref(0);
-
-const openLightbox = (currentIndex: number) => {
-  index.value = currentIndex;
-  visible.value = true;
-};
-const handleHide = () => {
-  visible.value = false;
-};
-</script>
 
 <style scoped lang="scss">
 .size-btn {

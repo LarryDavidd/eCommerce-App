@@ -4,9 +4,6 @@ import { type Ref, ref, computed } from 'vue';
 import type { Image } from '@commercetools/platform-sdk';
 import { AddRemoveButton } from '@/shared/ui-kit/Buttons';
 
-const sizes: string[] = ['S', 'M', 'L'];
-const sizeSelected: Ref<string> = ref(sizes[0]);
-
 const changeSize = (value: string) => {
   sizeSelected.value = value;
 };
@@ -18,9 +15,11 @@ type PropsType = {
   descriptions: string;
   price: string;
   discount?: string;
+  sizes: string[] | [];
 };
 
 const props = defineProps<PropsType>();
+const sizeSelected: Ref<string> = ref(props.sizes.length > 0 ? props.sizes[0] : '');
 const shortDescription = props.descriptions.split('.').shift();
 </script>
 
@@ -48,7 +47,10 @@ const shortDescription = props.descriptions.split('.').shift();
     <div class="to-cart flex flex-col justify-between">
       <div>
         <p class="text-[12px] text-gray-700">{{ shortDescription }}</p>
-        <div class="flex gap-5">
+        <div
+          class="flex gap-5"
+          v-if="sizes.length > 0"
+        >
           <p>Size:</p>
           <div class="flex gap-2.5">
             <div
