@@ -59,7 +59,7 @@
         </div>
         <div class="flex w-full items-center gap-4">
           <AddRemoveButton
-            classes="m-0 h-auto w-96 self-center p-1.5 sm:w-1/2"
+            classes="card-btn m-0 h-auto w-3/4 self-center p-1.5 sm:w-1/2"
             :id="product?.id ?? '0'"
           />
           <LikeHeart
