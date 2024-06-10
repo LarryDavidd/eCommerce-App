@@ -2,51 +2,30 @@ import { defineStore } from 'pinia';
 import CostumerApi from '../api/costumerApi';
 import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
 import { computed, ref } from 'vue';
-import type { Customer, CustomerDraft } from '@commercetools/platform-sdk';
+import type { CustomerDraft } from '@commercetools/platform-sdk';
 import { revokingToken } from '@/auth/api/revokeToken';
-import { useNotificationStore } from '@/shared/Store/AlertMessageStore';
-import router from '@/app/router';
+import { useNotificationStore } from '@shared/Store/AlertMessageStore';
+import router from '@app/router';
+import useCartStore from '@entities/Cart';
 
 export const useCostumerStore = defineStore('costumer_store', () => {
+  // State
   const costumerApi = new CostumerApi();
+
   const ls = useLocalStorage();
   const alert = useNotificationStore();
-
-  const costumerCredentials = ref<Customer | null>(null);
+  const cartStore = useCartStore();
 
   const isLogined = ref<boolean>(false);
   const isLoading = ref<boolean>(false);
   const isExist = ref<boolean>(false);
 
+  // Getters
   const getIsLoading = computed(() => isLoading.value);
+  const getIsLogedin = computed(() => isLogined.value);
+  const getIsExist = computed(() => isExist.value);
 
-  const userAccessToken = ref<string>('');
-  const userRefreshToken = ref<string>('');
-
-  const getCostumerCredentials = computed(() => {
-    if (costumerCredentials.value === null) return null;
-
-    return costumerCredentials.value;
-  });
-
-  const setNotificationSucces = () => {
-    const notification = {
-      id: Date.now(),
-      message: 'Login was successful' + ' ' + (isLogined.value ? 'Loginded user' : 'Anon user'),
-      type: 'success'
-    };
-    alert.addNotification(notification);
-  };
-
-  const setNotificationError = (message: string) => {
-    const notification = {
-      id: Date.now(),
-      message: message,
-      type: 'error'
-    };
-    alert.addNotification(notification);
-  };
-
+  // Actions
   async function AnonCostumer() {
     const anonCostumer = await costumerApi.anonCostumer();
 
@@ -91,7 +70,9 @@ export const useCostumerStore = defineStore('costumer_store', () => {
   async function LoginCostumer(email: string, password: string) {
     isLoading.value = true;
 
-    const res = await costumerApi.loginCostumer(email, password);
+    const cart = cartStore.getData;
+
+    const res = await costumerApi.loginCostumer(email, password, cart);
 
     if (res.statusCode === 200) {
       isExist.value = true;
@@ -138,6 +119,7 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     ls.remove('access_token');
     ls.remove('refresh_token');
     isLogined.value = false;
+    isExist.value = false;
 
     if (res instanceof Error) {
       setNotificationError(res.message);
@@ -149,9 +131,29 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLoading.value = false;
   }
 
+  // notification fns
+  const setNotificationSucces = () => {
+    const notification = {
+      id: Date.now(),
+      message: 'Login was successful' + ' ' + (isLogined.value ? 'Loginded user' : 'Anon user'),
+      type: 'success'
+    };
+    alert.addNotification(notification);
+  };
+
+  const setNotificationError = (message: string) => {
+    const notification = {
+      id: Date.now(),
+      message: message,
+      type: 'error'
+    };
+    alert.addNotification(notification);
+  };
+
   return {
-    getCostumerCredentials,
     getIsLoading,
+    getIsLogedin,
+    getIsExist,
     AnonCostumer,
     LoginExistigCostumer,
     LoginCostumer,
@@ -159,8 +161,6 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     LogoutCostumer,
     isLogined,
     isLoading,
-    isExist,
-    userAccessToken,
-    userRefreshToken
+    isExist
   };
 });

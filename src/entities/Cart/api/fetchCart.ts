@@ -1,14 +1,13 @@
 import Client from '@shared/api/client/Client';
-import type { CartDraft } from '@commercetools/platform-sdk';
 
 class CartApi {
-  public async createCartForAnonymousCustomer(refresh_token: string, cartDraft: CartDraft) {
+  public async createCartForCustomer(refresh_token: string) {
     const client = Client.getInstance().clientWithRefreshTokenFlow(refresh_token);
     return client
       .me()
       .carts()
       .post({
-        body: cartDraft
+        body: { currency: 'USD' }
       })
       .execute()
       .then((data) => data.body)

@@ -1,15 +1,18 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
-import { useAppState } from '@/shared/Store/AppStore';
-import type { CartDraft, Cart } from '@commercetools/platform-sdk';
+import { computed, ref, watch } from 'vue';
+import type { Cart } from '@commercetools/platform-sdk';
 import CartApi from '../api/fetchCart';
 import { useLocalStorage } from '@/shared/lib/composables/useLocalStorage';
+import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
+import CostumerApi from '@/entities/Costumer/api/costumerApi';
 
 const NAME_SPACE = 'CartStore';
 
 export const useCartStore = defineStore(NAME_SPACE, () => {
-  const appState = useAppState();
+  // State
   const cartApi = new CartApi();
+
+  const customerStore = useCostumerStore();
   const data = ref<Cart | null>(null);
   const isLoading = ref<boolean>(false);
   const inProcess = ref<Set<string>>(new Set());
@@ -22,12 +25,12 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
   const getInProcess = computed(() => inProcess.value);
 
   // Actions
-  const requestCreateAnonCart = async (cartDraft: CartDraft) => {
+  const requestCreateCart = async () => {
     const ls = useLocalStorage();
     const refresh_token = ls.load('refresh_token');
 
     isLoading.value = true;
-    const cart = await cartApi.createCartForAnonymousCustomer(String(refresh_token), cartDraft);
+    const cart = await cartApi.createCartForCustomer(String(refresh_token));
 
     if (cart instanceof Error) return;
 
@@ -43,9 +46,9 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
     isLoading.value = true;
     const cart = await cartApi.getCart(String(refresh_token));
 
-    if (cart instanceof Error) return;
+    if (cart.statusCode === 404) requestCreateCart();
+    else data.value = cart;
 
-    data.value = cart;
     isLoading.value = false;
     return cart;
   };
@@ -77,5 +80,14 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
     return res;
   };
 
-  return { requestGetCart, requestCreateAnonCart, requestAddProductToCart, requestRemoveProductFromCart, getData, IsLoading, getInProcess };
+  // watcher
+  watch(
+    () => customerStore.getIsLogedin,
+    () => customerStore.getIsExist,
+    () => {
+      if (customerStore.getIsExist) requestGetCart();
+    }
+  );
+
+  return { requestGetCart, requestCreateCart, requestAddProductToCart, requestRemoveProductFromCart, getData, IsLoading, getInProcess };
 });
