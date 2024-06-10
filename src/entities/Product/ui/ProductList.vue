@@ -25,6 +25,7 @@ onMounted(() => {
       :descriptions="product.description"
       :price="product.price"
       :discount="product.discount"
+      :sizes="product.sizeValues"
     >
     </ProductCard>
   </section>
