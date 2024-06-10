@@ -2,7 +2,6 @@
 import ProductCardSwiper from '@shared/components/productCard/ui/ProductCardSwiper.vue';
 import { type Ref, ref, computed } from 'vue';
 import type { Image } from '@commercetools/platform-sdk';
-import useCartStore from '@/entities/Cart';
 import { AddRemoveButton } from '@/shared/ui-kit/Buttons';
 
 const changeSize = (value: string) => {

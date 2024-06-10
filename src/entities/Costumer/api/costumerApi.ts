@@ -1,21 +1,25 @@
 import Client from '@/shared/api/client/Client';
-import { ByProjectKeyRequestBuilder, type CustomerDraft, type CustomerSignInResult, type ErrorResponse } from '@commercetools/platform-sdk';
+import { ByProjectKeyRequestBuilder, type Cart, type CustomerDraft, type CustomerSignInResult, type ErrorResponse } from '@commercetools/platform-sdk';
 import type { ClientResponse } from '@commercetools/sdk-client-v2';
 
 class CostumerApi {
   static clientBuilder: ByProjectKeyRequestBuilder;
   constructor() {}
 
-  public async loginCostumer(username: string, password: string) {
+  public async loginCostumer(username: string, password: string, cart: Cart | null) {
     this.logout();
     const res = await Client.getInstance()
       .getPasswordFlowClient(username, password)
-      .me()
+      // .me()
       .login()
       .post({
         body: {
           email: username,
-          password
+          password,
+          anonymousId: cart?.anonymousId,
+          anonymousCartId: cart?.id,
+          anonymousCartSignInMode: cart ? 'MergeWithExistingCustomerCart' : undefined,
+          updateProductData: cart ? true : undefined
         }
       })
       .execute()
