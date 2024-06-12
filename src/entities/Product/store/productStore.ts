@@ -4,6 +4,7 @@ import { computed, ref, watch, watchEffect } from 'vue';
 import type { Price, ProductProjection, ProductProjectionPagedQueryResponse, ProductProjectionPagedSearchResponse } from '@commercetools/platform-sdk';
 import { useAppState } from '@shared/Store/AppStore';
 import { useFilterStore } from './filterStore';
+import type { Attribute } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/product';
 
 const findPriceInCurrency = (prices?: Price[], currencyCode?: string) => {
   if (prices === undefined || currencyCode === undefined) return;
@@ -52,6 +53,12 @@ export const useProductStore = defineStore('product_store', () => {
     if (discountObj) {
       if (discountObj?.discounted?.value?.centAmount) discount = `${discountObj?.discounted?.value?.centAmount / 100} ${findPriceData?.currency}`;
     }
+    let sizeValues: string[] = [];
+    const idxSizes = product.value.masterVariant.attributes?.findIndex((el) => el.name === 'size');
+    if (idxSizes !== -1 && idxSizes !== undefined && product.value.masterVariant.attributes) {
+      sizeValues = product.value.masterVariant.attributes[idxSizes].value.map((elem: { key: string; label: string }) => elem.label);
+    }
+
     const result = {
       id: product.value.id,
       name: product.value.name[appState.getState.language],
@@ -61,9 +68,9 @@ export const useProductStore = defineStore('product_store', () => {
         price: findPriceData?.price,
         currency: findPriceData?.currency
       },
-      discount: discount
+      discount: discount,
+      sizes: sizeValues
     };
-
     return result;
   });
 
@@ -86,6 +93,11 @@ export const useProductStore = defineStore('product_store', () => {
           }
           return null;
         });
+        let sizeValues = [];
+        const idxSizes = product.masterVariant?.attributes?.findIndex((el) => el.name === 'size');
+        if (idxSizes !== -1 && idxSizes !== undefined && product.masterVariant.attributes) {
+          sizeValues = product.masterVariant.attributes[idxSizes].value.map((elem: string) => elem.label);
+        }
         let symbolCurrency = '$';
         let price = '';
         let discount = '';
@@ -105,7 +117,8 @@ export const useProductStore = defineStore('product_store', () => {
           description,
           urlImage,
           price,
-          discount
+          discount,
+          sizeValues
         };
       });
     }
