@@ -81,7 +81,6 @@ const selectedCurrency = ref(appStore.getCurrentCurrency);
 .header__wrapper {
   max-width: 1400px;
   margin: 0 auto;
-  //padding: 0 40px;
 }
 
 .login__button-text {
