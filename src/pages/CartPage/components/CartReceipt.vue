@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import MyAccordion from '@shared/ui-kit/Accordion/MyAccordion.vue';
 import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 
-interface ReceiptData {
-  total: string;
-  price: string;
-  discount: string;
-  delivery: string;
-}
+type PropsType = {
+  totalPriceWithoutDiscount: number;
+  totalPrice: number;
+  totalCount: number;
+};
 
-const props = defineProps<{ data: ReceiptData }>();
+const props = withDefaults(defineProps<PropsType>(), {
+  totalPriceWithoutDiscount: 0,
+  totalPrice: 0,
+  totalCount: 0
+});
+
+const getDiscount = computed(() => (props.totalPriceWithoutDiscount - props.totalPrice).toFixed(2));
+
 const emit = defineEmits(['inputPromo']);
 const promo = ref('');
 const inputPromo = () => {
@@ -26,15 +32,15 @@ const inputPromo = () => {
     <div class="main-block">
       <div class="price-block block">
         <span>Order amount</span>
-        <span>{{ props.data.price }}</span>
+        <span>{{ props.totalPriceWithoutDiscount }}</span>
       </div>
       <div class="discount-block block">
         <span>Your discount</span>
-        <span>{{ props.data.discount }}</span>
+        <span>{{ getDiscount }}</span>
       </div>
       <div class="delivery-block block">
-        <span>The cost of delivery</span>
-        <span>{{ props.data.delivery }}</span>
+        <span>Total count</span>
+        <span>{{ props.totalCount }}</span>
       </div>
       <div class="promo-block block">
         <MyAccordion
@@ -58,7 +64,7 @@ const inputPromo = () => {
       </div>
       <div class="total-block block font-bold">
         <span>Full price</span>
-        <span>{{ props.data.total }}</span>
+        <span>{{ props.totalPrice }}</span>
       </div>
     </div>
   </div>

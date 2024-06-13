@@ -29,7 +29,7 @@ export const useNotificationStore = defineStore('app', {
       const notification = {
         id: Date.now(),
         message,
-        type: 'error'
+        type: 'succes'
       };
 
       const timerId = setTimeout(() => {
