@@ -108,8 +108,8 @@ const openAddAddressWindow = () => {
 </script>
 
 <template>
-  <div class="profile-page">
-    <div class="wrapper">
+  <div class="profile-page wrapper">
+    <div class="profile-wrapper">
       <ToggleInput
         class="toggle-input"
         v-model="isEditMode"
@@ -233,7 +233,7 @@ const openAddAddressWindow = () => {
   min-height: 500px;
   background-color: white;
 }
-.wrapper {
+.profile-wrapper {
   background-color: #f3f2f2;
   width: 90%;
   height: 100%;
