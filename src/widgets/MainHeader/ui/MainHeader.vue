@@ -20,7 +20,7 @@ const selectedCurrency = ref(appStore.getCurrentCurrency);
 
 <template>
   <div class="header-bg">
-    <header class="header__wrapper flex min-h-20 w-full flex-col justify-center px-4 md:px-10">
+    <header class="wrapper flex min-h-20 w-full flex-col justify-center px-4 py-2 md:px-10">
       <div class="flex justify-between gap-4">
         <div class="mlg:w-4/5 flex w-1/2 flex-col gap-4 lg:flex-row lg:items-center lg:gap-8">
           <router-link to="/"><div class="text-base font-bold lg:text-xl">Shop Name</div></router-link>
@@ -76,11 +76,6 @@ const selectedCurrency = ref(appStore.getCurrentCurrency);
 <style scoped lang="scss">
 .header-bg {
   background: rgb(240, 240, 240);
-}
-
-.header__wrapper {
-  max-width: 1400px;
-  margin: 0 auto;
 }
 
 .login__button-text {
