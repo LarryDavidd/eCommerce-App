@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import type { Cart } from '@commercetools/platform-sdk';
+import type { Cart, DiscountCodeReference } from '@commercetools/platform-sdk';
 import CartApi from '../api/fetchCart';
 import { useLocalStorage } from '@/shared/lib/composables/useLocalStorage';
 import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
@@ -85,6 +85,38 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
     });
   });
 
+  const getTotalPrice = computed(() => {
+    if (!data.value) return;
+
+    return data.value.totalPrice.centAmount / 100;
+  });
+
+  const getTotalCount = computed(() => {
+    if (!data.value) return;
+
+    return data.value.totalLineItemQuantity;
+  });
+
+  const getTotalPriceWithotDiscount = computed(() => {
+    if (!data.value) return;
+
+    return data.value.lineItems.reduce((accum, lineItem) => (accum += lineItem.price.value.centAmount), 0) / 100;
+  });
+
+  const getDiscountOnTotalPrice = computed(() => {
+    if (!data.value) return;
+    if (!data.value.discountOnTotalPrice) return;
+
+    return data.value.discountOnTotalPrice.discountedAmount.centAmount / 100;
+  });
+
+  const getDiscountCodes = computed(() => {
+    if (!data.value) return;
+    if (!data.value.discountCodes) return;
+
+    return data.value.discountCodes;
+  });
+
   // Actions
   const requestCreateCart = async () => {
     const refresh_token = ls.load('refresh_token');
@@ -113,7 +145,6 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
       requestCreateCart();
     } else {
       data.value = cart;
-      console.log(cart, data.value);
     }
 
     isLoading.value = false;
@@ -172,6 +203,38 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
     return res;
   };
 
+  const requestAddDiscountCode = async (promoCode: string) => {
+    isLoading.value = true;
+
+    const res = await cartApi.addDiscountCode(data.value?.id, data.value?.version, promoCode);
+
+    if (res instanceof Error) {
+      alert.addErrorNotification('Something went wrong, please try again!');
+    } else {
+      alert.addSuccesNotification('Promo code added succesful');
+      data.value = res;
+    }
+
+    isLoading.value = false;
+    return res;
+  };
+
+  const requestRemoveDiscountCode = async (discountCode: DiscountCodeReference) => {
+    isLoading.value = true;
+
+    const res = await cartApi.removeDiscountCode(data.value?.id, data.value?.version, discountCode);
+
+    if (res instanceof Error) {
+      alert.addErrorNotification('Something went wrong, please try again!');
+    } else {
+      alert.addSuccesNotification('Promo code removed succesful');
+      data.value = res;
+    }
+
+    isLoading.value = false;
+    return res;
+  };
+
   // watcher
   watch([() => customerStore.getIsLogedin, () => customerStore.getIsExist], () => {
     if (customerStore.getIsExist) requestGetCart();
@@ -183,10 +246,17 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
     requestAddProductToCart,
     requestRemoveProductFromCart,
     requestChangeProductQuantity,
+    requestAddDiscountCode,
+    requestRemoveDiscountCode,
     getLineItems,
     getData,
     IsLoading,
     getInProcess,
-    getDataCount
+    getDataCount,
+    getTotalPrice,
+    getTotalCount,
+    getTotalPriceWithotDiscount,
+    getDiscountOnTotalPrice,
+    getDiscountCodes
   };
 });

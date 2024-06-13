@@ -1,11 +1,17 @@
 <script setup lang="ts">
+import { type DiscountCodeInfo, type DiscountCodeReference } from '@commercetools/platform-sdk';
 import CrossButton from '@shared/ui-kit/Buttons/CrossButton/CrossButton.vue';
 
-defineProps<{
-  promoCodes: string[];
-}>();
+type PropsType = {
+  discountCodes?: DiscountCodeInfo[];
+};
+
+const props = withDefaults(defineProps<PropsType>(), {
+  discountCodes: () => []
+});
+
 const emit = defineEmits(['deletePromo']);
-const deletePromo = (promo: string) => {
+const deletePromo = (promo: DiscountCodeReference) => {
   emit('deletePromo', promo);
 };
 </script>
@@ -13,16 +19,16 @@ const deletePromo = (promo: string) => {
 <template>
   <div class="promo-list">
     <p class="text-center font-medium">Your promo codes</p>
-    <ul v-if="promoCodes.length > 0">
+    <ul v-if="props.discountCodes.length > 0">
       <li
         class="text-base-100 promo-item"
-        v-for="promo in promoCodes"
-        :key="promo"
+        v-for="promo in discountCodes"
+        :key="promo.discountCode.id"
       >
-        {{ promo }}
+        {{ promo.discountCode.typeId }}
         <CrossButton
           class="delete-promo cursor-pointer"
-          @click="deletePromo(promo)"
+          @click="deletePromo(promo.discountCode)"
         />
       </li>
     </ul>

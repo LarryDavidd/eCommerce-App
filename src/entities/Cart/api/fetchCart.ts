@@ -1,3 +1,4 @@
+import type { DiscountCode, DiscountCodeReference } from '@commercetools/platform-sdk';
 import Client from '@shared/api/client/Client';
 
 class CartApi {
@@ -72,6 +73,48 @@ class CartApi {
         body: {
           version: cartVersion,
           actions: [{ action: 'changeLineItemQuantity', lineItemId, quantity }]
+        }
+      })
+      .execute()
+      .then((data) => data.body)
+      .catch((err) => err);
+  }
+
+  public async addDiscountCode(cartId: string, cartVersion: number, promoCode: string) {
+    const client = Client.getInstance().anonymousClient;
+
+    return await client
+      .me()
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        queryArgs: {
+          expand: ['cartDiscounts[*]']
+        },
+        body: {
+          version: cartVersion,
+          actions: [{ action: 'addDiscountCode', code: promoCode }]
+        }
+      })
+      .execute()
+      .then((data) => data.body)
+      .catch((err) => err);
+  }
+
+  public async removeDiscountCode(cartId: string, cartVersion: number, discountCode: DiscountCodeReference) {
+    const client = Client.getInstance().anonymousClient;
+
+    return await client
+      .me()
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        queryArgs: {
+          expand: ['cartDiscounts[*]']
+        },
+        body: {
+          version: cartVersion,
+          actions: [{ action: 'removeDiscountCode', discountCode: discountCode }]
         }
       })
       .execute()

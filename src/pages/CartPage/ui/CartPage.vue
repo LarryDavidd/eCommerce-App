@@ -33,11 +33,13 @@
       </div>
       <div class="overview-block">
         <CartReceipt
-          :data="receiptData"
+          :total-price-without-discount="totalPriceWithoutDiscount"
+          :total-price="totalPrice"
+          :total-count="totalCount"
           @input-promo="inputPromo"
         />
         <PromoCodesList
-          :promo-codes="promoCodes"
+          :discount-codes="discountCodes"
           @delete-promo="deletePromo"
         />
       </div>
@@ -55,32 +57,36 @@ import PromoCodesList from '../components/PromoCodesList.vue';
 import EmptyCart from '../components/EmptyCart.vue';
 import useCartStore from '@/entities/Cart';
 import { computed } from 'vue';
+import { type DiscountCodeReference } from '@commercetools/platform-sdk';
 
 const cartStore = useCartStore();
 
 const lineItems = computed(() => cartStore.getLineItems);
 
-let receiptData = {
-  total: '800 $', //elem.total (typeof elem===Cart)
-  price: '1900 $',
-  discount: '1100 $', //elem.discountOnTotalPrice
-  delivery: '0 $'
-};
-let promoCodes: string[] = ['asasa', 'bsbbsb'];
+const totalPriceWithoutDiscount = computed(() => cartStore.getTotalPriceWithotDiscount);
+
+const totalPrice = computed(() => cartStore.getTotalPrice);
+
+const totalCount = computed(() => cartStore.getTotalPrice);
+
+const discountCodes = computed(() => cartStore.getDiscountCodes);
 
 // let arrayProduct = [];
 const deleteProduct = (id: number) => {
   cartStore.requestRemoveProductFromCart(String(id));
-  console.log('delete', id);
 };
+
 const changeCount = (count: number, id: number) => {
   cartStore.requestChangeProductQuantity(String(id), count);
-  console.log('change-count', count, id);
 };
+
 const inputPromo = (promo: string) => {
+  cartStore.requestAddDiscountCode(promo);
   console.log('input', promo);
 };
-const deletePromo = (promo: string) => {
+
+const deletePromo = (promo: DiscountCodeReference) => {
+  cartStore.requestRemoveDiscountCode(promo);
   console.log('DeletePromo', promo);
 };
 </script>
