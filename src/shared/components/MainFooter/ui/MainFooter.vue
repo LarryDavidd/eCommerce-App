@@ -62,7 +62,7 @@ const data = [
     </div>
     <div>
       <div class="bg-gray-300">
-        <div class="footer__wrapper px-4 md:px-10">
+        <div class="wrapper px-4 md:px-10">
           <div class="flex h-14 flex-col items-center justify-between md:flex-row">
             <p>© 2024 All rights reserved</p>
             <p>Privacy Policy</p>
