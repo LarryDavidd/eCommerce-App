@@ -1,25 +1,10 @@
 import { defineStore } from 'pinia';
 import ProductApi from '../api/fetchProduct';
-import { computed, ref, watch, watchEffect } from 'vue';
-import type { Price, ProductProjection, ProductProjectionPagedQueryResponse, ProductProjectionPagedSearchResponse } from '@commercetools/platform-sdk';
+import { computed, ref, watch } from 'vue';
+import type { ProductProjection, ProductProjectionPagedSearchResponse } from '@commercetools/platform-sdk';
 import { useAppState } from '@shared/Store/AppStore';
 import { useFilterStore } from './filterStore';
-import type { Attribute } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/product';
-
-const findPriceInCurrency = (prices?: Price[], currencyCode?: string) => {
-  if (prices === undefined || currencyCode === undefined) return;
-
-  const find = prices.find((price) => price.value.currencyCode === currencyCode);
-
-  if (find === undefined) return;
-
-  let symbolCurrency = '$';
-  if (find.value.currencyCode === 'RUB') symbolCurrency = 'P';
-  if (find.value.currencyCode === 'EUR') symbolCurrency = 'Э';
-  const resultPrice = ` ${find.value.centAmount / 100}`;
-
-  return { price: resultPrice, currency: symbolCurrency };
-};
+import findPriceInCurrency from '../lib/priceInCurrency';
 
 export const useProductStore = defineStore('product_store', () => {
   const appState = useAppState();
@@ -36,28 +21,33 @@ export const useProductStore = defineStore('product_store', () => {
   );
 
   // Getters
-  const GetData = computed(() => data.value);
-
-  const Product = computed(() => product.value);
-
   const GetProduct = computed(() => {
     if (product.value === null) return null;
-    let discount = '';
+
     const findPriceData = findPriceInCurrency(product.value.masterVariant.prices, appState.getState.currencyCode);
+
+    let discount = '';
+
     const discountObj = product.value.masterVariant.prices?.find((_price) => {
       if (_price.discounted?.value.currencyCode === appState.getState.currencyCode && _price.value.centAmount !== _price.discounted?.value.centAmount) {
         return _price.discounted.value;
       }
       return null;
     });
+
     if (discountObj) {
       if (discountObj?.discounted?.value?.centAmount) discount = `${discountObj?.discounted?.value?.centAmount / 100} ${findPriceData?.currency}`;
     }
+
     let sizeValues: string[] = [];
+
     const idxSizes = product.value.masterVariant.attributes?.findIndex((el) => el.name === 'size');
+
     if (idxSizes !== -1 && idxSizes !== undefined && product.value.masterVariant.attributes) {
       sizeValues = product.value.masterVariant.attributes[idxSizes].value.map((elem: { key: string; label: string }) => elem.label);
     }
+
+    const variants = product.value.variants;
 
     const result = {
       id: product.value.id,
@@ -69,7 +59,8 @@ export const useProductStore = defineStore('product_store', () => {
         currency: findPriceData?.currency
       },
       discount: discount,
-      sizes: sizeValues
+      sizes: sizeValues,
+      variants
     };
     return result;
   });
@@ -98,6 +89,9 @@ export const useProductStore = defineStore('product_store', () => {
         if (idxSizes !== -1 && idxSizes !== undefined && product.masterVariant.attributes) {
           sizeValues = product.masterVariant.attributes[idxSizes].value.map((elem: string) => elem.label);
         }
+
+        const variants = product.variants;
+
         let symbolCurrency = '$';
         let price = '';
         let discount = '';
@@ -118,7 +112,8 @@ export const useProductStore = defineStore('product_store', () => {
           urlImage,
           price,
           discount,
-          sizeValues
+          sizeValues,
+          variants
         };
       });
     }

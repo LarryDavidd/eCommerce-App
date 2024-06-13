@@ -4,7 +4,8 @@ import type { Cart } from '@commercetools/platform-sdk';
 import CartApi from '../api/fetchCart';
 import { useLocalStorage } from '@/shared/lib/composables/useLocalStorage';
 import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
-import CostumerApi from '@/entities/Costumer/api/costumerApi';
+import { useNotificationStore } from '@/shared/Store/AlertMessageStore';
+import { useAppState } from '@/shared/Store/AppStore';
 
 const NAME_SPACE = 'CartStore';
 
@@ -12,7 +13,11 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
   // State
   const cartApi = new CartApi();
 
+  const appState = useAppState();
   const customerStore = useCostumerStore();
+  const alert = useNotificationStore();
+  const ls = useLocalStorage();
+
   const data = ref<Cart | null>(null);
   const isLoading = ref<boolean>(false);
   const inProcess = ref<Set<string>>(new Set());
@@ -26,17 +31,73 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
 
   const getDataCount = computed(() => data.value?.lineItems.length);
 
+  const getLineItems = computed(() => {
+    if (!data.value?.lineItems && !data.value) return;
+
+    return data.value?.lineItems.map((lineItem) => {
+      const productId = lineItem.productId;
+      const lineItemId = lineItem.id;
+      const quantity = lineItem.quantity;
+      const name = lineItem.name[appState.getState.language];
+      const urlImages = lineItem.variant.images?.map((image) => image.url) ?? [];
+
+      const discountObj = lineItem.variant.prices?.find((_price) => {
+        if (_price.discounted?.value.currencyCode === appState.getState.currencyCode && _price.value.centAmount !== _price.discounted?.value.centAmount) {
+          return _price.discounted.value;
+        }
+        return null;
+      });
+      const findCurrencyPrice = lineItem.variant.prices?.find((_price) => {
+        if (_price.value.currencyCode === appState.getState.currencyCode) {
+          return _price.value;
+        }
+        return null;
+      });
+      let sizeValues = [];
+      const idxSizes = lineItem.variant?.attributes?.findIndex((el) => el.name === 'size');
+      if (idxSizes !== -1 && idxSizes !== undefined && lineItem.variant.attributes) {
+        sizeValues = lineItem.variant.attributes[idxSizes].value.map((elem: string) => elem.label);
+      }
+
+      let symbolCurrency = '$';
+      let price = '';
+      let discount = '';
+      if (findCurrencyPrice) {
+        if (findCurrencyPrice.value.currencyCode === 'RUB') symbolCurrency = 'P';
+        if (findCurrencyPrice.value.currencyCode === 'EUR') symbolCurrency = 'Э';
+        price = `${symbolCurrency} ${findCurrencyPrice.value.centAmount / 100}`;
+      }
+      if (discountObj) {
+        if (discountObj?.discounted?.value.currencyCode === 'RUB') symbolCurrency = 'P';
+        if (discountObj?.discounted?.value.currencyCode === 'EUR') symbolCurrency = 'Э';
+        if (discountObj?.discounted?.value?.centAmount) discount = `${symbolCurrency} ${discountObj?.discounted?.value?.centAmount / 100}`;
+      }
+      return {
+        lineItemId,
+        productId,
+        name,
+        price,
+        quantity,
+        urlImages,
+        discount,
+        sizeValues
+      };
+    });
+  });
+
   // Actions
   const requestCreateCart = async () => {
-    const ls = useLocalStorage();
     const refresh_token = ls.load('refresh_token');
 
     isLoading.value = true;
     const cart = await cartApi.createCartForCustomer(String(refresh_token));
 
-    if (cart instanceof Error) return;
+    if (cart instanceof Error) {
+      alert.addErrorNotification('Please reload page!');
+    } else {
+      data.value = cart;
+    }
 
-    data.value = cart;
     isLoading.value = false;
     return cart;
   };
@@ -48,8 +109,12 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
     isLoading.value = true;
     const cart = await cartApi.getCart(String(refresh_token));
 
-    if (cart.statusCode === 404) requestCreateCart();
-    else data.value = cart;
+    if (cart.statusCode === 404) {
+      requestCreateCart();
+    } else {
+      data.value = cart;
+      console.log(cart, data.value);
+    }
 
     isLoading.value = false;
     return cart;
@@ -60,9 +125,13 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
     inProcess.value.add(productId);
     const res = await cartApi.addProductToCart(data.value?.id, data.value?.version, productId);
 
-    if (res instanceof Error) console.log(res);
+    if (res instanceof Error) {
+      alert.addErrorNotification('Something went wrong, please try again!');
+    } else {
+      alert.addSuccesNotification('Product added successful!');
+      data.value = res;
+    }
 
-    data.value = res;
     inProcess.value.delete(productId);
     isLoading.value = false;
     return res;
@@ -74,22 +143,50 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
     const lineItem = data.value?.lineItems.find((lineItem) => lineItem.productId === productId);
     const res = await cartApi.removeProductFromCart(data.value?.id, data.value?.version, lineItem?.id);
 
-    if (res instanceof Error) console.log(res);
+    if (res instanceof Error) {
+      alert.addErrorNotification('Something went wrong, please try again!');
+    } else {
+      alert.addSuccesNotification('Product removed successful!');
+      data.value = res;
+    }
 
-    data.value = res;
+    inProcess.value.delete(productId);
+    isLoading.value = false;
+    return res;
+  };
+
+  const requestChangeProductQuantity = async (productId: string, quantity: number) => {
+    isLoading.value = true;
+    inProcess.value.add(productId);
+    const lineItem = data.value?.lineItems.find((lineItem) => lineItem.productId === productId);
+    const res = await cartApi.changeProductQuantity(data.value?.id, data.value?.version, lineItem?.id, quantity);
+
+    if (res instanceof Error) {
+      alert.addErrorNotification('Something went wrong, please try again!');
+    } else {
+      data.value = res;
+    }
+
     inProcess.value.delete(productId);
     isLoading.value = false;
     return res;
   };
 
   // watcher
-  watch(
-    () => customerStore.getIsLogedin,
-    () => customerStore.getIsExist,
-    () => {
-      if (customerStore.getIsExist) requestGetCart();
-    }
-  );
+  watch([() => customerStore.getIsLogedin, () => customerStore.getIsExist], () => {
+    if (customerStore.getIsExist) requestGetCart();
+  });
 
-  return { requestGetCart, requestCreateCart, requestAddProductToCart, requestRemoveProductFromCart, getData, IsLoading, getInProcess, getDataCount };
+  return {
+    requestGetCart,
+    requestCreateCart,
+    requestAddProductToCart,
+    requestRemoveProductFromCart,
+    requestChangeProductQuantity,
+    getLineItems,
+    getData,
+    IsLoading,
+    getInProcess,
+    getDataCount
+  };
 });
