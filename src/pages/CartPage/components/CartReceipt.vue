@@ -6,17 +6,19 @@ import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 
 type PropsType = {
   totalPriceWithoutDiscount: number;
+  discountOnTotalPrice: number;
   totalPrice: number;
   totalCount: number;
 };
 
 const props = withDefaults(defineProps<PropsType>(), {
   totalPriceWithoutDiscount: 0,
+  discountOnTotalPrice: 0,
   totalPrice: 0,
   totalCount: 0
 });
 
-const getDiscount = computed(() => (props.totalPriceWithoutDiscount - props.totalPrice).toFixed(2));
+const getDiscount = computed(() => (props.totalPriceWithoutDiscount - props.totalPrice - props.discountOnTotalPrice).toFixed(2));
 
 const emit = defineEmits(['inputPromo']);
 const promo = ref('');
@@ -36,6 +38,10 @@ const inputPromo = () => {
       </div>
       <div class="discount-block block">
         <span>Your discount</span>
+        <span>{{ props.discountOnTotalPrice }}</span>
+      </div>
+      <div class="discount-block block">
+        <span>Product discount</span>
         <span>{{ getDiscount }}</span>
       </div>
       <div class="delivery-block block">

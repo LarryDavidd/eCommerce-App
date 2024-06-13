@@ -36,6 +36,7 @@
           :total-price-without-discount="totalPriceWithoutDiscount"
           :total-price="totalPrice"
           :total-count="totalCount"
+          :discount-on-total-price="discountOnTotalPrice"
           @input-promo="inputPromo"
         />
         <PromoCodesList
@@ -59,19 +60,23 @@ import useCartStore from '@/entities/Cart';
 import { computed } from 'vue';
 import { type DiscountCodeReference } from '@commercetools/platform-sdk';
 
+// state
 const cartStore = useCartStore();
 
+// computed
 const lineItems = computed(() => cartStore.getLineItems);
 
 const totalPriceWithoutDiscount = computed(() => cartStore.getTotalPriceWithotDiscount);
 
 const totalPrice = computed(() => cartStore.getTotalPrice);
 
-const totalCount = computed(() => cartStore.getTotalPrice);
+const totalCount = computed(() => cartStore.getTotalCount);
 
 const discountCodes = computed(() => cartStore.getDiscountCodes);
 
-// let arrayProduct = [];
+const discountOnTotalPrice = computed(() => cartStore.getDiscountOnTotalPrice);
+
+// methods
 const deleteProduct = (id: number) => {
   cartStore.requestRemoveProductFromCart(String(id));
 };
@@ -82,12 +87,10 @@ const changeCount = (count: number, id: number) => {
 
 const inputPromo = (promo: string) => {
   cartStore.requestAddDiscountCode(promo);
-  console.log('input', promo);
 };
 
 const deletePromo = (promo: DiscountCodeReference) => {
   cartStore.requestRemoveDiscountCode(promo);
-  console.log('DeletePromo', promo);
 };
 </script>
 <style lang="scss" scoped>
