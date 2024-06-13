@@ -100,7 +100,7 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
   const getTotalPriceWithotDiscount = computed(() => {
     if (!data.value) return;
 
-    return data.value.lineItems.reduce((accum, lineItem) => (accum += lineItem.price.value.centAmount), 0) / 100;
+    return data.value.lineItems.reduce((accum, lineItem) => (accum += lineItem.price.value.centAmount * lineItem.quantity), 0) / 100;
   });
 
   const getDiscountOnTotalPrice = computed(() => {
