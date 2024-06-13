@@ -47,7 +47,7 @@ const data = [
 <template>
   <footer>
     <div class="footer-bg">
-      <div class="footer__wrapper px-4 md:px-10">
+      <div class="wrapper px-4 md:px-10">
         <div class="footer-top py-4 md:py-20">
           <div class="flex flex-col items-center md:flex-row md:items-start md:justify-between md:gap-10">
             <FooterColumn
@@ -76,9 +76,5 @@ const data = [
 <style scoped lang="scss">
 .footer-bg {
   background: rgb(240, 240, 240);
-}
-.footer__wrapper {
-  max-width: 1400px;
-  margin: 0 auto;
 }
 </style>

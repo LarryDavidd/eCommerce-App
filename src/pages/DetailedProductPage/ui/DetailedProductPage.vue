@@ -52,7 +52,7 @@ const handleHide = () => {
 
 <template>
   <template v-if="!productStore.isLoading">
-    <div class="mx-6 flex flex-col items-center gap-0 sm:flex-row sm:items-start sm:justify-center sm:gap-16 md:mx-20">
+    <div class="wrapper flex flex-col items-center gap-0 px-4 sm:flex-row sm:items-start sm:justify-center sm:gap-16 md:px-10">
       <div class="aspect-[3/4] w-4/5 py-4 sm:w-[35%]">
         <Splide
           :options="{ rewind: true }"
@@ -76,7 +76,7 @@ const handleHide = () => {
           @hide="handleHide"
         />
       </div>
-      <div class="flex w-full flex-col gap-8 py-4 sm:w-2/5">
+      <div class="flex w-full flex-col gap-8 py-4 sm:w-[50%]">
         <p class="text-3xl font-bold lg:text-4xl">{{ product?.name }}</p>
         <p
           class="text-3xl font-black text-[rgb(110,15,23)]"
@@ -112,11 +112,11 @@ const handleHide = () => {
             {{ size }}
           </div>
         </div>
-        <div class="flex w-full items-center gap-4">
+        <div class="flex w-full flex-wrap-reverse items-center gap-4">
           <MainButton
             name="ADD TO CART"
             :options="{ buttonStyle: 'dark-grey' }"
-            class="card-btn m-0 h-auto w-3/4 self-center p-1.5 sm:w-1/2"
+            class="card-btn m-0 h-auto self-center p-1.5 sm:w-1/2"
           />
           <LikeHeart
             width="60px"

@@ -91,7 +91,7 @@ const inputPromo = () => {
   text-align: center;
 }
 .receipt-wrapper {
-  min-width: 380px;
+  min-width: 340px;
   background-color: #f3f2f3;
   padding: 50px 20px;
   display: flex;

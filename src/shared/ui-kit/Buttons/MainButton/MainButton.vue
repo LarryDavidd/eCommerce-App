@@ -58,7 +58,7 @@ button {
   font-weight: 400;
   line-height: 22px;
 
-  width: 250px;
+  min-width: 250px;
   height: 40px;
 
   background: rgb(229, 229, 229);
@@ -70,7 +70,7 @@ button {
   line-height: 24px;
   text-transform: uppercase;
 
-  width: 300px;
+  min-width: 250px;
   height: 60px;
 
   background: rgb(82, 82, 82);
