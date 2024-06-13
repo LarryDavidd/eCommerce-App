@@ -13,11 +13,11 @@ router.beforeEach((to, from, next) => {
   const isLoggedIn = useCostumerStore().isLogined;
 
   if (requiresAuth && !isLoggedIn) {
-    next(from.path); // если роут требует авторизации и пользователь не авторизован, перенаправляем на страницу /home
+    next(from.path);
   } else if (requiresGuest && isLoggedIn) {
-    next(from.path); // если роут требует гостя и пользователь авторизован, перенаправляем на страницу /home
+    next(from.path);
   } else {
-    next(); // в остальных случаях разрешаем переход
+    next();
   }
 });
 

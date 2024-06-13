@@ -11,22 +11,21 @@
     </div>
     <div
       class="main-block"
-      v-if="arrayProduct.length > 0"
+      v-if="lineItems"
     >
       <div class="products-block">
         <div
           class="product-elem"
-          v-for="product in arrayProduct"
-          :key="product.productId"
+          v-for="lineItem in lineItems"
+          :key="lineItem.lineItemId"
         >
           <CartCard
-            :product-id="product.productId"
-            :size="product.size"
-            :price="product.price"
-            :count="product.count"
-            :name="product.name"
-            :url-imgs="product.urlImgs"
-            :discount="product.discount ? product.discount : null"
+            :product-id="lineItem.productId"
+            :price="lineItem.price"
+            :count="lineItem.quantity"
+            :name="lineItem.name"
+            :url-imgs="lineItem.urlImages"
+            :discount="lineItem.discount ? lineItem.discount : null"
             @delete-product="deleteProduct"
             @change-count="changeCount"
           />
@@ -50,20 +49,16 @@
 </template>
 <script setup lang="ts">
 import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
-import CartCard from '@entities/CartCard';
-import CartReceipt from '@entities/CartReceipt/ui/CartReceipt.vue';
-import PromoCodesList from '@entities/PromoCodesList/ui/PromoCodesList.vue';
-import EmptyCart from '@entities/EmptyCart/ui/EmptyCart.vue';
+import CartCard from '../components/CartCard.vue';
+import CartReceipt from '../components/CartReceipt.vue';
+import PromoCodesList from '../components/PromoCodesList.vue';
+import EmptyCart from '../components/EmptyCart.vue';
+import useCartStore from '@/entities/Cart';
+import { computed } from 'vue';
 
-type ProductElem = {
-  count: number; //quantity
-  productId: number; //
-  price: string; //price
-  name: string; //
-  discount?: string; //totalPrice
-  size: string; //variant.attributes.find((el)=>el.name==='size').value
-  urlImgs: string[]; //variant.images.map((el)=>el.url)
-};
+const cartStore = useCartStore();
+
+const lineItems = computed(() => cartStore.getLineItems);
 
 let receiptData = {
   total: '800 $', //elem.total (typeof elem===Cart)
@@ -72,58 +67,14 @@ let receiptData = {
   delivery: '0 $'
 };
 let promoCodes: string[] = ['asasa', 'bsbbsb'];
-let arrayProduct: ProductElem[] = [
-  {
-    name: 'Dress',
-    productId: 1,
-    size: 'xs',
-    price: '5050 $',
-    count: 2,
-    urlImgs: [
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/e1d/e1dcaddcc2b601226e2f1e420cf8b7e4/6d016c8434cefcb2bbc3b7913e60e20a.jpg',
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/6e5/6e57a17ad59a79572cc63c35c707dcb3/688371b85619f5f1a709d34364bc5451.jpg',
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/14d/14d7785d8e2ba001584b50109bf3326a/7cce0a93fd1d9f74f69826d014c6c049.jpg',
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/c36/c36edba7dfad1f33b2cbbe8853ffaafd/59cc5dba5feec14859f3395a02ad4b1e.jpg',
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/9ec/9ecd300c6eb1960918e8efe4396967c3/b8beded126408d6f5e7a4e459832c23d.jpg'
-    ]
-  },
-  {
-    name: 'Trouses',
-    productId: 2,
-    size: 'L',
-    price: '1400 $',
-    count: 3,
-    urlImgs: [
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/e1d/e1dcaddcc2b601226e2f1e420cf8b7e4/6d016c8434cefcb2bbc3b7913e60e20a.jpg',
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/6e5/6e57a17ad59a79572cc63c35c707dcb3/688371b85619f5f1a709d34364bc5451.jpg',
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/14d/14d7785d8e2ba001584b50109bf3326a/7cce0a93fd1d9f74f69826d014c6c049.jpg',
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/c36/c36edba7dfad1f33b2cbbe8853ffaafd/59cc5dba5feec14859f3395a02ad4b1e.jpg',
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/9ec/9ecd300c6eb1960918e8efe4396967c3/b8beded126408d6f5e7a4e459832c23d.jpg'
-    ],
-    discount: '680 $'
-  },
-  {
-    name: 'Coat',
-    productId: 3,
-    size: 'M',
-    price: '8900 $',
-    count: 1,
-    urlImgs: [
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/e1d/e1dcaddcc2b601226e2f1e420cf8b7e4/6d016c8434cefcb2bbc3b7913e60e20a.jpg',
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/6e5/6e57a17ad59a79572cc63c35c707dcb3/688371b85619f5f1a709d34364bc5451.jpg',
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/14d/14d7785d8e2ba001584b50109bf3326a/7cce0a93fd1d9f74f69826d014c6c049.jpg',
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/c36/c36edba7dfad1f33b2cbbe8853ffaafd/59cc5dba5feec14859f3395a02ad4b1e.jpg',
-      'https://e930f744-2554-4589-81f4-fda27b4a4a59.selcdn.net/iblock/9ec/9ecd300c6eb1960918e8efe4396967c3/b8beded126408d6f5e7a4e459832c23d.jpg'
-    ],
-    discount: '890 $'
-  }
-];
 
 // let arrayProduct = [];
 const deleteProduct = (id: number) => {
+  cartStore.requestRemoveProductFromCart(String(id));
   console.log('delete', id);
 };
 const changeCount = (count: number, id: number) => {
+  cartStore.requestChangeProductQuantity(String(id), count);
   console.log('change-count', count, id);
 };
 const inputPromo = (promo: string) => {

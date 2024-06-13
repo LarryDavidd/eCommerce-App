@@ -60,6 +60,24 @@ class CartApi {
       .then((data) => data.body)
       .catch((err) => err);
   }
+
+  public async changeProductQuantity(cartId: string, cartVersion: number, lineItemId: string, quantity: number) {
+    const client = Client.getInstance().anonymousClient;
+
+    return await client
+      .me()
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion,
+          actions: [{ action: 'changeLineItemQuantity', lineItemId, quantity }]
+        }
+      })
+      .execute()
+      .then((data) => data.body)
+      .catch((err) => err);
+  }
 }
 
 export default CartApi;
