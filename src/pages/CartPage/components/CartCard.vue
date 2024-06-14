@@ -7,6 +7,7 @@ import MyCounter from '@shared/ui-kit/MyCounter/MyCounter.vue';
 import CrossButton from '@shared/ui-kit/Buttons/CrossButton/CrossButton.vue';
 
 type PropsType = {
+  isInProcess: boolean;
   count: number;
   productId: string;
   price: string;
@@ -76,6 +77,7 @@ const changeCount = (newCount: number) => {
         <div class="data-block">
           <span class="data-title">Count:</span>
           <MyCounter
+            :is-in-process="props.isInProcess"
             :count="props.count"
             @update:model-value="changeCount"
           />

@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper">
-    <div class="header-block">
+    <div class="header-block flex flex-col flex-wrap text-nowrap md:flex-row">
       <div class="header-title">Cart</div>
       <MainButton
         name="Continue shopping"
@@ -8,10 +8,16 @@
         :options="{ buttonStyle: 'light-grey--border-bold' }"
         @click="$router.push('/catalog')"
       />
+      <MainButton
+        name="Clear Cart"
+        class="continue"
+        :options="{ buttonStyle: 'light-grey--border-bold' }"
+        @click="clearCart"
+      />
     </div>
     <div
       class="main-block"
-      v-if="lineItems"
+      v-if="lineItems.length > 0"
     >
       <div class="products-block">
         <div
@@ -20,6 +26,7 @@
           :key="lineItem.lineItemId"
         >
           <CartCard
+            :is-in-process="inProcessProducts.has(lineItem.productId)"
             :product-id="lineItem.productId"
             :price="lineItem.price"
             :count="lineItem.quantity"
@@ -64,7 +71,9 @@ import { type DiscountCodeReference } from '@commercetools/platform-sdk';
 const cartStore = useCartStore();
 
 // computed
-const lineItems = computed(() => cartStore.getLineItems);
+const inProcessProducts = computed(() => cartStore.getInProcess);
+
+const lineItems = computed(() => cartStore.getLineItems ?? []);
 
 const totalPriceWithoutDiscount = computed(() => cartStore.getTotalPriceWithotDiscount);
 
@@ -91,6 +100,10 @@ const inputPromo = (promo: string) => {
 
 const deletePromo = (promo: DiscountCodeReference) => {
   cartStore.requestRemoveDiscountCode(promo);
+};
+
+const clearCart = () => {
+  cartStore.requestClearCart();
 };
 </script>
 <style lang="scss" scoped>
@@ -122,7 +135,6 @@ const deletePromo = (promo: DiscountCodeReference) => {
   border-bottom: 2px solid #d8d7d7;
   padding: 22px 80px;
   align-items: center;
-  display: flex;
   gap: 20px;
 }
 
