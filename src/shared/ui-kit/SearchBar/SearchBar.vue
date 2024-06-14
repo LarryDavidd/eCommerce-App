@@ -45,6 +45,7 @@ const onInput = (event: InputEvent) => {
 .search-bar__container {
   background: rgb(211, 211, 211);
   border-radius: 5px;
+  height: fit-content;
 }
 
 .search-bar__magnifier {

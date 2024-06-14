@@ -46,27 +46,35 @@ const data = [
 
 <template>
   <footer>
-    <div class="footer-top py-4 md:py-20">
-      <div class="mx-20 flex flex-col items-center md:flex-row md:items-start md:justify-between md:gap-10">
-        <FooterColumn
-          v-for="(column, index) in data"
-          :key="index"
-          :name="column.title"
-          :links="column.links"
-        />
+    <div class="footer-bg">
+      <div class="wrapper px-4 md:px-10">
+        <div class="footer-top py-4 md:py-20">
+          <div class="flex flex-col items-center md:flex-row md:items-start md:justify-between md:gap-10">
+            <FooterColumn
+              v-for="(column, index) in data"
+              :key="index"
+              :name="column.title"
+              :links="column.links"
+            />
+          </div>
+        </div>
       </div>
     </div>
-    <div class="bg-gray-300">
-      <div class="mx-5 flex h-14 flex-col items-center justify-between md:mx-20 md:flex-row">
-        <p>© 2024 All rights reserved</p>
-        <p>Privacy Policy</p>
+    <div>
+      <div class="bg-gray-300">
+        <div class="wrapper px-4 md:px-10">
+          <div class="flex h-14 flex-col items-center justify-between md:flex-row">
+            <p>© 2024 All rights reserved</p>
+            <p>Privacy Policy</p>
+          </div>
+        </div>
       </div>
     </div>
   </footer>
 </template>
 
 <style scoped lang="scss">
-.footer-top {
+.footer-bg {
   background: rgb(240, 240, 240);
 }
 </style>

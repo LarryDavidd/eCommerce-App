@@ -18,55 +18,52 @@ const selectedCurrency = ref(appStore.getCurrentCurrency);
 </script>
 
 <template>
-  <header class="flex h-20 w-full flex-col justify-center">
-    <!--    lg:gap-32 убрать-->
-    <div class="header__wrapper mx-3 flex justify-between gap-4 md:mx-20 lg:gap-32">
-      <div class="flex w-1/2 flex-col gap-4 md:w-4/5 md:flex-row md:gap-8">
-        <router-link to="/"><div class="text-base font-bold lg:text-xl">Shop Name</div></router-link>
-        <SearchBar></SearchBar>
-      </div>
-
-      <div class="flex flex-col items-end gap-4 md:flex-row md:items-start">
-        <div class="flex gap-4 text-xs">
-          <CustomSelect
-            :options="['ru', 'en-US']"
-            v-model="selectedLang"
-            :icon="GlobeIcon"
-            title="Language"
-            @update:model-value="(lang) => appStore.changeLanguage(lang)"
-          />
-          <CustomSelect
-            :options="['RUB', 'USD', 'EUR']"
-            v-model="selectedCurrency"
-            :icon="CurrencyIcon"
-            title="Currency"
-            @update:model-value="(currency) => appStore.changeCurrencyCode(currency)"
-          />
+  <div class="header-bg">
+    <header class="wrapper flex min-h-20 w-full flex-col justify-center px-4 py-2 md:px-10">
+      <div class="flex justify-between gap-4">
+        <div class="mlg:w-4/5 flex w-1/2 flex-col gap-4 lg:flex-row lg:items-center lg:gap-8">
+          <router-link to="/"><div class="text-base font-bold lg:text-xl">Shop Name</div></router-link>
+          <SearchBar></SearchBar>
         </div>
 
-        <div class="flex gap-4">
-          <UserProfile />
+        <div class="flex flex-col items-end gap-4 lg:flex-row lg:items-center">
+          <div class="flex gap-4 text-xs">
+            <CustomSelect
+              :options="['ru', 'en-US']"
+              v-model="selectedLang"
+              :icon="GlobeIcon"
+              title="Language"
+              @update:model-value="(lang) => appStore.changeLanguage(lang)"
+            />
+            <CustomSelect
+              :options="['RUB', 'USD', 'EUR']"
+              v-model="selectedCurrency"
+              :icon="CurrencyIcon"
+              title="Currency"
+              @update:model-value="(currency) => appStore.changeCurrencyCode(currency)"
+            />
+          </div>
 
-          <router-link to="/cart">
-            <CartButtonCounter> </CartButtonCounter>
-          </router-link>
+          <div class="flex gap-4">
+            <UserProfile />
 
-          <router-link to="/catalog">
-            <CartIcon />
-          </router-link>
+            <router-link to="/cart">
+              <CartButtonCounter> </CartButtonCounter>
+            </router-link>
+
+            <router-link to="/catalog">
+              <CartIcon />
+            </router-link>
+          </div>
         </div>
       </div>
-    </div>
-  </header>
+    </header>
+  </div>
 </template>
 
 <style scoped lang="scss">
-header {
+.header-bg {
   background: rgb(240, 240, 240);
-}
-
-.header__wrapper {
-  border: 20px;
 }
 
 .login__button-text {

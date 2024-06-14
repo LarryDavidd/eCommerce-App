@@ -133,13 +133,13 @@ const clearCart = () => {
 .header-block {
   margin-bottom: 10px;
   border-bottom: 2px solid #d8d7d7;
-  padding: 22px 80px;
+  padding: 22px 40px;
   align-items: center;
   gap: 20px;
 }
 
 .main-block {
-  padding: 90px 80px 50px 80px;
+  padding: 90px 40px 50px;
   display: flex;
   justify-content: space-between;
   gap: 20px;
@@ -157,7 +157,7 @@ const clearCart = () => {
 }
 @media (max-width: 1200px) {
   .main-block {
-    padding: 90px 35px;
+    padding: 90px 40px;
     align-items: center;
     flex-direction: column;
     gap: 40px;
@@ -184,11 +184,11 @@ const clearCart = () => {
 
 @media (max-width: 550px) {
   .main-block {
-    padding: 40px 15px;
+    padding: 40px 16px;
   }
   .header-block {
     flex-direction: column;
-    padding: 22px 40px;
+    padding: 22px 16px;
   }
   .promo-list {
     min-width: 0;
