@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import type { Cart, DiscountCodeReference } from '@commercetools/platform-sdk';
+import type { Cart, DiscountCodeReference, MyCartUpdateAction } from '@commercetools/platform-sdk';
 import CartApi from '../api/fetchCart';
 import { useLocalStorage } from '@/shared/lib/composables/useLocalStorage';
 import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
@@ -235,6 +235,48 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
     return res;
   };
 
+  const requestClearCart = async () => {
+    isLoading.value = true;
+
+    const actions = getActionsForClearCart();
+
+    const res = await cartApi.updateCart(data.value?.id, data.value?.version, actions);
+
+    if (res instanceof Error) {
+      alert.addErrorNotification('Something went wrong, please try again!');
+    } else {
+      alert.addSuccesNotification('Cart cleared succesful');
+      data.value = res;
+    }
+
+    isLoading.value = false;
+    return res;
+  };
+
+  const getActionsForClearCart = () => {
+    let actions: MyCartUpdateAction[] = [];
+
+    if (data.value?.lineItems) {
+      actions = actions.concat(
+        data.value?.lineItems.map((lineItem) => ({
+          action: 'removeLineItem',
+          lineItemId: lineItem.id
+        }))
+      );
+    }
+
+    if (data.value?.discountCodes) {
+      actions = actions.concat(
+        data.value?.discountCodes?.map((discountCode) => ({
+          action: 'removeDiscountCode',
+          discountCode: discountCode.discountCode
+        }))
+      );
+    }
+
+    return actions;
+  };
+
   // watcher
   watch([() => customerStore.getIsLogedin, () => customerStore.getIsExist], () => {
     if (customerStore.getIsExist) requestGetCart();
@@ -248,6 +290,7 @@ export const useCartStore = defineStore(NAME_SPACE, () => {
     requestChangeProductQuantity,
     requestAddDiscountCode,
     requestRemoveDiscountCode,
+    requestClearCart,
     getLineItems,
     getData,
     IsLoading,

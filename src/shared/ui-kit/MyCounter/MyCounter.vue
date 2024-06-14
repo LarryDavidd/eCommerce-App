@@ -1,14 +1,25 @@
 <template>
   <div class="counter">
-    <button @click="decrement">-</button>
+    <button
+      @click="decrement"
+      :disabled="isInProcess"
+    >
+      -
+    </button>
     <span class="count">{{ props.count }}</span>
-    <button @click="increment">+</button>
+    <button
+      @click="increment"
+      :disabled="isInProcess"
+    >
+      +
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
 type PropsType = {
   count: number;
+  isInProcess: boolean;
 };
 
 const props = defineProps<PropsType>();
