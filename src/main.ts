@@ -7,6 +7,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import App from '@app/App.vue';
 import router from '@app/router';
 import { useCostumerStore } from './entities/Costumer/store/costumerStore';
+// import useCartStore from './entities/Cart';
 // import getClient from './auth/client/get-client';
 // import { useProductStore } from './entities/Product/store/productStore';
 // import { useCategoriesStore } from './entities/Categories/store/categoriesStore';
@@ -24,6 +25,14 @@ useCostumerStore()
 
     app.mount('#app');
   });
+
+// useCartStore()
+//   .requestCreateAnonCart({ currency: 'USD' })
+//   .then((cart) => console.log(cart));
+
+// useCartStore()
+//   .requestGetCart()
+//   .then((cart) => console.log(cart));
 
 // getClient().then((res) => console.log(res));
 

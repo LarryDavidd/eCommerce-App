@@ -1,34 +1,37 @@
 <template>
   <div class="counter">
-    <button @click="decrement">-</button>
-    <span class="count">{{ count }}</span>
-    <button @click="increment">+</button>
+    <button
+      @click="decrement"
+      :disabled="isInProcess"
+    >
+      -
+    </button>
+    <span class="count">{{ props.count }}</span>
+    <button
+      @click="increment"
+      :disabled="isInProcess"
+    >
+      +
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-const props = defineProps({
-  modelValue: {
-    type: Number,
-    default: 1
-  }
-});
+type PropsType = {
+  count: number;
+  isInProcess: boolean;
+};
 
-const count = ref(props.modelValue);
+const props = defineProps<PropsType>();
+
 const emit = defineEmits(['update:modelValue']);
 
 const increment = () => {
-  count.value++;
-  emit('update:modelValue', count.value);
+  emit('update:modelValue', props.count + 1);
 };
 
 const decrement = () => {
-  if (count.value <= 1) {
-    return;
-  }
-  count.value--;
-  emit('update:modelValue', count.value);
+  emit('update:modelValue', props.count - 1);
 };
 </script>
 

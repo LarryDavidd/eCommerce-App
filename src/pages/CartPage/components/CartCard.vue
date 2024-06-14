@@ -2,19 +2,17 @@
 import { ref } from 'vue';
 import '@splidejs/vue-splide/css';
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
-import '@splidejs/vue-splide/css';
 import VueEasyLightbox from 'vue-easy-lightbox';
-
 import MyCounter from '@shared/ui-kit/MyCounter/MyCounter.vue';
 import CrossButton from '@shared/ui-kit/Buttons/CrossButton/CrossButton.vue';
 
 type PropsType = {
+  isInProcess: boolean;
   count: number;
-  productId: number;
+  productId: string;
   price: string;
   name: string;
   discount: string | null;
-  size: string;
   urlImgs: string[];
 };
 
@@ -79,17 +77,10 @@ const changeCount = (newCount: number) => {
         <div class="data-block">
           <span class="data-title">Count:</span>
           <MyCounter
-            :model-value="props.count"
+            :is-in-process="props.isInProcess"
+            :count="props.count"
             @update:model-value="changeCount"
           />
-        </div>
-        <div class="data-block">
-          <span class="data-title">Article:</span>
-          <span>{{ props.productId }}</span>
-        </div>
-        <div class="data-block">
-          <span class="data-title">Size:</span>
-          <span>{{ props.size }}</span>
         </div>
       </div>
       <div class="price-wrapper">

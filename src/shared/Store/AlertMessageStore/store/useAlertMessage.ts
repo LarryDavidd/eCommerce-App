@@ -25,6 +25,40 @@ export const useNotificationStore = defineStore('app', {
       });
     },
 
+    addSuccesNotification(message: string) {
+      const notification = {
+        id: Date.now(),
+        message,
+        type: 'success'
+      };
+
+      const timerId = setTimeout(() => {
+        this.hideNotification(notification.id);
+      }, 3000);
+
+      this.notifications.push({
+        ...notification,
+        timerId
+      });
+    },
+
+    addErrorNotification(message: string) {
+      const notification = {
+        id: Date.now(),
+        message,
+        type: 'error'
+      };
+
+      const timerId = setTimeout(() => {
+        this.hideNotification(notification.id);
+      }, 3000);
+
+      this.notifications.push({
+        ...notification,
+        timerId
+      });
+    },
+
     hideNotification(id: number) {
       const index = this.notifications.findIndex((entry) => entry.id === id);
       if (index !== -1) {

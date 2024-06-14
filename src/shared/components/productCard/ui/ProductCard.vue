@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
 import ProductCardSwiper from '@shared/components/productCard/ui/ProductCardSwiper.vue';
-import { type Ref, ref } from 'vue';
+import { type Ref, ref, computed } from 'vue';
 import type { Image } from '@commercetools/platform-sdk';
+import { AddRemoveButton } from '@/shared/ui-kit/Buttons';
 
 const changeSize = (value: string) => {
   sizeSelected.value = value;
@@ -65,10 +65,9 @@ const shortDescription = props.descriptions.split('.').shift();
           </div>
         </div>
       </div>
-      <MainButton
-        name="ADD TO CART"
-        :options="{ buttonStyle: 'dark-grey' }"
-        class="card-btn"
+      <AddRemoveButton
+        classes="card-btn"
+        :id="props.id"
       />
     </div>
   </div>
