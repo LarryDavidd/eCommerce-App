@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { computed, type Ref, ref, watch, reactive } from 'vue';
-import ToggleInput from '@shared/ui-kit/Inputs/ToggleInput/ToggleInput.vue';
-import PersonalInfo from '@pages/UserProfilePage/components/PersonalInfo.vue';
-import { validateBirthDate, validateEmail, validateName } from '@shared/utils/validation';
-import { ValidateAddress, ValidatePersonal } from '@pages/UserProfilePage/model/useValidate';
-import AddressInfo from '@pages/UserProfilePage/components/AddressInfo.vue';
-import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
+import { computed, type Ref, ref, watch } from 'vue';
+import { type Address, ConvertDataForServer, useUserData } from '../model/useUserData';
+import { ValidateAddress, ValidatePersonal } from '../model/useValidate';
+import PersonalInfo from '../components/PersonalInfo.vue';
+import AddressInfo from '../components/AddressInfo.vue';
+import PasswordChangeModal from '../components/PasswordChangeModal.vue';
+import AddAddressModal from '../components/AddAddressModal.vue';
+import useProfileStore from '@entities/Profile';
+import { validateBirthDate, validateEmail, validateName } from '@shared/validation/validation';
 import ModalWrapper from '@shared/ui-kit/ModalWrapper/ModalWrapper.vue';
-import PasswordChangeModal from '@pages/UserProfilePage/components/PasswordChangeModal.vue';
-import { type Address, ConvertDataForServer, useUserData } from '@pages/UserProfilePage/model/useUserData';
-import AddAddressModal from '@pages/UserProfilePage/components/AddAddressModal.vue';
-import useProfileStore from '@/entities/Profile';
+import { ToggleInput } from '@shared/ui-kit/Inputs';
+import { MainButton } from '@shared/ui-kit/Buttons';
+
 export type PersonalErrors = {
   name: string[] | null;
   surname: string[] | null;
@@ -18,6 +19,7 @@ export type PersonalErrors = {
   password: string[] | null;
   dateOfBirth: string | null;
 };
+
 const isEditMode = ref(false);
 const passwordWindowIsOpen = ref(false);
 const addAddressWindowIsOpen = ref(false);

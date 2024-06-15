@@ -1,5 +1,3 @@
-import { type Ref, ref } from 'vue';
-
 export interface UserData {
   id: string;
   email: string;

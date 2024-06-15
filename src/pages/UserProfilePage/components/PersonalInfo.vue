@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { PersonalErrors } from '@pages/UserProfilePage/ui/UserProfilePage.vue';
-import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
-import DatePicker from '@shared/ui-kit/Inputs/DatePicker/DatePicker.vue';
 import { ref, watch } from 'vue';
-import type { Personal } from '@pages/UserProfilePage/model/useUserData';
+import type { PersonalErrors } from '../ui/UserProfilePage.vue';
+import type { Personal } from '../model/useUserData';
+import { SimpleInput } from '@shared/ui-kit/Inputs';
+import { DatePicker } from '@shared/ui-kit/Inputs';
 
 const props = defineProps({
   modelValue: {
