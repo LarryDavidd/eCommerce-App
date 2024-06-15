@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import FirstStep from '@pages/RegistrationPage/components/FirstStep/FirstStep.vue';
-import SecondStep from '@pages/RegistrationPage/components/SecondStep/SecondStep.vue';
-import ThirdStep from '@pages/RegistrationPage/components/ThirdStep/ThirdStep.vue';
-import ForthStep from '@pages/RegistrationPage/components/ForthStep/ForthStep.vue';
 import type { BaseAddress } from '@commercetools/platform-sdk';
-import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
-import router from '@/app/router';
+import router from '@app/router';
+import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
+import { FirstStep } from '../';
+import { SecondStep } from '../';
+import { ThirdStep } from '../';
+import { ForthStep } from '../';
 
 const costumerStore = useCostumerStore();
 

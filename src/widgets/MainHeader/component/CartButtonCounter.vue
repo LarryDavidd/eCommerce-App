@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import useCartStore from '@/entities/Cart';
-import ButtonIconCounter from '@/shared/ui-kit/Buttons/ButtonIconCounter/ButtonIconCounter.vue';
-import CartIcon from '@/shared/ui-kit/Icons/CartIcon.vue';
+import useCartStore from '@entities/Cart';
+import { ButtonIconCounter } from '@shared/ui-kit/Buttons';
+import CartIcon from '@shared/ui-kit/Icons/CartIcon.vue';
 import { computed } from 'vue';
 
 const cartStore = useCartStore();

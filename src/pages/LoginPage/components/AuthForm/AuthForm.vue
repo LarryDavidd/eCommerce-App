@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
 import { computed, ref } from 'vue';
+import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
+import { validatePassword, validateEmail } from '@shared/validation/validation';
+import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
 import OpenedEye from '@shared/ui-kit/Icons/OpenedEye.vue';
 import ClosedEye from '@shared/ui-kit/Icons/ClosedEye.vue';
-import { validateEmail } from '@shared/utils/validation';
-import { validatePassword } from '@shared/utils/validation';
-import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
-import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
-import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
+import { SimpleInput } from '@shared/ui-kit/Inputs';
+import { MainButton } from '@shared/ui-kit/Buttons';
 
 const costumerStore = useCostumerStore();
 

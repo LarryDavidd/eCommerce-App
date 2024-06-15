@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import useCartStore from '@entities/Cart';
 import { computed } from 'vue';
-import MainButton from '../MainButton/MainButton.vue';
+import { MainButton } from '../';
 
 const cartStore = useCartStore();
 

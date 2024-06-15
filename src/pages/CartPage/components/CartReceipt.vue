@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import MyAccordion from '@shared/ui-kit/Accordion/MyAccordion.vue';
-import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
+import { SimpleInput } from '@shared/ui-kit/Inputs';
 import { computed, ref } from 'vue';
-import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
+import { MainButton } from '@shared/ui-kit/Buttons';
 
 type PropsType = {
   totalPriceWithoutDiscount: number;

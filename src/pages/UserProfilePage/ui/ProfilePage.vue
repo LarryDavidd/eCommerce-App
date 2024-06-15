@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useProfileStore from '@/entities/Profile';
+import useProfileStore from '@entities/Profile';
 import UserProfilePage from './UserProfilePage.vue';
 
 const profileStore = useProfileStore();

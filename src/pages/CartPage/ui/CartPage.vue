@@ -1,12 +1,62 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+import { type DiscountCodeReference } from '@commercetools/platform-sdk';
+import router from '@app/router';
+import useCartStore from '@entities/Cart';
+import CartCard from '../components/CartCard.vue';
+import CartReceipt from '../components/CartReceipt.vue';
+import PromoCodesList from '../components/PromoCodesList.vue';
+import EmptyCart from '../components/EmptyCart.vue';
+import { MainButton } from '@shared/ui-kit/Buttons';
+
+// state
+const cartStore = useCartStore();
+
+// computed
+const inProcessProducts = computed(() => cartStore.getInProcess);
+
+const lineItems = computed(() => cartStore.getLineItems ?? []);
+
+const totalPriceWithoutDiscount = computed(() => cartStore.getTotalPriceWithotDiscount);
+
+const totalPrice = computed(() => cartStore.getTotalPrice);
+
+const totalCount = computed(() => cartStore.getTotalCount);
+
+const discountCodes = computed(() => cartStore.getDiscountCodes);
+
+const discountOnTotalPrice = computed(() => cartStore.getDiscountOnTotalPrice);
+
+// methods
+const deleteProduct = (id: number) => {
+  cartStore.requestRemoveProductFromCart(String(id));
+};
+
+const changeCount = (count: number, id: number) => {
+  cartStore.requestChangeProductQuantity(String(id), count);
+};
+
+const inputPromo = (promo: string) => {
+  cartStore.requestAddDiscountCode(promo);
+};
+
+const deletePromo = (promo: DiscountCodeReference) => {
+  cartStore.requestRemoveDiscountCode(promo);
+};
+
+const clearCart = () => {
+  cartStore.requestClearCart();
+};
+</script>
 <template>
-  <div class="page-wrapper">
+  <div class="wrapper">
     <div class="header-block flex flex-col flex-wrap text-nowrap md:flex-row">
       <div class="header-title">Cart</div>
       <MainButton
         name="Continue shopping"
         class="continue"
         :options="{ buttonStyle: 'light-grey--border-bold' }"
-        @click="$router.push('/catalog')"
+        @click="router.push('/catalog')"
       />
       <MainButton
         name="Clear Cart"
@@ -57,55 +107,6 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
-import CartCard from '../components/CartCard.vue';
-import CartReceipt from '../components/CartReceipt.vue';
-import PromoCodesList from '../components/PromoCodesList.vue';
-import EmptyCart from '../components/EmptyCart.vue';
-import useCartStore from '@/entities/Cart';
-import { computed } from 'vue';
-import { type DiscountCodeReference } from '@commercetools/platform-sdk';
-
-// state
-const cartStore = useCartStore();
-
-// computed
-const inProcessProducts = computed(() => cartStore.getInProcess);
-
-const lineItems = computed(() => cartStore.getLineItems ?? []);
-
-const totalPriceWithoutDiscount = computed(() => cartStore.getTotalPriceWithotDiscount);
-
-const totalPrice = computed(() => cartStore.getTotalPrice);
-
-const totalCount = computed(() => cartStore.getTotalCount);
-
-const discountCodes = computed(() => cartStore.getDiscountCodes);
-
-const discountOnTotalPrice = computed(() => cartStore.getDiscountOnTotalPrice);
-
-// methods
-const deleteProduct = (id: number) => {
-  cartStore.requestRemoveProductFromCart(String(id));
-};
-
-const changeCount = (count: number, id: number) => {
-  cartStore.requestChangeProductQuantity(String(id), count);
-};
-
-const inputPromo = (promo: string) => {
-  cartStore.requestAddDiscountCode(promo);
-};
-
-const deletePromo = (promo: DiscountCodeReference) => {
-  cartStore.requestRemoveDiscountCode(promo);
-};
-
-const clearCart = () => {
-  cartStore.requestClearCart();
-};
-</script>
 <style lang="scss" scoped>
 .products-block {
   width: 65%;

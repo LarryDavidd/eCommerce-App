@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type DiscountCodeInfo, type DiscountCodeReference } from '@commercetools/platform-sdk';
-import CrossButton from '@shared/ui-kit/Buttons/CrossButton/CrossButton.vue';
+import { CrossButton } from '@shared/ui-kit/Buttons';
 
 type PropsType = {
   discountCodes?: DiscountCodeInfo[];
@@ -11,6 +11,7 @@ const props = withDefaults(defineProps<PropsType>(), {
 });
 
 const emit = defineEmits(['deletePromo']);
+
 const deletePromo = (promo: DiscountCodeReference) => {
   emit('deletePromo', promo);
 };

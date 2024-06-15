@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
 import { computed, ref, toRefs, watch } from 'vue';
-import { validateName, validatePostalCode, validateStreet } from '@shared/utils/validation';
+import { validateName, validatePostalCode, validateStreet } from '@shared/validation/validation';
 import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
 import SelectInput from '@shared/ui-kit/Inputs/SelectInput/SelectInput.vue';
 import CheckBox from '@shared/ui-kit/Inputs/CheckBox/CheckBox.vue';
-import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
+import { MainButton } from '@shared/ui-kit/Buttons';
 import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
 
 const costumerStore = useCostumerStore();

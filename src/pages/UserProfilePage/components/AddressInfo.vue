@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { type Ref, ref, watch, reactive } from 'vue';
-import SelectInput from '@shared/ui-kit/Inputs/SelectInput/SelectInput.vue';
-import CheckBox from '@shared/ui-kit/Inputs/CheckBox/CheckBox.vue';
-import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
-import { ValidateAddress } from '@pages/UserProfilePage/model/useValidate';
-import type { Address } from '@pages/UserProfilePage/model/useUserData';
-import CheckBoxSimple from '@/shared/ui-kit/Inputs/CheckBoxSimple/CheckBoxSimple.vue';
+import { ValidateAddress } from '../model/useValidate';
+import type { Address } from '../model/useUserData';
+import { SelectInput } from '@shared/ui-kit/Inputs';
+import { CheckBox } from '@shared/ui-kit/Inputs';
+import { SimpleInput } from '@shared/ui-kit/Inputs';
 
 export type AddressErrors = {
   street: string[] | null;
