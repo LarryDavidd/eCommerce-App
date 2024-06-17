@@ -8,9 +8,12 @@
         </router-link>
       </div>
     </div>
+    <DiscountList />
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import DiscountList from '@pages/HomePage/components/DiscountList.vue';
+</script>
 
 <style lang="scss" scoped></style>
