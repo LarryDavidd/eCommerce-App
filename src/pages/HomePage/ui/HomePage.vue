@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper flex min-h-[600px] px-4 md:px-10">
+  <div class="wrapper min-h-[600px] px-4 md:px-10">
     <div class="content flex grow justify-between">
       <div>home page</div>
       <div class="flex gap-4">
