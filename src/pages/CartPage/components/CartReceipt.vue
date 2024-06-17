@@ -104,7 +104,8 @@ const inputPromo = () => {
 }
 .promo-button {
   height: auto;
-  width: auto;
+  width: fit-content;
+  min-width: 100px;
   padding: 0 10px;
   margin: 0;
   transition: all 0.2s ease;

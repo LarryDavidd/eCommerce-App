@@ -6,6 +6,7 @@ import { NotFoundPage } from '@pages/NotFoundPage';
 import { DetailedProductPage } from '@pages/DetailedProductPage';
 import { CatalogPage } from '@pages/CatalopPage';
 import { UserProfilePage } from '@pages/UserProfilePage';
+import AboutUsPage from '@pages/AboutUsPage';
 
 export const routes = [
   {
@@ -56,6 +57,11 @@ export const routes = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: '/about-us',
+    name: 'about-us',
+    component: AboutUsPage
   },
   {
     path: '/404',
