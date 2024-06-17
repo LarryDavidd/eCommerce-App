@@ -113,11 +113,10 @@ const handleHide = () => {
             {{ size }}
           </div>
         </div>
-        <div class="flex w-full flex-wrap-reverse items-center gap-4">
-          <MainButton
-            name="ADD TO CART"
-            :options="{ buttonStyle: 'dark-grey' }"
-            class="card-btn m-0 h-auto self-center p-1.5 sm:w-1/2"
+        <div class="flex w-full items-center gap-4">
+          <AddRemoveButton
+            classes="card-btn m-0 h-auto w-3/4 self-center p-1.5 sm:w-1/2"
+            :id="product?.id ?? '0'"
           />
           <LikeHeart
             width="60px"
