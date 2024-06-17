@@ -1,22 +1,22 @@
 <template>
-  <div class="home-page-container mx-6 flex md:mx-20">
+  <div class="home-page-container mx-6 md:mx-20">
     <div class="content flex grow justify-between">
       <div>home page</div>
-      <!-- <ProductCard></ProductCard> -->
-      <div class="flex gap-4">
-        <router-link to="/catalog">
-          <p class="underline hover:text-blue-500">catalog</p>
-        </router-link>
-      </div>
+      <router-link to="/catalog">
+        <p class="underline hover:text-blue-500">catalog</p>
+      </router-link>
     </div>
+    <DiscountList />
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import DiscountList from '@pages/HomePage/components/DiscountList.vue';
+</script>
 
 <style lang="scss" scoped>
 .home-page-container {
-  display: flex;
+  //display: flex;
   flex-direction: row;
   align-items: flex-start;
   min-height: 600px;
