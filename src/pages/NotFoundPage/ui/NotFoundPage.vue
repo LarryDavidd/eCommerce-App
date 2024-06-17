@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
+import { MainButton } from '@shared/ui-kit/Buttons';
 </script>
 
 <template>

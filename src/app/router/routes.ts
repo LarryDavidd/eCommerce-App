@@ -1,12 +1,10 @@
 import { HomePage } from '@pages/HomePage';
 import { RegistrationPage } from '@pages/RegistrationPage';
 import { LoginPage } from '@pages/LoginPage';
-import { FavoritesPage } from '@pages/FavoritesPage';
 import { CartPage } from '@pages/CartPage';
-
-import { NotFoundPage } from '@/pages/NotFoundPage';
+import { NotFoundPage } from '@pages/NotFoundPage';
 import { DetailedProductPage } from '@pages/DetailedProductPage';
-import CatalogPage from '@/pages/CatalopPage';
+import { CatalogPage } from '@pages/CatalopPage';
 import { UserProfilePage } from '@pages/UserProfilePage';
 import AboutUsPage from '@pages/AboutUsPage';
 
@@ -43,20 +41,9 @@ export const routes = [
     component: DetailedProductPage
   },
   {
-    path: '/favorites',
-    name: 'favorites',
-    component: FavoritesPage,
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
     path: '/cart',
     name: 'cart',
-    component: CartPage,
-    meta: {
-      requiresAuth: true
-    }
+    component: CartPage
   },
   {
     path: '/detailed',

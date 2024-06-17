@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { defineComponent, type Ref, ref, onMounted, computed } from 'vue';
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
-import '@splidejs/vue-splide/css';
 import VueEasyLightbox from 'vue-easy-lightbox';
-import LikeHeart from '@shared/ui-kit/Icons/LikeHeart.vue';
-import { useProductStore } from '@/entities/Product/store/productStore';
+import '@splidejs/vue-splide/css';
 import { useRouter } from 'vue-router';
+import { useProductStore } from '@entities/Product/store/productStore';
 import CustomLoading from '@shared/ui-kit/Loading/CustomLoading.vue';
-import { AddRemoveButton } from '@/shared/ui-kit/Buttons';
+import LikeHeart from '@shared/ui-kit/Icons/LikeHeart.vue';
+import { AddRemoveButton } from '@shared/ui-kit/Buttons';
 
 defineComponent({
   components: {
@@ -32,6 +32,7 @@ const sizeSelected: Ref<string> = ref(product?.value?.sizes[0] || '');
 const changeSize = (value: string) => {
   sizeSelected.value = value;
 };
+
 const isChecked = ref(false);
 
 const toggleChecked = () => {
@@ -76,7 +77,7 @@ const handleHide = () => {
           @hide="handleHide"
         />
       </div>
-      <div class="flex w-full flex-col gap-8 py-4 sm:w-[50%]">
+      <div class="flex w-full flex-col gap-8 py-4 sm:w-1/2">
         <p class="text-3xl font-bold lg:text-4xl">{{ product?.name }}</p>
         <p
           class="text-3xl font-black text-[rgb(110,15,23)]"

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, type Ref, ref, watch } from 'vue';
-import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
-import type { Address } from '@pages/UserProfilePage/model/useUserData';
-import { ValidateAddress } from '@pages/UserProfilePage/model/useValidate';
-import AddressInfo, { type AddressErrors } from '@pages/UserProfilePage/components/AddressInfo.vue';
+import { type AddressErrors } from '../components/AddressInfo.vue';
+import AddressInfo from '../components/AddressInfo.vue';
+import type { Address } from '../model/useUserData';
+import { ValidateAddress } from '../model/useValidate';
+import { MainButton } from '@shared/ui-kit/Buttons';
 
 const dataAddress: Ref<Address> = ref({
   id: '',

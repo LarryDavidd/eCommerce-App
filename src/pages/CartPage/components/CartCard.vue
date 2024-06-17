@@ -1,10 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import '@splidejs/vue-splide/css';
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
 import VueEasyLightbox from 'vue-easy-lightbox';
 import MyCounter from '@shared/ui-kit/MyCounter/MyCounter.vue';
-import CrossButton from '@shared/ui-kit/Buttons/CrossButton/CrossButton.vue';
+import { CrossButton } from '@shared/ui-kit/Buttons';
+import router from '@/app/router';
+
+defineComponent({
+  components: {
+    Splide,
+    SplideSlide,
+    VueEasyLightbox
+  }
+});
 
 type PropsType = {
   isInProcess: boolean;
@@ -37,6 +46,10 @@ const deleteProduct = () => {
 
 const changeCount = (newCount: number) => {
   emit('changeCount', newCount, props.productId);
+};
+
+const redirectToProductDetales = () => {
+  router.push({ name: 'product-page', params: { id: props.productId } });
 };
 </script>
 
@@ -73,7 +86,11 @@ const changeCount = (newCount: number) => {
     </div>
     <div class="wrapper">
       <div class="info-wrapper">
-        <span class="title">{{ props.name }}</span>
+        <span
+          class="title"
+          @click="redirectToProductDetales"
+          >{{ props.name }}</span
+        >
         <div class="data-block">
           <span class="data-title">Count:</span>
           <MyCounter

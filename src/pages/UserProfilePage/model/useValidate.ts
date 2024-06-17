@@ -1,7 +1,7 @@
-import type { PersonalErrors } from '@pages/UserProfilePage/ui/UserProfilePage.vue';
-import { validateBirthDate, validateName, validatePostalCode, validateStreet } from '@shared/utils/validation';
-import type { AddressErrors } from '@pages/UserProfilePage/components/AddressInfo.vue';
-import type { Address, Personal } from '@pages/UserProfilePage/model/useUserData';
+import type { PersonalErrors } from '../ui/UserProfilePage.vue';
+import type { AddressErrors } from '../components/AddressInfo.vue';
+import type { Address, Personal } from '../model/useUserData';
+import { validateBirthDate, validateName, validatePostalCode, validateStreet } from '@shared/validation/validation';
 
 const ValidateAddress = (data: Address) => {
   const validations: Record<string, Function> = {

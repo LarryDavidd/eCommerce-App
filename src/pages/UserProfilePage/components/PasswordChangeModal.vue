@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import SimpleInput from '@shared/ui-kit/Inputs/SimpleInput/SimpleInput.vue';
+import { validatePassword } from '@shared/validation/validation';
 import OpenedEye from '@shared/ui-kit/Icons/OpenedEye.vue';
 import ClosedEye from '@shared/ui-kit/Icons/ClosedEye.vue';
-import { validatePassword } from '@shared/utils/validation';
-import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
+import { SimpleInput } from '@shared/ui-kit/Inputs';
+import { MainButton } from '@shared/ui-kit/Buttons';
 
 interface InputDescription {
   id: string;

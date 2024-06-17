@@ -15,13 +15,7 @@ const props = defineProps({
   }
 });
 
-// const emits = defineEmits(['update:modelValue']);
-
 const selected = ref(props.modelValue);
-
-// const updateValue = (value: string) => {
-//   emits('update:modelValue', value);
-// };
 
 watch(
   () => props.modelValue,

@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import SearchBar from '@shared/ui-kit/SearchBar/SearchBar.vue';
-import ButtonIconCounter from '@shared/ui-kit/Buttons/ButtonIconCounter/ButtonIconCounter.vue';
-import LikeHeart from '@shared/ui-kit/Icons/LikeHeart.vue';
 import CartIcon from '@/shared/ui-kit/Icons/CartIcon.vue';
 import { ref } from 'vue';
 import CustomSelect from '@shared/ui-kit/Inputs/CustomSelect/CustomSelect.vue';

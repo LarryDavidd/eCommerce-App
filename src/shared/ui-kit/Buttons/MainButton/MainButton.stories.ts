@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 
-import MainButton from './MainButton.vue';
+import { MainButton } from './MainButton.vue';
 
 const meta: Meta<typeof MainButton> = {
   title: 'UI-KIT/Buttons/MainButton',
