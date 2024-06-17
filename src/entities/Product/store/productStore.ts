@@ -126,6 +126,12 @@ export const useProductStore = defineStore('product_store', () => {
     return Math.ceil(data.value.total / data.value.limit);
   });
 
+  const GetCurrentPaginationNum = computed(() => {
+    if (data.value === null) return 0;
+    if (data.value.offset === undefined) return 0;
+    return Math.ceil(data.value.offset / data.value.limit);
+  });
+
   // Actions
   const requestGetProduct = async (offset = 0, limit = 10) => {
     if (offset <= 0) offset = 0;
@@ -138,8 +144,7 @@ export const useProductStore = defineStore('product_store', () => {
     isLoading.value = false;
   };
 
-  const requestGetProductByQueryParams = async (offset = 0) => {
-    if (offset <= 0) offset = 0;
+  const requestGetProductByQueryParams = async () => {
     isLoading.value = true;
     const products = await productApi.fetchQueryProductProjectionsByQP();
 
@@ -160,34 +165,12 @@ export const useProductStore = defineStore('product_store', () => {
     return res.body;
   };
 
-  const requestGetProductsByCategory = async (ids: string[]) => {
-    isLoading.value = true;
-    const products = await productApi.fetchQueryProductProjectionsByCategory(ids);
-
-    if (products instanceof Error) return;
-
-    data.value = products;
-    isLoading.value = false;
-    return products;
-  };
-
-  const requestProductSearch = async (text: string) => {
-    isLoading.value = true;
-    const products = await productApi.fetchProductProjectionSearch(appState.getState.language, text);
-
-    if (products instanceof Error) return;
-
-    data.value = products;
-    isLoading.value = false;
-    return products;
-  };
-
   return {
     requestGetProduct,
     requestGetProductByQueryParams,
-    requestGetProductsByCategory,
-    requestProductSearch,
     requestGetProductById,
+    GetTotalPaginationNumber,
+    GetCurrentPaginationNum,
     GetProducts,
     GetProduct,
     isLoading
