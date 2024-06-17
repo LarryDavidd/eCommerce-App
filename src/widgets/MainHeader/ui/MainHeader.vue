@@ -10,6 +10,7 @@ import CurrencyIcon from '@shared/ui-kit/Icons/CurrencyIcon.vue';
 import UserProfile from '@features/UserProfile/ui/UserProfile.vue';
 import { useAppState } from '@/shared/Store/AppStore';
 import CartButtonCounter from '../component/CartButtonCounter.vue';
+import InfoIcon from '@shared/ui-kit/Icons/InfoIcon.vue';
 
 const appStore = useAppState();
 
@@ -53,6 +54,10 @@ const selectedCurrency = ref(appStore.getCurrentCurrency);
 
             <router-link to="/catalog">
               <CartIcon />
+            </router-link>
+
+            <router-link to="/about-us">
+              <InfoIcon />
             </router-link>
           </div>
         </div>
