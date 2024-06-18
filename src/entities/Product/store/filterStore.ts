@@ -14,10 +14,15 @@ export const useFilterStore = defineStore(NAME_SPACE, () => {
     sort: { priceCondition: 'none', nameCondition: 'none' }
   });
 
+  const getLimit = computed(() => queryArgs.limit);
+
   const getCategories = computed(() => queryArgs.categories);
 
   const getPriceCondition = computed(() => queryArgs.sort.priceCondition);
   const getNameCondition = computed(() => queryArgs.sort.nameCondition);
+
+  const getMinPrice = computed(() => queryArgs.price.min);
+  const getMaxPrice = computed(() => queryArgs.price.max);
 
   const getQueryArgs = computed(() => queryArgs);
 
@@ -29,9 +34,6 @@ export const useFilterStore = defineStore(NAME_SPACE, () => {
   const changeSortByName = (newCondition: string) => (queryArgs.sort.nameCondition = newCondition);
 
   const setPrice = (newPrice: { min: number; max: number }) => (queryArgs.price = newPrice);
-
-  const getMinPrice = computed(() => queryArgs.price.min);
-  const getMaxPrice = computed(() => queryArgs.price.max);
 
   const setSearchText = (text: string) => (queryArgs.searchText = text);
 
@@ -52,6 +54,7 @@ export const useFilterStore = defineStore(NAME_SPACE, () => {
     changeSortByPrice,
     changeSortByName,
     resetFilter,
+    getLimit,
     getCategories,
     getPriceCondition,
     getNameCondition,

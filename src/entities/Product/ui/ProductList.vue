@@ -3,14 +3,17 @@ import { onMounted } from 'vue';
 import { useProductStore } from '../store/productStore';
 import { ProductCard } from '@shared/components/productCard';
 import CustomLoading from '@shared/ui-kit/Loading/CustomLoading.vue';
-import { useFilterStore } from '../store/filterStore';
+import { PaginationLayer } from '@shared/ui-kit/Navigation';
 
 const productStore = useProductStore();
-const filterStore = useFilterStore();
 
 onMounted(() => {
   productStore.requestGetProductByQueryParams();
 });
+
+const changePaginationPage = (pageNumber: number) => {
+  productStore.requestGetProductByQueryParamsNextPage(pageNumber);
+};
 </script>
 
 <template>
@@ -30,31 +33,14 @@ onMounted(() => {
       :sizes="product.sizeValues"
     >
     </ProductCard>
-    <nav aria-label="Page navigation example">
-      <ul class="inline-flex h-10 -space-x-px text-base">
-        <li
-          class="ms-0 flex h-10 cursor-pointer items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-        >
-          Previous
-        </li>
-        <li
-          v-for="num in productStore.GetTotalPaginationNumber"
-          :class="
-            productStore.GetCurrentPaginationNum + 1 === num
-              ? 'flex h-10 items-center justify-center border border-gray-300 bg-blue-50 px-4 text-blue-600 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
-              : 'flex h-10 cursor-pointer items-center justify-center border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
-          "
-          :key="num"
-        >
-          {{ num === productStore.GetCurrentPaginationNum + 1 }}
-        </li>
-        <li
-          class="flex h-10 cursor-pointer items-center justify-center rounded-e-lg border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-        >
-          Next
-        </li>
-      </ul>
-    </nav>
+    <template v-if="productStore.GetTotalPaginationNumber > 1">
+      <PaginationLayer
+        class="flex w-full justify-center"
+        :amount="productStore.GetTotalPaginationNumber"
+        :current-page="productStore.GetCurrentPaginationNum"
+        @update:model-value="changePaginationPage"
+      />
+    </template>
   </section>
   <CustomLoading v-else />
 </template>

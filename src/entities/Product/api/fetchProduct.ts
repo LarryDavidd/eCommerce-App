@@ -22,14 +22,13 @@ class ProductApi {
       .catch((err) => err);
   }
 
-  async fetchQueryProductProjectionsByQP() {
+  async fetchQueryProductProjectionsByQP(offset: number) {
     const client = Client.getInstance().credentialsClient;
     const categories = this.filterStore.getQueryArgs.categories;
     const sortNames = this.filterStore.getQueryArgs.sort;
     const text = this.filterStore.getQueryArgs.searchText;
     const price = this.filterStore.getQueryArgs.price;
     const limit = this.filterStore.getQueryArgs.limit;
-    const offset = this.filterStore.getQueryArgs.offset;
 
     const language = this.appStore.getCurrentLang;
 

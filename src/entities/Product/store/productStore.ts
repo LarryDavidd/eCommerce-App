@@ -129,7 +129,7 @@ export const useProductStore = defineStore('product_store', () => {
   const GetCurrentPaginationNum = computed(() => {
     if (data.value === null) return 0;
     if (data.value.offset === undefined) return 0;
-    return Math.ceil(data.value.offset / data.value.limit);
+    return Math.ceil(data.value.offset / data.value.limit) + 1;
   });
 
   // Actions
@@ -144,9 +144,21 @@ export const useProductStore = defineStore('product_store', () => {
     isLoading.value = false;
   };
 
-  const requestGetProductByQueryParams = async () => {
+  const requestGetProductByQueryParams = async (offset = 0) => {
+    if (offset <= 0) offset = 0;
     isLoading.value = true;
-    const products = await productApi.fetchQueryProductProjectionsByQP();
+    const products = await productApi.fetchQueryProductProjectionsByQP(offset);
+
+    if (products instanceof Error) return;
+
+    data.value = products;
+    isLoading.value = false;
+  };
+
+  const requestGetProductByQueryParamsNextPage = async (pageNumber: number) => {
+    const offset = (pageNumber - 1) * filterStore.getLimit;
+    isLoading.value = true;
+    const products = await productApi.fetchQueryProductProjectionsByQP(offset);
 
     if (products instanceof Error) return;
 
@@ -168,6 +180,7 @@ export const useProductStore = defineStore('product_store', () => {
   return {
     requestGetProduct,
     requestGetProductByQueryParams,
+    requestGetProductByQueryParamsNextPage,
     requestGetProductById,
     GetTotalPaginationNumber,
     GetCurrentPaginationNum,
