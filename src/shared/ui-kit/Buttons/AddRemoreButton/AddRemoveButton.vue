@@ -30,7 +30,7 @@ const isInCart = computed(() => {
     :name="isInCart ? 'DELETE FROM CART' : 'ADD TO CART'"
     :options="{ buttonStyle: 'dark-grey' }"
     :class="props.classes"
-    :is-loading="cartStore.getInProcess.has(props.id)"
+    :isLoading="cartStore.getInProcess.has(props.id)"
     @click="addRemoveProductToCart"
   />
 </template>

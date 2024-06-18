@@ -111,7 +111,7 @@ const redirectToProductDetales = () => {
           v-if="props.discount"
           class="discount-block"
         >
-          <span class="whitespace-nowrap">Total:</span>
+          <span class="whitespace-nowrap">Price:</span>
           <span class="total-price whitespace-nowrap font-bold">{{ props.discount }}</span>
         </div>
       </div>
