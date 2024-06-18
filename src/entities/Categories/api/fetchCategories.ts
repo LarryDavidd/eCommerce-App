@@ -2,7 +2,7 @@ import Client from '@/shared/api/client/Client';
 
 class CategoriesApi {
   async getAllCategories() {
-    const client = new Client().credentialsClient;
+    const client = Client.getInstance().credentialsClient;
     return await client
       .categories()
       .get()

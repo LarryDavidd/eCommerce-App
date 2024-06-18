@@ -2,50 +2,30 @@ import { defineStore } from 'pinia';
 import CostumerApi from '../api/costumerApi';
 import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
 import { computed, ref } from 'vue';
-import type { Customer, CustomerDraft } from '@commercetools/platform-sdk';
+import type { CustomerDraft } from '@commercetools/platform-sdk';
 import { revokingToken } from '@/auth/api/revokeToken';
-import { useNotificationStore } from '@/shared/Store/AlertMessageStore';
-import router from '@/app/router';
-import type { Client, ClientResponse } from '@commercetools/sdk-client-v2';
+import { useNotificationStore } from '@shared/Store/AlertMessageStore';
+import router from '@app/router';
+import useCartStore from '@entities/Cart';
 
 export const useCostumerStore = defineStore('costumer_store', () => {
+  // State
   const costumerApi = new CostumerApi();
+
   const ls = useLocalStorage();
   const alert = useNotificationStore();
-
-  const costumerCredentials = ref<Customer | null>(null);
+  const cartStore = useCartStore();
 
   const isLogined = ref<boolean>(false);
   const isLoading = ref<boolean>(false);
   const isExist = ref<boolean>(false);
 
+  // Getters
   const getIsLoading = computed(() => isLoading.value);
+  const getIsLogedin = computed(() => isLogined.value);
+  const getIsExist = computed(() => isExist.value);
 
-  const userAccessToken = ref<string>('');
-  const userRefreshToken = ref<string>('');
-
-  const getCostumerCredentials = computed(() => {
-    if (costumerCredentials.value === null) return null;
-
-    return costumerCredentials.value;
-  });
-
-  const setTokenToLs = () => {
-    if (isLogined.value) {
-      if (userRefreshToken.value) useLocalStorage().set('refresh_token', userRefreshToken.value);
-      if (userAccessToken.value) useLocalStorage().set('access_token', userAccessToken.value);
-    }
-  };
-
-  const setNotificationSucces = () => {
-    const notification = {
-      id: Date.now(),
-      message: 'Login was successful' + ' ' + (isLogined.value ? 'Loginded user' : 'Anon user'),
-      type: 'success'
-    };
-    alert.addNotification(notification);
-  };
-
+  // Actions
   async function AnonCostumer() {
     const anonCostumer = await costumerApi.anonCostumer();
 
@@ -53,12 +33,7 @@ export const useCostumerStore = defineStore('costumer_store', () => {
       isExist.value = true;
       setNotificationSucces();
     } else {
-      const notification = {
-        id: Date.now(),
-        message: 'Please reload page',
-        type: 'error'
-      };
-      alert.addNotification(notification);
+      setNotificationError(anonCostumer.message);
     }
 
     return { isExist };
@@ -78,46 +53,43 @@ export const useCostumerStore = defineStore('costumer_store', () => {
       }
     }
 
-    if (!isLogined.value) await AnonCostumer();
+    if (!isLogined.value && refresh_token) {
+      const existAnonCostumre = await costumerApi.refreshAnonCostumer(String(refresh_token));
+
+      if (existAnonCostumre?.statusCode === 200) {
+        isExist.value = true;
+        setNotificationSucces();
+      }
+    }
+
+    if (!isExist.value) await AnonCostumer();
 
     isLoading.value = false;
-
-    setTokenToLs();
   }
 
   async function LoginCostumer(email: string, password: string) {
     isLoading.value = true;
 
-    const res = await costumerApi.loginCostumer(email, password);
+    const cart = cartStore.getData;
+
+    const res = await costumerApi.loginCostumer(email, password, cart);
 
     if (res.statusCode === 200) {
       isExist.value = true;
       isLogined.value = true;
       setNotificationSucces();
-    } else if (res.statusCode === 400) {
-      const notification = {
-        id: Date.now(),
-        message: res.message,
-        type: 'error'
-      };
-      alert.addNotification(notification);
     } else {
-      const notification = {
-        id: Date.now(),
-        message: 'Please try again or reload page',
-        type: 'error'
-      };
-      alert.addNotification(notification);
+      setNotificationError(res.message);
     }
-    isLoading.value = false;
 
-    setTokenToLs();
+    isLoading.value = false;
 
     return { isLogined };
   }
 
   async function RegistrationCostumer(draft: CustomerDraft) {
     isLoading.value = true;
+
     const res = await costumerApi.regCostumer(draft);
 
     if (res.statusCode === 201) {
@@ -128,14 +100,10 @@ export const useCostumerStore = defineStore('costumer_store', () => {
       };
       alert.addNotification(notification);
       if (draft.password) await LoginCostumer(draft.email, draft.password);
-    } else if (res.statusCode >= 300) {
-      const notification = {
-        id: Date.now(),
-        message: res.message,
-        type: 'error'
-      };
-      alert.addNotification(notification);
+    } else {
+      setNotificationError(res.message);
     }
+
     isLoading.value = false;
 
     return { isLogined };
@@ -151,9 +119,10 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     ls.remove('access_token');
     ls.remove('refresh_token');
     isLogined.value = false;
+    isExist.value = false;
 
     if (res instanceof Error) {
-      alert.addNotification({ status: 'error', message: 'Please reload page' });
+      setNotificationError(res.message);
     } else {
       AnonCostumer();
       router.push({ name: 'login' });
@@ -162,28 +131,29 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isLoading.value = false;
   }
 
-  const requestCostumer = async () => {
-    isLoading.value = true;
+  // notification fns
+  const setNotificationSucces = () => {
+    const notification = {
+      id: Date.now(),
+      message: 'Login was successful' + ' ' + (isLogined.value ? 'Loginded user' : 'Anon user'),
+      type: 'success'
+    };
+    alert.addNotification(notification);
+  };
 
-    const refresh_token = ls.load('refresh_token');
-
-    if (refresh_token) {
-      const res = await costumerApi.refreshCostumer(String(refresh_token));
-
-      if (res instanceof Error) {
-        alert.addNotification({ status: 'error', message: 'Please reload page' });
-      } else {
-        costumerCredentials.value = res.body;
-      }
-    }
-
-    isLoading.value = false;
+  const setNotificationError = (message: string) => {
+    const notification = {
+      id: Date.now(),
+      message: message,
+      type: 'error'
+    };
+    alert.addNotification(notification);
   };
 
   return {
-    getCostumerCredentials,
     getIsLoading,
-    requestCostumer,
+    getIsLogedin,
+    getIsExist,
     AnonCostumer,
     LoginExistigCostumer,
     LoginCostumer,
@@ -191,8 +161,6 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     LogoutCostumer,
     isLogined,
     isLoading,
-    isExist,
-    userAccessToken,
-    userRefreshToken
+    isExist
   };
 });

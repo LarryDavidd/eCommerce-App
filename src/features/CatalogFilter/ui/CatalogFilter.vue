@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import MyAccordion from '@/shared/ui-kit/Accordion/MyAccordion.vue';
+import { ref } from 'vue';
 import CategoriesAll from '../components/CategoriesAll.vue';
 import SortCheckboxes from '../components/SortCheckboxes.vue';
-import RangeSlider from '@/shared/ui-kit/Inputs/RangeSlider/RangeSlider.vue';
-import { useFilterStore } from '@/entities/Product/store/filterStore';
-import { ref } from 'vue';
+import { useFilterStore } from '@entities/Product/store/filterStore';
 import FilterIcon from '@shared/ui-kit/Icons/FilterIcon.vue';
-import MainButton from '@/shared/ui-kit/Buttons/MainButton/MainButton.vue';
+import { MainButton } from '@shared/ui-kit/Buttons';
+import { RangeSlider } from '@shared/ui-kit/Inputs';
+import MyAccordion from '@shared/ui-kit/Accordion/MyAccordion.vue';
 
 const filterStore = useFilterStore();
 

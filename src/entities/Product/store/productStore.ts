@@ -1,24 +1,10 @@
 import { defineStore } from 'pinia';
 import ProductApi from '../api/fetchProduct';
-import { computed, ref, watch, watchEffect } from 'vue';
-import type { Price, ProductProjection, ProductProjectionPagedQueryResponse, ProductProjectionPagedSearchResponse } from '@commercetools/platform-sdk';
+import { computed, ref, watch } from 'vue';
+import type { ProductProjection, ProductProjectionPagedSearchResponse } from '@commercetools/platform-sdk';
 import { useAppState } from '@shared/Store/AppStore';
 import { useFilterStore } from './filterStore';
-
-const findPriceInCurrency = (prices?: Price[], currencyCode?: string) => {
-  if (prices === undefined || currencyCode === undefined) return;
-
-  const find = prices.find((price) => price.value.currencyCode === currencyCode);
-
-  if (find === undefined) return;
-
-  let symbolCurrency = '$';
-  if (find.value.currencyCode === 'RUB') symbolCurrency = 'P';
-  if (find.value.currencyCode === 'EUR') symbolCurrency = 'Э';
-  const resultPrice = ` ${find.value.centAmount / 100}`;
-
-  return { price: resultPrice, currency: symbolCurrency };
-};
+import findPriceInCurrency from '../lib/priceInCurrency';
 
 export const useProductStore = defineStore('product_store', () => {
   const appState = useAppState();
@@ -35,23 +21,34 @@ export const useProductStore = defineStore('product_store', () => {
   );
 
   // Getters
-  const GetData = computed(() => data.value);
-
-  const Product = computed(() => product.value);
-
   const GetProduct = computed(() => {
     if (product.value === null) return null;
-    let discount = '';
+
     const findPriceData = findPriceInCurrency(product.value.masterVariant.prices, appState.getState.currencyCode);
+
+    let discount = '';
+
     const discountObj = product.value.masterVariant.prices?.find((_price) => {
       if (_price.discounted?.value.currencyCode === appState.getState.currencyCode && _price.value.centAmount !== _price.discounted?.value.centAmount) {
         return _price.discounted.value;
       }
       return null;
     });
+
     if (discountObj) {
       if (discountObj?.discounted?.value?.centAmount) discount = `${discountObj?.discounted?.value?.centAmount / 100} ${findPriceData?.currency}`;
     }
+
+    let sizeValues: string[] = [];
+
+    const idxSizes = product.value.masterVariant.attributes?.findIndex((el) => el.name === 'size');
+
+    if (idxSizes !== -1 && idxSizes !== undefined && product.value.masterVariant.attributes) {
+      sizeValues = product.value.masterVariant.attributes[idxSizes].value.map((elem: { key: string; label: string }) => elem.label);
+    }
+
+    const variants = product.value.variants;
+
     const result = {
       id: product.value.id,
       name: product.value.name[appState.getState.language],
@@ -61,9 +58,10 @@ export const useProductStore = defineStore('product_store', () => {
         price: findPriceData?.price,
         currency: findPriceData?.currency
       },
-      discount: discount
+      discount: discount,
+      sizes: sizeValues,
+      variants
     };
-
     return result;
   });
 
@@ -86,6 +84,14 @@ export const useProductStore = defineStore('product_store', () => {
           }
           return null;
         });
+        let sizeValues = [];
+        const idxSizes = product.masterVariant?.attributes?.findIndex((el) => el.name === 'size');
+        if (idxSizes !== -1 && idxSizes !== undefined && product.masterVariant.attributes) {
+          sizeValues = product.masterVariant.attributes[idxSizes].value.map((elem: string) => elem.label);
+        }
+
+        const variants = product.variants;
+
         let symbolCurrency = '$';
         let price = '';
         let discount = '';
@@ -105,7 +111,9 @@ export const useProductStore = defineStore('product_store', () => {
           description,
           urlImage,
           price,
-          discount
+          discount,
+          sizeValues,
+          variants
         };
       });
     }
@@ -116,6 +124,12 @@ export const useProductStore = defineStore('product_store', () => {
     if (data.value === null) return 0;
     if (data.value.total === undefined) return 0;
     return Math.ceil(data.value.total / data.value.limit);
+  });
+
+  const GetCurrentPaginationNum = computed(() => {
+    if (data.value === null) return 0;
+    if (data.value.offset === undefined) return 0;
+    return Math.ceil(data.value.offset / data.value.limit) + 1;
   });
 
   // Actions
@@ -133,7 +147,18 @@ export const useProductStore = defineStore('product_store', () => {
   const requestGetProductByQueryParams = async (offset = 0) => {
     if (offset <= 0) offset = 0;
     isLoading.value = true;
-    const products = await productApi.fetchQueryProductProjectionsByQP();
+    const products = await productApi.fetchQueryProductProjectionsByQP(offset);
+
+    if (products instanceof Error) return;
+
+    data.value = products;
+    isLoading.value = false;
+  };
+
+  const requestGetProductByQueryParamsNextPage = async (pageNumber: number) => {
+    const offset = (pageNumber - 1) * filterStore.getLimit;
+    isLoading.value = true;
+    const products = await productApi.fetchQueryProductProjectionsByQP(offset);
 
     if (products instanceof Error) return;
 
@@ -152,34 +177,13 @@ export const useProductStore = defineStore('product_store', () => {
     return res.body;
   };
 
-  const requestGetProductsByCategory = async (ids: string[]) => {
-    isLoading.value = true;
-    const products = await productApi.fetchQueryProductProjectionsByCategory(ids);
-
-    if (products instanceof Error) return;
-
-    data.value = products;
-    isLoading.value = false;
-    return products;
-  };
-
-  const requestProductSearch = async (text: string) => {
-    isLoading.value = true;
-    const products = await productApi.fetchProductProjectionSearch(appState.getState.language, text);
-
-    if (products instanceof Error) return;
-
-    data.value = products;
-    isLoading.value = false;
-    return products;
-  };
-
   return {
     requestGetProduct,
     requestGetProductByQueryParams,
-    requestGetProductsByCategory,
-    requestProductSearch,
+    requestGetProductByQueryParamsNextPage,
     requestGetProductById,
+    GetTotalPaginationNumber,
+    GetCurrentPaginationNum,
     GetProducts,
     GetProduct,
     isLoading

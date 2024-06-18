@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import MainButton from '@shared/ui-kit/Buttons/MainButton/MainButton.vue';
+import { MainButton } from '@shared/ui-kit/Buttons';
 </script>
 
 <template>
-  <div class="mx-10 lg:mx-20">
+  <div class="wrapper px-4 md:px-10">
     <div class="mb-4 flex w-full flex-col items-center sm:items-start">
       <div class="background md:h-70vh flex w-full bg-contain bg-center bg-no-repeat py-5 text-center sm:bg-right-top sm:py-20 sm:text-left">
         <div class="flex flex-col justify-between gap-6 font-bold text-black sm:w-3/5 md:justify-center">
