@@ -28,10 +28,11 @@ const callCallback = () => {
   <ModalWrapper
     :is-open="isModalOpen"
     @close="closeModal"
+    class="z-50"
   >
     <div class="p-4 text-center md:p-5">
       <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to clear your cart?</h3>
-      <div class="flex gap-4">
+      <div class="flex flex-wrap justify-center gap-4">
         <MainButton
           name="Yes, i'm sure"
           class="continue"
