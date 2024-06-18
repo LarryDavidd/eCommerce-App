@@ -3,12 +3,17 @@ import { onMounted } from 'vue';
 import { useProductStore } from '../store/productStore';
 import { ProductCard } from '@shared/components/productCard';
 import CustomLoading from '@shared/ui-kit/Loading/CustomLoading.vue';
+import { PaginationLayer } from '@shared/ui-kit/Navigation';
 
 const productStore = useProductStore();
 
 onMounted(() => {
   productStore.requestGetProductByQueryParams();
 });
+
+const changePaginationPage = (pageNumber: number) => {
+  productStore.requestGetProductByQueryParamsNextPage(pageNumber);
+};
 </script>
 
 <template>
@@ -28,6 +33,14 @@ onMounted(() => {
       :sizes="product.sizeValues"
     >
     </ProductCard>
+    <template v-if="productStore.GetTotalPaginationNumber > 1">
+      <PaginationLayer
+        class="flex w-full justify-center"
+        :amount="productStore.GetTotalPaginationNumber"
+        :current-page="productStore.GetCurrentPaginationNum"
+        @update:model-value="changePaginationPage"
+      />
+    </template>
   </section>
   <CustomLoading v-else />
 </template>

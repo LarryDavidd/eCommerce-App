@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ProductCardSwiper from '@shared/components/productCard/ui/ProductCardSwiper.vue';
+import ProductCardSwiper from './ProductCardSwiper.vue';
 import { type Ref, ref, computed } from 'vue';
 import type { Image } from '@commercetools/platform-sdk';
 import { AddRemoveButton } from '@/shared/ui-kit/Buttons';
