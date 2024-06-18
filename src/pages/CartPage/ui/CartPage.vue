@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { type DiscountCodeReference } from '@commercetools/platform-sdk';
 import router from '@app/router';
 import useCartStore from '@entities/Cart';
@@ -7,10 +7,13 @@ import CartCard from '../components/CartCard.vue';
 import CartReceipt from '../components/CartReceipt.vue';
 import PromoCodesList from '../components/PromoCodesList.vue';
 import EmptyCart from '../components/EmptyCart.vue';
+import ClearCartModal from '../components/ClearCartModal.vue';
 import { MainButton } from '@shared/ui-kit/Buttons';
 
 // state
 const cartStore = useCartStore();
+
+const isModalOpen = ref<boolean>(false);
 
 // computed
 const inProcessProducts = computed(() => cartStore.getInProcess);
@@ -45,7 +48,7 @@ const deletePromo = (promo: DiscountCodeReference) => {
 };
 
 const clearCart = () => {
-  cartStore.requestClearCart();
+  if (lineItems.value.length > 0) cartStore.requestClearCart();
 };
 </script>
 <template>
@@ -62,7 +65,7 @@ const clearCart = () => {
         name="Clear Cart"
         class="continue"
         :options="{ buttonStyle: 'light-grey--border-bold' }"
-        @click="clearCart"
+        @click="isModalOpen = true"
       />
     </div>
     <div
@@ -105,6 +108,11 @@ const clearCart = () => {
     <div v-else>
       <EmptyCart />
     </div>
+    <ClearCartModal
+      :cb="clearCart"
+      :is-open="isModalOpen"
+      @update:model-value="isModalOpen = !isModalOpen"
+    />
   </div>
 </template>
 <style lang="scss" scoped>
