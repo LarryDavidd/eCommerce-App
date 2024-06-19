@@ -1,20 +1,20 @@
 import { defineStore } from 'pinia';
-import type { Notification } from '@shared/ui-kit/Alert/AlertText.vue';
+import type { NotificationAlert } from '@shared/ui-kit/Alert';
 interface NotificationState {
-  notifications: Notification[];
+  notifications: NotificationAlert[];
 }
 
 export const useNotificationStore = defineStore('app', {
   state: (): NotificationState => ({
-    notifications: [] as Notification[]
+    notifications: [] as NotificationAlert[]
   }),
   getters: {
-    getNotifications(): Notification[] {
+    getNotifications(): NotificationAlert[] {
       return this.notifications;
     }
   },
   actions: {
-    addNotification(notification: Notification) {
+    addNotification(notification: NotificationAlert) {
       const timerId = setTimeout(() => {
         this.hideNotification(notification.id);
       }, 3000);

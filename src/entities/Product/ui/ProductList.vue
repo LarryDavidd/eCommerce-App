@@ -2,7 +2,7 @@
 import { onMounted } from 'vue';
 import { useProductStore } from '../store/productStore';
 import { ProductCard } from '@shared/components/productCard';
-import CustomLoading from '@shared/ui-kit/Loading/CustomLoading.vue';
+import { PagesLoading } from '@shared/ui-kit/Loading';
 import { PaginationLayer } from '@shared/ui-kit/Navigation';
 
 const productStore = useProductStore();
@@ -42,5 +42,5 @@ const changePaginationPage = (pageNumber: number) => {
       />
     </template>
   </section>
-  <CustomLoading v-else />
+  <PagesLoading v-else />
 </template>

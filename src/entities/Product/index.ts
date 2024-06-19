@@ -1,3 +1,4 @@
 import ProductList from './ui/ProductList.vue';
+import { useFilterStore } from './store/filterStore';
 
-export default ProductList;
+export { ProductList, useFilterStore };

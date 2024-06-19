@@ -15,7 +15,7 @@ const props = defineProps({
   }
 });
 
-const checkboxId = Date.now().toString();
+const checkboxId = String(Math.random());
 
 const emit = defineEmits(['update:modelValue']);
 

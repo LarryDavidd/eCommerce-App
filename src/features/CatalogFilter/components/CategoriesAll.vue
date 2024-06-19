@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import useCategoriesStore from '@entities/Categories';
+import { onMounted, ref, watch } from 'vue';
 import type { Category } from '@commercetools/platform-sdk';
+import useCategoriesStore from '@entities/Categories';
+import { useFilterStore } from '@entities/Product/store/filterStore';
 import { useAppState } from '@shared/Store/AppStore';
-import { onMounted, ref, watch, reactive } from 'vue';
-import Accordion from '@/shared/ui-kit/Accordion/MyAccordion.vue';
-import CheckBox from '@/shared/ui-kit/Inputs/CheckBox/CheckBox.vue';
-import { useFilterStore } from '@/entities/Product/store/filterStore';
+import { MyAccordion } from '@shared/ui-kit/Navigation';
+import { CheckBox } from '@shared/ui-kit/Inputs';
 
 const useCategories = useCategoriesStore();
 
@@ -63,7 +63,7 @@ const filterCategories = (categories: Category[], lang: string) => {
 <template>
   <template v-if="useCategories.IsLoading"> Loading </template>
   <template v-else>
-    <Accordion
+    <MyAccordion
       class="inner-accordion"
       v-for="category in data"
       :key="category.id"
@@ -77,7 +77,7 @@ const filterCategories = (categories: Category[], lang: string) => {
         :model-value="categories.has(subcategory.id)"
         @update:model-value="() => useFilters.addRemoveCategory(subcategory.id)"
       />
-    </Accordion>
+    </MyAccordion>
   </template>
 </template>
 <style scoped lang="scss">

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import CatalogFilter from '@features/CatalogFilter';
-import ProductList from '@entities/Product';
+import { ProductList } from '@entities/Product';
 </script>
 
 <template>

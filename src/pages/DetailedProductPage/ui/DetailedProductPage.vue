@@ -5,7 +5,7 @@ import VueEasyLightbox from 'vue-easy-lightbox';
 import '@splidejs/vue-splide/css';
 import { useRouter } from 'vue-router';
 import { useProductStore } from '@entities/Product/store/productStore';
-import CustomLoading from '@shared/ui-kit/Loading/CustomLoading.vue';
+import { PagesLoading } from '@shared/ui-kit/Loading';
 import LikeHeart from '@shared/ui-kit/Icons/LikeHeart.vue';
 import { AddRemoveButton } from '@shared/ui-kit/Buttons';
 
@@ -133,7 +133,7 @@ const handleHide = () => {
       </div>
     </div>
   </template>
-  <CustomLoading v-else />
+  <PagesLoading v-else />
 </template>
 
 <style scoped lang="scss">

@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { ButtonLoading } from '@shared/ui-kit/Loading';
+
 type ButtonStyleType = 'light-grey--font-light' | 'dark-grey' | 'light-grey--font-bold' | 'light-grey--border-bold' | 'small';
 
 type OutlineType = 'border';
@@ -36,7 +38,7 @@ const handleClick = () => {
     @click="handleClick"
   >
     <template v-if="props.isLoading">
-      <span class="loading loading-spinner loading-md"></span>
+      <ButtonLoading />
     </template>
     <template v-else>
       {{ props.name }}

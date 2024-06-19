@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import SliderRange from '@/shared/ui-kit/Inputs/RangeSlider/SliderRange.vue';
+import { RangeSlider } from '@shared/ui-kit/Inputs';
 </script>
 
 <template>
-  <SliderRange />
+  <RangeSlider />
 </template>

@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import { defineComponent, ref } from 'vue';
 import '@splidejs/vue-splide/css';
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
 import VueEasyLightbox from 'vue-easy-lightbox';
-import MyCounter from '@shared/ui-kit/MyCounter/MyCounter.vue';
+import { ProductCounter } from '@shared/ui-kit/Counter';
 import { CrossButton } from '@shared/ui-kit/Buttons';
-import router from '@/app/router';
 
 defineComponent({
   components: {
@@ -24,6 +24,8 @@ type PropsType = {
   discount: string | null;
   urlImgs: string[];
 };
+
+const router = useRouter();
 
 const props = defineProps<PropsType>();
 // const props = defineProps<LineItem>()
@@ -93,7 +95,7 @@ const redirectToProductDetales = () => {
         >
         <div class="data-block">
           <span class="data-title">Count:</span>
-          <MyCounter
+          <ProductCounter
             :is-in-process="props.isInProcess"
             :count="props.count"
             @update:model-value="changeCount"
@@ -111,7 +113,7 @@ const redirectToProductDetales = () => {
           v-if="props.discount"
           class="discount-block"
         >
-          <span class="whitespace-nowrap">Total:</span>
+          <span class="whitespace-nowrap">Price:</span>
           <span class="total-price whitespace-nowrap font-bold">{{ props.discount }}</span>
         </div>
       </div>

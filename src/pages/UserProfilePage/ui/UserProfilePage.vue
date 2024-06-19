@@ -8,7 +8,7 @@ import PasswordChangeModal from '../components/PasswordChangeModal.vue';
 import AddAddressModal from '../components/AddAddressModal.vue';
 import useProfileStore from '@entities/Profile';
 import { validateBirthDate, validateEmail, validateName } from '@shared/validation/validation';
-import ModalWrapper from '@shared/ui-kit/ModalWrapper/ModalWrapper.vue';
+import { ModalWrapper } from '@shared/ui-kit/Wrapper';
 import { ToggleInput } from '@shared/ui-kit/Inputs';
 import { MainButton } from '@shared/ui-kit/Buttons';
 

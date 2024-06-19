@@ -6,7 +6,7 @@ import { useFilterStore } from '@entities/Product/store/filterStore';
 import FilterIcon from '@shared/ui-kit/Icons/FilterIcon.vue';
 import { MainButton } from '@shared/ui-kit/Buttons';
 import { RangeSlider } from '@shared/ui-kit/Inputs';
-import MyAccordion from '@shared/ui-kit/Accordion/MyAccordion.vue';
+import { MyAccordion } from '@shared/ui-kit/Navigation';
 
 const filterStore = useFilterStore();
 

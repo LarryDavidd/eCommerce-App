@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useFilterStore } from '@/entities/Product/store/filterStore';
-import MyAccordion from '@/shared/ui-kit/Accordion/MyAccordion.vue';
-import RadioButtonSimple from '@/shared/ui-kit/Buttons/RadioButtonSimple/RadioButtonSimple.vue';
+import { MyAccordion } from '@shared/ui-kit/Navigation';
+import { RadioButtonSimple } from '@/shared/ui-kit/Buttons';
 import { computed } from 'vue';
 
 const filterStore = useFilterStore();

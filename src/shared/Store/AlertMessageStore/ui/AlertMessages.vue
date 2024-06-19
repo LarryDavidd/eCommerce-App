@@ -1,7 +1,7 @@
 <template>
   <div class="notification">
     <transition-group name="transition-animate">
-      <Alert
+      <NotificationAlert
         v-for="notification in notifications"
         :notification="notification"
         :key="notification.id"
@@ -14,10 +14,13 @@
 <script setup lang="ts">
 import { useNotificationStore } from '../store/useAlertMessage';
 import { ref } from 'vue';
-import Alert from '@shared/ui-kit/Alert/AlertText.vue';
+import { NotificationAlert } from '@shared/ui-kit/Alert';
+
 const { getNotifications } = useNotificationStore();
-const notifications = ref(getNotifications);
 const appStore = useNotificationStore();
+
+const notifications = ref(getNotifications);
+
 const hideNotification = (id: number) => {
   appStore.hideNotification(id);
 };

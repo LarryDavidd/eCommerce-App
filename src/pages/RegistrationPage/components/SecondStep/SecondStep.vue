@@ -3,7 +3,7 @@ import { computed, ref, toRefs, watch } from 'vue';
 import { validatePassword, validateEmail } from '@shared/validation/validation';
 import OpenedEye from '@shared/ui-kit/Icons/OpenedEye.vue';
 import ClosedEye from '@shared/ui-kit/Icons/ClosedEye.vue';
-import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
+import { FormWrapper } from '@shared/ui-kit/Wrapper';
 import { MainButton } from '@shared/ui-kit/Buttons';
 import { SimpleInput } from '@shared/ui-kit/Inputs';
 
