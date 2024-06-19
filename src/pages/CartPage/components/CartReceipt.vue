@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MyAccordion from '@shared/ui-kit/Accordion/MyAccordion.vue';
+import { MyAccordion } from '@shared/ui-kit/Navigation';
 import { SimpleInput } from '@shared/ui-kit/Inputs';
 import { computed, ref } from 'vue';
 import { MainButton } from '@shared/ui-kit/Buttons';

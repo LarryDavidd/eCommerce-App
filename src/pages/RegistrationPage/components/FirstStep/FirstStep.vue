@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, toRefs, watch, computed } from 'vue';
 import { SimpleInput } from '@shared/ui-kit/Inputs';
-import FormWrapper from '@shared/ui-kit/FormWrapper/FormWrapper.vue';
+import { FormWrapper } from '@shared/ui-kit/Wrapper';
 import { DatePicker } from '@shared/ui-kit/Inputs';
 import { validateName, validateBirthDate } from '@shared/validation/validation';
 import { MainButton } from '@shared/ui-kit/Buttons';

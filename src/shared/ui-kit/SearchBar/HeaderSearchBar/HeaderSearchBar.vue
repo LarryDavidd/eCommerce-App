@@ -1,20 +1,19 @@
 <script lang="ts" setup>
-import { useFilterStore } from '@entities/Product/store/filterStore';
-import magnifier from '../assets/magnifier.svg';
+import magnifier from '@shared/ui-kit/assets/magnifier.svg';
 
-const filterStore = useFilterStore();
+const emit = defineEmits(['update:modelValue']);
 
 function onSubmit(event: Event) {
   event.preventDefault();
   const form = event.target as HTMLFormElement;
 
   const text = (form.elements.namedItem('search-text') as HTMLInputElement).value;
-  filterStore.setSearchText(text);
+  emit('update:modelValue', text);
 }
 
 const onInput = (event: InputEvent) => {
   const target = event.target as HTMLInputElement;
-  filterStore.setSearchText(target.value);
+  emit('update:modelValue', target.value);
 };
 </script>
 

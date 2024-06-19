@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import ModalWrapper from '@shared/ui-kit/ModalWrapper/ModalWrapper.vue';
-import { MainButton } from '@shared/ui-kit/Buttons';
 import { computed } from 'vue';
+import { ModalWrapper } from '@shared/ui-kit/Wrapper';
+import { MainButton } from '@shared/ui-kit/Buttons';
 
 type PropsType = {
   cb: () => void;

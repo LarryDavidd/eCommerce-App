@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DropDown from '@shared/ui-kit/DropDown/DropDown.vue';
+import { DropDown } from '@shared/ui-kit/Navigation';
 import UserProfileIcon from '@shared/ui-kit/Icons/UserProfileIcon.vue';
 import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
 
