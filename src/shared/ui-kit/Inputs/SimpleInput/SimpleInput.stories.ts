@@ -12,8 +12,7 @@ const meta: Meta<typeof SimpleInput> = {
     },
     error: { control: 'text' },
     required: { control: 'boolean' },
-    disabled: { control: 'boolean' },
-    maxWidth: { control: 'text' }
+    disabled: { control: 'boolean' }
   }
 };
 
@@ -29,8 +28,7 @@ export const Default: Story = {
     type: 'text',
     error: null,
     required: true,
-    disabled: false,
-    maxWidth: '300px'
+    disabled: false
   }
 };
 
@@ -70,11 +68,5 @@ export const AsPassword: Story = {
     ...Default.args,
     type: 'password',
     placeholder: 'Password'
-  }
-};
-export const CustomWidth: Story = {
-  args: {
-    ...Default.args,
-    maxWidth: '500px'
   }
 };

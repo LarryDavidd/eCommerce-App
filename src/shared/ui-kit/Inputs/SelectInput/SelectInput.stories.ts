@@ -6,7 +6,7 @@ const meta: Meta<typeof SelectInput> = {
   component: SelectInput,
   argTypes: {
     modelValue: { control: 'text' },
-    options: { control: 'array' }
+    options: { control: 'object' }
   }
 };
 
