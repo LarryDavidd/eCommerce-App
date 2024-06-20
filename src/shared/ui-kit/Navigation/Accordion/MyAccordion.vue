@@ -13,11 +13,7 @@ const toggleAccordion = () => {
   isOpen.value = !isOpen.value;
   rotation.value += isOpen.value ? 180 : -180;
 };
-const classesAccordion = computed(() => {
-  return {
-    'is-closed': !isOpen.value
-  };
-});
+
 const rotation = ref(0);
 </script>
 
