@@ -1,15 +1,16 @@
-import { defineStore } from 'pinia';
-import CostumerApi from '../api/costumerApi';
-import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { defineStore } from 'pinia';
 import type { CustomerDraft } from '@commercetools/platform-sdk';
+import CostumerApi from '../api/costumerApi';
 import { revokingToken } from '@/auth/api/revokeToken';
-import { useNotificationStore } from '@shared/Store/AlertMessageStore';
-import router from '@app/router';
 import useCartStore from '@entities/Cart';
+import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
+import { useNotificationStore } from '@shared/Store/AlertMessageStore';
 
 export const useCostumerStore = defineStore('costumer_store', () => {
   // State
+  const router = useRouter();
   const costumerApi = new CostumerApi();
 
   const ls = useLocalStorage();
@@ -31,9 +32,9 @@ export const useCostumerStore = defineStore('costumer_store', () => {
 
     if (anonCostumer.statusCode === 200) {
       isExist.value = true;
-      setNotificationSucces();
+      alert.addSuccesNotification('Login was successful' + ' ' + (isLogined.value ? 'Loginded user' : 'Anon user'));
     } else {
-      setNotificationError(anonCostumer.message);
+      alert.addErrorNotification(anonCostumer.message);
     }
 
     return { isExist };
@@ -49,7 +50,7 @@ export const useCostumerStore = defineStore('costumer_store', () => {
       if (existCostumer?.statusCode === 200) {
         isLogined.value = true;
         isExist.value = true;
-        setNotificationSucces();
+        alert.addSuccesNotification('Login was successful' + ' ' + (isLogined.value ? 'Loginded user' : 'Anon user'));
       }
     }
 
@@ -58,7 +59,7 @@ export const useCostumerStore = defineStore('costumer_store', () => {
 
       if (existAnonCostumre?.statusCode === 200) {
         isExist.value = true;
-        setNotificationSucces();
+        alert.addSuccesNotification('Login was successful' + ' ' + (isLogined.value ? 'Loginded user' : 'Anon user'));
       }
     }
 
@@ -77,9 +78,9 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     if (res.statusCode === 200) {
       isExist.value = true;
       isLogined.value = true;
-      setNotificationSucces();
+      alert.addSuccesNotification('Login was successful' + ' ' + (isLogined.value ? 'Loginded user' : 'Anon user'));
     } else {
-      setNotificationError(res.message);
+      alert.addErrorNotification(res.message);
     }
 
     isLoading.value = false;
@@ -93,15 +94,10 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     const res = await costumerApi.regCostumer(draft);
 
     if (res.statusCode === 201) {
-      const notification = {
-        id: Date.now(),
-        message: 'Registration was successful',
-        type: 'success'
-      };
-      alert.addNotification(notification);
+      alert.addSuccesNotification('Registration was successful');
       if (draft.password) await LoginCostumer(draft.email, draft.password);
     } else {
-      setNotificationError(res.message);
+      alert.addErrorNotification(res.message);
     }
 
     isLoading.value = false;
@@ -122,7 +118,7 @@ export const useCostumerStore = defineStore('costumer_store', () => {
     isExist.value = false;
 
     if (res instanceof Error) {
-      setNotificationError(res.message);
+      alert.addErrorNotification(res.message);
     } else {
       AnonCostumer();
       router.push({ name: 'login' });
@@ -130,25 +126,6 @@ export const useCostumerStore = defineStore('costumer_store', () => {
 
     isLoading.value = false;
   }
-
-  // notification fns
-  const setNotificationSucces = () => {
-    const notification = {
-      id: Date.now(),
-      message: 'Login was successful' + ' ' + (isLogined.value ? 'Loginded user' : 'Anon user'),
-      type: 'success'
-    };
-    alert.addNotification(notification);
-  };
-
-  const setNotificationError = (message: string) => {
-    const notification = {
-      id: Date.now(),
-      message: message,
-      type: 'error'
-    };
-    alert.addNotification(notification);
-  };
 
   return {
     getIsLoading,

@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-import router from '@/app/router';
-import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
-import AuthForm from '@pages/LoginPage/components/AuthForm/AuthForm.vue';
+import { useRouter } from 'vue-router';
+import { useCostumerStore } from '@entities/Costumer';
+import AuthForm from '../components/AuthForm/AuthForm.vue';
+
+const router = useRouter();
 
 const costumerStore = useCostumerStore();
 
@@ -13,7 +15,6 @@ const login = (data: { email: string; password: string }) => {
 </script>
 
 <template>
-  <!--  <span @click="addNotify">123</span>-->
   <div class="page-wrapper flex bg-gray-50 dark:bg-gray-900">
     <div class="mx-auto flex flex-col items-center justify-center md:h-screen lg:py-0">
       <AuthForm @submit-form="login" />

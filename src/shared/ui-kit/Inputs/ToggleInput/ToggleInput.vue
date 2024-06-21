@@ -27,7 +27,7 @@ const toggle = () => {
     >
       <div
         :class="{ 'translate-x-6': modelValue }"
-        class="h-6 w-6 rounded-full bg-white shadow-md transition-all duration-300"
+        class="size-6 rounded-full bg-white shadow-md transition-all duration-300"
       ></div>
     </div>
     <span>

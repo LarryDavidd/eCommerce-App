@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { defineComponent, type Ref, ref, onMounted, computed } from 'vue';
-import { Splide, SplideSlide } from '@splidejs/vue-splide';
-import VueEasyLightbox from 'vue-easy-lightbox';
-import '@splidejs/vue-splide/css';
 import { useRouter } from 'vue-router';
+import AddRemoveButton from '@features/Product/AddRemoreButton';
 import { useProductStore } from '@entities/Product/store/productStore';
 import { PagesLoading } from '@shared/ui-kit/Loading';
 import LikeHeart from '@shared/ui-kit/Icons/LikeHeart.vue';
-import { AddRemoveButton } from '@shared/ui-kit/Buttons';
+
+import { Splide, SplideSlide } from '@splidejs/vue-splide';
+import VueEasyLightbox from 'vue-easy-lightbox';
+import '@splidejs/vue-splide/css';
 
 defineComponent({
   components: {

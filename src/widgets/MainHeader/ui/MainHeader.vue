@@ -1,21 +1,14 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import ChangeLanguage from '@features/ChangeLanguage';
+import ChangeCurrency from '@features/ChangeCurrency';
 import { UserProfile } from '@features/UserProfile';
 import { useFilterStore } from '@entities/Product';
-import { useAppState } from '@shared/Store/AppStore';
-import CartIcon from '@shared/ui-kit/Icons/CartIcon.vue';
-import GlobeIcon from '@shared/ui-kit/Icons/GlobeIcon.vue';
-import CurrencyIcon from '@shared/ui-kit/Icons/CurrencyIcon.vue';
-import InfoIcon from '@shared/ui-kit/Icons/InfoIcon.vue';
 import { HeaderSearchBar } from '@shared/ui-kit/SearchBar';
-import { CustomSelect } from '@shared/ui-kit/Inputs';
 import CartButtonCounter from '../component/CartButtonCounter.vue';
+import CartIcon from '@shared/ui-kit/Icons/CartIcon.vue';
+import InfoIcon from '@shared/ui-kit/Icons/InfoIcon.vue';
 
-const appStore = useAppState();
 const filterStore = useFilterStore();
-
-const selectedLang = ref(appStore.getCurrentLang);
-const selectedCurrency = ref(appStore.getCurrentCurrency);
 
 const serchNewValue = (text: string) => {
   filterStore.setSearchText(text);
@@ -33,27 +26,15 @@ const serchNewValue = (text: string) => {
 
         <div class="flex flex-col items-end gap-4 lg:flex-row lg:items-center">
           <div class="flex gap-4 text-xs">
-            <CustomSelect
-              :options="['ru', 'en-US']"
-              v-model="selectedLang"
-              :icon="GlobeIcon"
-              title="Language"
-              @update:model-value="(lang) => appStore.changeLanguage(lang)"
-            />
-            <CustomSelect
-              :options="['RUB', 'USD', 'EUR']"
-              v-model="selectedCurrency"
-              :icon="CurrencyIcon"
-              title="Currency"
-              @update:model-value="(currency) => appStore.changeCurrencyCode(currency)"
-            />
+            <ChangeLanguage />
+            <ChangeCurrency />
           </div>
 
           <div class="flex gap-4">
             <UserProfile />
 
             <router-link to="/cart">
-              <CartButtonCounter> </CartButtonCounter>
+              <CartButtonCounter />
             </router-link>
 
             <router-link to="/catalog">

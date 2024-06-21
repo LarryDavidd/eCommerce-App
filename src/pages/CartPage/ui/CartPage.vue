@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { type DiscountCodeReference } from '@commercetools/platform-sdk';
-import router from '@app/router';
-import useCartStore from '@entities/Cart';
 import CartCard from '../components/CartCard.vue';
 import CartReceipt from '../components/CartReceipt.vue';
 import PromoCodesList from '../components/PromoCodesList.vue';
 import EmptyCart from '../components/EmptyCart.vue';
 import ClearCartModal from '../components/ClearCartModal.vue';
+import useCartStore from '@entities/Cart';
 import { MainButton } from '@shared/ui-kit/Buttons';
 
 // state
+const router = useRouter();
+
 const cartStore = useCartStore();
 
 const isModalOpen = ref<boolean>(false);

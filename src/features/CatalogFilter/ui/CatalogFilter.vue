@@ -13,7 +13,7 @@ const filterStore = useFilterStore();
 const minPrice = ref(filterStore.getMinPrice);
 const maxPrice = ref(filterStore.getMaxPrice);
 
-const updateRangeValue = (newPrice) => {
+const updateRangeValue = (newPrice: { min: number; max: number }) => {
   filterStore.setPrice(newPrice);
 };
 

@@ -7,16 +7,14 @@ import { createApp } from 'vue';
 import App from '@app/App.vue';
 import router from '@app/router';
 
-import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
+import { useCostumerStore } from '@entities/Costumer';
 
 const app = createApp(App);
 
 app.use(createPinia());
 
-useCostumerStore()
-  .LoginExistigCostumer()
-  .then(() => {
-    app.use(router);
+app.use(router);
 
-    app.mount('#app');
-  });
+app.mount('#app');
+
+useCostumerStore().LoginExistigCostumer();

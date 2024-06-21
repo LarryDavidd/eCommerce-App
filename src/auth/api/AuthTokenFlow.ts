@@ -7,9 +7,9 @@ import {
   type PasswordAuthMiddlewareOptions,
   type RefreshAuthMiddlewareOptions
 } from '@commercetools/sdk-client-v2';
+import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import { config } from '@shared/api/config/config';
 import fetcher from './fetcher';
-import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import Token from './Token';
 
 const { apiUrl, authUrl, clientId, projectKey, scopes, clientSecret } = config;

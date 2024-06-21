@@ -1,13 +1,11 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import CategoriesApi from '../api/fetchCategories';
-import { useAppState } from '@/shared/Store/AppStore';
 import type { Category } from '@commercetools/platform-sdk';
 
 const NAME_SPACE = 'CategoriesStore';
 
 export const useCategoriesStore = defineStore(NAME_SPACE, () => {
-  const appState = useAppState();
   const categoriesApi = new CategoriesApi();
   const data = ref<Category[] | null>(null);
   const isLoading = ref<boolean>(false);

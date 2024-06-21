@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps, computed } from 'vue';
+import { ref, defineProps } from 'vue';
 import AccordionIcon from '@shared/ui-kit/Icons/AccordionIcon.vue';
 
 const props = defineProps({
