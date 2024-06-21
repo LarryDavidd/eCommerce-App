@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { defineStore } from 'pinia';
+import router from '@app/router';
 import type { CustomerDraft } from '@commercetools/platform-sdk';
 import CostumerApi from '../api/costumerApi';
 import { revokingToken } from '@/auth/api/revokeToken';
@@ -10,7 +10,6 @@ import { useNotificationStore } from '@shared/Store/AlertMessageStore';
 
 export const useCostumerStore = defineStore('costumer_store', () => {
   // State
-  const router = useRouter();
   const costumerApi = new CostumerApi();
 
   const ls = useLocalStorage();

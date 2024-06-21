@@ -13,8 +13,10 @@ const app = createApp(App);
 
 app.use(createPinia());
 
-app.use(router);
+useCostumerStore()
+  .LoginExistigCostumer()
+  .then(() => {
+    app.use(router);
 
-app.mount('#app');
-
-useCostumerStore().LoginExistigCostumer();
+    app.mount('#app');
+  });
