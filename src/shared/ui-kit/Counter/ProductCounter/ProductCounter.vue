@@ -37,6 +37,7 @@ const decrement = () => {
 
 <style scoped lang="scss">
 .counter {
+  max-width: 200px;
   font-weight: 500;
   padding: 0 6px;
   display: flex;

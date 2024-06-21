@@ -33,7 +33,7 @@ class Client {
     return this.cachedClients.clientCredentials;
   }
 
-  getPasswordFlowClient(email: string, password: string) {
+  public getPasswordFlowClient(email: string, password: string) {
     if (!this.cachedClients.passwordFlow) {
       this.cachedClients.passwordFlow = this.authTokenFlow.createLoginedUser(email, password);
     }
@@ -49,7 +49,7 @@ class Client {
     return this.cachedClients.anonymous;
   }
 
-  clientWithRefreshTokenFlow(refreshToken: string) {
+  public clientWithRefreshTokenFlow(refreshToken: string) {
     if (!this.cachedClients.existingTokenClient) {
       this.cachedClients.existingTokenClient = this.authTokenFlow.createRefreshUser(refreshToken);
     }
@@ -57,7 +57,7 @@ class Client {
     return this.cachedClients.existingTokenClient;
   }
 
-  clientWithExistTokenFlow(accessToken: string) {
+  public clientWithExistTokenFlow(accessToken: string) {
     if (!this.cachedClients.existingTokenClient) {
       this.cachedClients.existingTokenClient = this.authTokenFlow.createExistUser(accessToken);
     }
@@ -65,7 +65,7 @@ class Client {
     return this.cachedClients.existingTokenClient;
   }
 
-  clearApiRoot() {
+  public clearApiRoot() {
     this.cachedClients = { ...this.cachedClients, passwordFlow: undefined, existingTokenClient: undefined };
   }
 }

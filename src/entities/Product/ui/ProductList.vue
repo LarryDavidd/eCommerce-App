@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import { useProductStore } from '../store/productStore';
-import { ProductCard } from '@shared/components/productCard';
+import { ProductCard } from '@features/Product/ProductCart';
 import { PagesLoading } from '@shared/ui-kit/Loading';
 import { PaginationLayer } from '@shared/ui-kit/Navigation';
 

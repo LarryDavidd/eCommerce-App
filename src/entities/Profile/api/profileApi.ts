@@ -1,6 +1,6 @@
 import type { Address, UserData } from '@/pages/UserProfilePage/model/useUserData';
 import Client from '@/shared/api/client/Client';
-import { type BaseAddress, type Customer, type ErrorResponse, type MyCustomerUpdate, type MyCustomerUpdateAction } from '@commercetools/platform-sdk';
+import { type Customer, type ErrorResponse, type MyCustomerUpdateAction } from '@commercetools/platform-sdk';
 import type { ClientResponse } from '@commercetools/sdk-client-v2';
 import { isEqual } from 'lodash';
 
@@ -11,8 +11,6 @@ enum Countries {
 }
 
 class ProfileApi {
-  constructor() {}
-
   public async addNewCustomerAddress(newAddressData: Address, version: number, refresh_token: string) {
     const client = Client.getInstance().clientWithRefreshTokenFlow(refresh_token);
 

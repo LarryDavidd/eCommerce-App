@@ -1,13 +1,13 @@
+import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
-import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
-import { computed, ref, type Ref } from 'vue';
-import type { Customer, CustomerDraft, ErrorResponse } from '@commercetools/platform-sdk';
-import { useNotificationStore } from '@/shared/Store/AlertMessageStore';
-import type { Client, ClientResponse } from '@commercetools/sdk-client-v2';
 import ProfileApi from '../api/profileApi';
-import { mapCountry, type Address, type UserData } from '@/pages/UserProfilePage/model/useUserData';
-import CostumerApi from '@/entities/Costumer/api/costumerApi';
-import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
+import type { Customer } from '@commercetools/platform-sdk';
+import type { ClientResponse } from '@commercetools/sdk-client-v2';
+import { type Address, type UserData } from '@pages/UserProfilePage/model/useUserData';
+import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
+import CostumerApi from '@entities/Costumer/api/costumerApi';
+import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
+import { useNotificationStore } from '@shared/Store/AlertMessageStore';
 
 export const useProfileStore = defineStore('profileStore', () => {
   const costumerApi = new CostumerApi();
@@ -35,7 +35,7 @@ export const useProfileStore = defineStore('profileStore', () => {
     if (refresh_token) {
       const res = await costumerApi.refreshCostumer(String(refresh_token));
       if (res.statusCode >= 400) {
-        alert.addNotification({ status: 'error', message: 'Please reload page' });
+        alert.addErrorNotification(res.message);
       } else {
         costumer.value = res.body;
       }
@@ -52,10 +52,10 @@ export const useProfileStore = defineStore('profileStore', () => {
     const res = await profileApi.addNewCustomerAddress(newAddressData, costumer.value?.version, refresh_token);
 
     if (res?.statusCode >= 300) {
-      setError(res.message);
+      alert.addErrorNotification(res.message);
     } else {
       costumer.value = (res as ClientResponse<Customer>).body;
-      setNotificationAboutAddAdressSuccess();
+      alert.addSuccesNotification('Address has been added successfully');
     }
 
     isLoading.value = false;
@@ -69,7 +69,7 @@ export const useProfileStore = defineStore('profileStore', () => {
     const res = await profileApi.setTagsToNewAddress(newAddressData, costumer.value?.version, refresh_token, costumer.value?.addresses.at(-1).id);
 
     if (res?.statusCode >= 300) {
-      setError(res.message);
+      alert.addErrorNotification(res.message);
     } else {
       costumer.value = (res as ClientResponse<Customer>).body;
     }
@@ -85,10 +85,10 @@ export const useProfileStore = defineStore('profileStore', () => {
     const res = await profileApi.removeAddress(costumer.value?.version, addressId, refresh_token);
 
     if (res?.statusCode >= 300) {
-      setError(res.message);
+      alert.addErrorNotification(res.message);
     } else {
       costumer.value = (res as ClientResponse<Customer>).body;
-      setNotificationAboutRemoveAdressSuccess();
+      alert.addSuccesNotification('Address has been removed successfully');
     }
 
     isLoading.value = false;
@@ -102,11 +102,10 @@ export const useProfileStore = defineStore('profileStore', () => {
     const res = await profileApi.updatePassword(costumer.value?.version, currentPassword, newPassword, refresh_token);
 
     if (res?.statusCode >= 300) {
-      setError(res.message);
+      alert.addErrorNotification(res.message);
     } else {
-      console.log(newPassword);
       costumer.value = (res as ClientResponse<Customer>).body;
-      setNotificationAboutChangePasswordSuccess();
+      alert.addSuccesNotification('Password has been successfully changed');
       await useCostumerStore().LoginCostumer(costumer.value?.email, newPassword);
     }
 
@@ -121,59 +120,14 @@ export const useProfileStore = defineStore('profileStore', () => {
     const res = await profileApi.updateCustomerData(costumer.value, formData, refresh_token);
 
     if (res?.statusCode >= 300) {
-      setError(res.message);
+      alert.addErrorNotification(res.message);
     } else {
       costumer.value = res.body;
-      setNotificationAboutSavedUserDataSuccess();
+      alert.addSuccesNotification('Data has been changed successfully');
     }
 
     isLoading.value = false;
   }
-
-  const setNotificationAboutChangePasswordSuccess = () => {
-    const notification = {
-      id: Date.now(),
-      message: 'Password has been successfully changed',
-      type: 'success'
-    };
-    alert.addNotification(notification);
-  };
-
-  const setNotificationAboutAddAdressSuccess = () => {
-    const notification = {
-      id: Date.now(),
-      message: 'Address has been added successfully',
-      type: 'success'
-    };
-    alert.addNotification(notification);
-  };
-
-  const setNotificationAboutRemoveAdressSuccess = () => {
-    const notification = {
-      id: Date.now(),
-      message: 'Address has been removed successfully',
-      type: 'success'
-    };
-    alert.addNotification(notification);
-  };
-
-  const setNotificationAboutSavedUserDataSuccess = () => {
-    const notification = {
-      id: Date.now(),
-      message: 'Data has been changed successfully',
-      type: 'success'
-    };
-    alert.addNotification(notification);
-  };
-
-  const setError = (err: string) => {
-    const notification = {
-      id: Date.now(),
-      message: err,
-      type: 'error'
-    };
-    alert.addNotification(notification);
-  };
 
   return {
     getIsLoading,

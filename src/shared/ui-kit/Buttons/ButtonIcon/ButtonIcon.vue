@@ -6,12 +6,12 @@
 
 <style lang="scss" scoped>
 .button-icon {
-  @apply relative 
+  @apply relative
   flex
   w-fit
-  cursor-pointer 
-  select-none 
-  items-center 
+  cursor-pointer
+  select-none
+  items-center
   justify-center
   rounded-sm
   duration-500;

@@ -1,4 +1,3 @@
-import { useAppState } from '@/shared/Store/AppStore';
 import { defineStore } from 'pinia';
 import { computed, reactive } from 'vue';
 

@@ -45,7 +45,6 @@ const filterCategories = (categories: Category[], lang: string) => {
     categoryDict[category.id] = { id: category.id, name: category.name[lang], children: [] };
   });
 
-  // Step 2: Populate the 'children' arrays
   categories.forEach((category) => {
     if (category.parent) {
       const parentId = category.parent.id;
@@ -53,7 +52,6 @@ const filterCategories = (categories: Category[], lang: string) => {
     }
   });
 
-  // Step 3: Create the result array with only root categories
   const result: SimpleCategory[] = categories.filter((category) => !category.parent).map((category) => categoryDict[category.id]);
 
   return result;

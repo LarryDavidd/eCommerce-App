@@ -1,11 +1,11 @@
-import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
+import { defineStore } from 'pinia';
 import type { Cart, DiscountCodeReference, MyCartUpdateAction } from '@commercetools/platform-sdk';
 import CartApi from '../api/fetchCart';
-import { useLocalStorage } from '@/shared/lib/composables/useLocalStorage';
-import { useCostumerStore } from '@/entities/Costumer/store/costumerStore';
-import { useNotificationStore } from '@/shared/Store/AlertMessageStore';
-import { useAppState } from '@/shared/Store/AppStore';
+import { useCostumerStore } from '@entities/Costumer/store/costumerStore';
+import { useAppState } from '@shared/Store/AppStore';
+import { useLocalStorage } from '@shared/lib/composables/useLocalStorage';
+import { useNotificationStore } from '@shared/Store/AlertMessageStore';
 
 const NAME_SPACE = 'CartStore';
 

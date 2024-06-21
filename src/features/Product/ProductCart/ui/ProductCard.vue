@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import ProductCardSwiper from './ProductCardSwiper.vue';
-import { type Ref, ref, computed } from 'vue';
+import { type Ref, ref } from 'vue';
 import type { Image } from '@commercetools/platform-sdk';
-import { AddRemoveButton } from '@/shared/ui-kit/Buttons';
+import AddRemoveButton from '../../AddRemoreButton';
 
 const changeSize = (value: string) => {
   sizeSelected.value = value;
