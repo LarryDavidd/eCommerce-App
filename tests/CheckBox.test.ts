@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import CheckBox from '@shared/ui-kit/Inputs/CheckBox/CheckBox.vue';
+import { CheckBox } from '@shared/ui-kit/Inputs';
 
 describe('BaseCheckbox tests', () => {
   it('should render', () => {
@@ -11,7 +11,7 @@ describe('BaseCheckbox tests', () => {
       }
     });
     expect(wrapper.find('div.checkbox-wrapper').exists()).toBeTruthy();
-    expect(wrapper.find('input#myCheckbox').exists()).toBeTruthy();
+    expect(wrapper.find('input').exists()).toBeTruthy();
   });
 
   it('should emit update:modelValue on change', async () => {
@@ -22,7 +22,7 @@ describe('BaseCheckbox tests', () => {
       }
     });
 
-    await wrapper.find('input#myCheckbox').trigger('change');
+    await wrapper.find('input').trigger('change');
 
     expect(wrapper.emitted()['update:modelValue']).toBeTruthy();
     expect(wrapper.emitted()['update:modelValue'][0]).toEqual([false]);
